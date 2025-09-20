@@ -1,5 +1,7 @@
 <?php
 
+require_once "./app/Support/Response.php";
+
 class TestController
 {
     public function index()
@@ -9,6 +11,6 @@ class TestController
 
     public function get($id)
     {
-        echo "test id: $id";
+        Response::json(200, ["test id" => $id]);
     }
 }

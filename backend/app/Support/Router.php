@@ -1,29 +1,26 @@
 <?php
 class Router
 {
-    private static $routes = [
-        'GET' => [],
-        'POST' => [],
-    ];
+    private static $routes = ['GET' => [], 'POST' => []];
 
-    public static function get($path, $callback)
+    public static function get($path, $callback, $middleware = [])
     {
-        self::addRoute('GET', $path, $callback);
+        self::addRoute('GET', $path, $callback, $middleware);
     }
 
-    public static function post($path, $callback)
+    public static function post($path, $callback, $middleware = [])
     {
-        self::addRoute('POST', $path, $callback);
+        self::addRoute('POST', $path, $callback, $middleware);
     }
 
-    private static function addRoute($method, $path, $callback)
+    private static function addRoute($method, $path, $callback, $middleware)
     {
         $regex = preg_replace('/\{([^}]+)\}/', '([^/]+)', $path);
         $regex = "#^" . $regex . "$#";
-
         self::$routes[$method][] = [
-            'regex'    => $regex,
-            'callback' => $callback,
+            'regex'      => $regex,
+            'callback'   => $callback,
+            'middleware' => $middleware,
         ];
     }
 
@@ -34,25 +31,40 @@ class Router
 
         foreach (self::$routes[$method] as $route) {
             if (preg_match($route['regex'], $path, $matches)) {
-                array_shift($matches); // drop full match
+                array_shift($matches);
                 $callback = $route['callback'];
 
-                // Case 1: Closure
-                if (is_callable($callback)) {
-                    return call_user_func_array($callback, $matches);
+                // Run middleware
+                foreach ($route['middleware'] as $mw) {
+                    require_once "./app/Middlewares/$mw.php";
+                    $mwInstance = new $mw();
+                    $result = $mwInstance->handle();
+                    if ($result === false) {
+                        return; // stop request if middleware blocks it
+                    }
                 }
 
-                // Case 2: "Controller@method" string
-                if (is_string($callback) && strpos($callback, '@') !== false) {
+                // Run controller or closure
+                if (is_callable($callback)) {
+                    $result = call_user_func_array($callback, $matches);
+                } elseif (is_string($callback) && strpos($callback, '@')) {
                     [$controller, $methodName] = explode('@', $callback);
                     require_once "./app/Controllers/$controller.php";
-                    $controllerObj = new $controller();
-                    return call_user_func_array([$controllerObj, $methodName], $matches);
+                    $ctrl = new $controller();
+                    $result = call_user_func_array([$ctrl, $methodName], $matches);
                 }
+
+                if (is_array($result) || is_object($result)) {
+                    header('Content-Type: application/json');
+                    echo json_encode($result);
+                } elseif (is_string($result)) {
+                    echo $result;
+                }
+                return;
             }
         }
 
         http_response_code(404);
-        echo "404 - Page Not Found";
+        echo json_encode(["Not Found"]);
     }
 }
