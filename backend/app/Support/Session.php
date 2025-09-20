@@ -22,4 +22,11 @@ class Session
 
         return $_SESSION[$key];
     }
+
+    public function destroy(string $key): void
+    {
+        self::start();
+
+        $_SESSION[$key] = null;
+    }
 }
