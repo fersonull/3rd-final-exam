@@ -4,7 +4,7 @@ class Session
 {
     public static function start(): void
     {
-        if (PHP_SESSION_NONE === 0) {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
@@ -20,13 +20,27 @@ class Session
     {
         self::start();
 
-        return $_SESSION[$key];
+        return $_SESSION[$key] ?? null;
     }
 
-    public function destroy(string $key): void
+    public static function destroy(): void
     {
         self::start();
+        $_SESSION = [];
 
-        $_SESSION[$key] = null;
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params["path"],
+                $params["domain"],
+                $params["secure"],
+                $params["httponly"]
+            );
+        }
+
+        session_destroy();
     }
 }
