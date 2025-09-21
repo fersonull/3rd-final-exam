@@ -9,8 +9,8 @@ class TestController
         echo "Hello World!";
     }
 
-    public function get($id)
+    public function get($id, $historyID)
     {
-        Response::json(200, ["test id" => $id]);
+        Response::json(200, ["test id" => $id, "history id" => $historyID]);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 require_once "./config/cors.php";
-
 require __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;

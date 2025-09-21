@@ -11,8 +11,8 @@ class User extends Model
         $stmt = self::db()->prepare("SELECT * FROM $this->table");
         $stmt->execute();
 
-        $row = $stmt->fetchAll();
-        return $row ?: null;
+        $rows = $stmt->fetchAll();
+        return $rows ?: null;
     }
 
     public function find($id): ?array

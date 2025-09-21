@@ -63,10 +63,11 @@ class Router
                 } elseif (is_string($result)) {
                     echo $result;
                 }
+                
                 return;
             }
         }
 
-        Response::json(404, ["error" => "Not Found"]);
+        Response::json(404, ["error" => "Route not found"]);
     }
 }
