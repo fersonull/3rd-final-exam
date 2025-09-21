@@ -1,16 +1,11 @@
 <?php
 require_once "./config/cors.php";
-require_once "./app/Support/Router.php";
-require_once "./app/Support/Response.php";
-require_once "./app/Controllers/TestController.php";
-require_once "./app/Middlewares/AuthMiddleware.php";
 
-Router::get('/', function () {
-    Response::json(200, "Welcome to Home Page!");
-});
+require __DIR__ . '/vendor/autoload.php';
 
-Router::get('/test', 'TestController@index');
+use Dotenv\Dotenv;
 
-Router::get('/test/{id}', 'TestController@get', ['AuthMiddleware']);
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-Router::dispatch();
+require_once "./routes/api.php";

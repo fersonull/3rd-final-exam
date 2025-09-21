@@ -1,4 +1,6 @@
 <?php
+require_once "./app/Support/Response.php";
+
 class AuthMiddleware
 {
     public function handle(): bool
@@ -6,8 +8,7 @@ class AuthMiddleware
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
 
         if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
-            http_response_code(401);
-            echo json_encode(["error" => "Unauthorized"]);
+            Response::json(401, ["error" => "Unauthorized"]);
             return false;
         }
 
@@ -15,8 +16,7 @@ class AuthMiddleware
 
         // Example check
         if ($token !== "my-secret-token") {
-            http_response_code(403);
-            echo json_encode(["error" => "Forbidden"]);
+            Response::json(403, ["error" => "Forbidden"]);
             return false;
         }
 

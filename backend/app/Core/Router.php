@@ -1,4 +1,7 @@
 <?php
+
+require_once "./app/Support/Response.php";
+
 class Router
 {
     private static $routes = ['GET' => [], 'POST' => []];
@@ -16,7 +19,7 @@ class Router
     private static function addRoute($method, $path, $callback, $middleware)
     {
         $regex = preg_replace('/\{([^}]+)\}/', '([^/]+)', $path);
-        $regex = "#^" . $regex . "$#";
+        $regex = "#^$regex$#";
         self::$routes[$method][] = [
             'regex'      => $regex,
             'callback'   => $callback,
@@ -34,7 +37,7 @@ class Router
                 array_shift($matches);
                 $callback = $route['callback'];
 
-                // Run middleware
+                // run middleware
                 foreach ($route['middleware'] as $mw) {
                     require_once "./app/Middlewares/$mw.php";
                     $mwInstance = new $mw();
@@ -44,7 +47,7 @@ class Router
                     }
                 }
 
-                // Run controller or closure
+                // run controller or closure
                 if (is_callable($callback)) {
                     $result = call_user_func_array($callback, $matches);
                 } elseif (is_string($callback) && strpos($callback, '@')) {
@@ -64,7 +67,6 @@ class Router
             }
         }
 
-        http_response_code(404);
-        echo json_encode(["Not Found"]);
+        Response::json(404, ["error" => "Not Found"]);
     }
 }
