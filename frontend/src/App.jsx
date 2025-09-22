@@ -1,9 +1,24 @@
-import { Button } from "./components/ui/button";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useRoutes,
+} from "react-router-dom";
+import { Suspense } from "react";
+import Home from "./pages/home";
+import { routes } from "./routes";
+
+function AppRoutes() {
+  const element = useRoutes(routes);
+  return element;
+}
 
 export default function App() {
   return (
-    <div className="font-geist">
-      <Button>Sample</Button>
-    </div>
+    <Router>
+      <Suspense>
+        <AppRoutes />
+      </Suspense>
+    </Router>
   );
 }
