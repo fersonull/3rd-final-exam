@@ -15,10 +15,19 @@ class User extends Model
         return $rows ?: null;
     }
 
-    public function find($id): ?array
+    public function find(int $id): ?array
     {
         $stmt = self::db()->prepare("SELECT * FROM $this->table WHERE id = :id");
         $stmt->execute(['id' => $id]);
+
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
+
+    public function findByEmail(string $email): ?array
+    {
+        $stmt = self::db()->prepare("SELECT * FROM $this->table WHERE email = :email");
+        $stmt->execute(['email' => $email]);
 
         $row = $stmt->fetch();
         return $row ?: null;

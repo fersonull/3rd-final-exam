@@ -9,18 +9,17 @@ class Session
         }
     }
 
-    public static function store(string $key, array $value): array
+    public static function store(string $key, mixed $value): mixed
     {
         self::start();
-
-        return $_SESSION[$key] = $value;
+        $_SESSION[$key] = $value;
+        return $value;
     }
 
-    public static function get(string $key): array
+    public static function get(string $key, mixed $default = null): mixed
     {
         self::start();
-
-        return $_SESSION[$key] ?? null;
+        return $_SESSION[$key] ?? $default;
     }
 
     public static function destroy(): void
