@@ -7,8 +7,8 @@ export default function PublicRoutes() {
     <div className="flex flex-col h-screen font-geist">
       <HomeNavbar />
 
-      <main className="lg:px-24 flex-1">
-        <div className="h-full grid md:grid-cols-3 grid-cols-1 items-center">
+      <main className="lg:px-24 px-8 flex-1">
+        <div className="h-full grid-cols-1 grid md:grid-cols-3  items-center">
           <Outlet />
         </div>
       </main>
