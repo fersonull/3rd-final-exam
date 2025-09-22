@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function useResponsive() {
+const useResponsive = () => {
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
