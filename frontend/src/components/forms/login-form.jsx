@@ -1,8 +1,30 @@
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useFetch } from "@/hooks/useFetch";
+import { useFormData } from "@/hooks/useFormData";
+import DotLoading from "../loadings/dot-loading";
 
 export default function LoginForm() {
+  const { values, handleChange, getFormData } = useFormData({
+    email: "",
+    password: "",
+  });
+
+  const {
+    error,
+    loading,
+    refetch: login,
+  } = useFetch("http://localhost:2234/login", { method: "POST" }, false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = getFormData();
+
+    login({ body: formData });
+  };
+
   return (
     <>
       <div className="text-center mb-6">
@@ -12,17 +34,41 @@ export default function LoginForm() {
         </p>
       </div>
 
-      <form className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="you@example.com" />
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <div className="flex flex-col">
+          <Label htmlFor="email" className="mb-2">
+            Email
+          </Label>
+          <Input
+            id="email"
+            name="email"
+            type="text"
+            values={values.email}
+            onChange={handleChange}
+            placeholder="you@example.com"
+          />
+          {error?.email && (
+            <span className="text-red-500 text-sm mt-1">{error?.email}</span>
+          )}
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" placeholder="juantamad123" />
+        <div className="flex flex-col">
+          <Label htmlFor="password" className="mb-2">
+            Password
+          </Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            values={values.password}
+            onChange={handleChange}
+            placeholder="juantamad123"
+          />
+          {error?.password && (
+            <span className="text-red-500 text-sm mt-1">{error?.password}</span>
+          )}
         </div>
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? <DotLoading /> : "Login"}
         </Button>
       </form>
     </>

@@ -4,9 +4,9 @@ import LoginForm from "@/components/forms/login-form";
 
 export default function AuthPage() {
   return (
-    <div className="flex-1 grid grid-cols-2">
-      <div className="flex flex-col items-center justify-between h-full px-10 py-6 rounded-t-2xl">
-        <a className="logo text-xl font-bold">Logo</a>
+    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 bg-accent-foreground">
+      <div className="flex flex-col items-center justify-between h-full md:px-10 px-8 py-6 rounded-t-2xl md:rounded-none bg-background order-1 md:order-0">
+        <a className="logo text-xl font-bold hidden md:block">Logo</a>
 
         <Tabs defaultValue="login" className="w-full max-w-md">
           <TabsList className="w-full grid grid-cols-2 gap-1 mb-6">
