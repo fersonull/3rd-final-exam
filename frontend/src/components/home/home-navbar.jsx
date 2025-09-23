@@ -14,7 +14,7 @@ export default function HomeNavbar() {
           </Button>
         </div>
 
-        <div className="hidden md:flex gap-2">
+        <div className="hidden md:flex gap-2 font-outfit">
           <Button size="sm" variant="ghost">
             Login
           </Button>

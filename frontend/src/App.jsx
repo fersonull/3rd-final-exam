@@ -10,9 +10,7 @@ function AppRoutes() {
 export default function App() {
   return (
     <Router>
-      <Suspense>
-        <AppRoutes />
-      </Suspense>
+      <AppRoutes />
     </Router>
   );
 }

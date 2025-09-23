@@ -6,7 +6,7 @@ export default function HomeHero() {
 
   return (
     <>
-      <div className="max-w-lg col-span-2">
+      <div className="max-w-lg col-span-2 ">
         <h4 className="headings">
           Connect with your love ones. Discuss what's up.
         </h4>
