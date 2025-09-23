@@ -15,13 +15,7 @@ Router::post('/new', function () {
     Response::json(201, "Success post");
 });
 
+// auth relatedt routes
 Router::post('/login', 'AuthController@login');
-
-Router::get('/users', 'UserController@index');
-Router::get('/users/{id}', 'UserController@findById');
-
-Router::get('/test', 'TestController@index');
-
-Router::get('/test/{id}/history/{12}', 'TestController@get');
 
 Router::dispatch();

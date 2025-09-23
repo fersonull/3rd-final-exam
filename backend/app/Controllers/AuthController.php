@@ -19,6 +19,7 @@ class AuthController
     {
         $request = $_POST;
 
+        // Validate request
         $validator = Validate::make($request, [
             'email' => 'required|email',
             'password' => 'required'
@@ -30,26 +31,44 @@ class AuthController
             ]);
         }
 
+        // Find user
         $result = $this->userModel->findByEmail($request['email']);
 
-        $passwordMatched = password_verify($request['password'], $result['password']);
+        if (!$result) {
+            return Response::json(404, [
+                'errors' => ['email' => 'Invalid email address']
+            ]);
+        }
 
-        if (!$passwordMatched) {
-            return Response::json(400, [
+        // Verify password
+        if (!password_verify($request['password'], $result['password'])) {
+            return Response::json(401, [
                 'errors' => ['password' => 'Incorrect password']
             ]);
         }
 
+        // Generate token
         $token = AuthService::generateToken([
             'user_id' => $result['id'],
-            'email' => $result['email'],
-            'iat' => time()
+            'email'   => $result['email'],
+            'iat'     => time(),
+            'exp'     => time() + 3600 // 1 hour expiry
         ]);
 
+        // Store in session
         Session::store('auth', [
-            'token' => $token,
+            'user_id' => $result['id'],
+            'token'   => $token,
         ]);
 
-        Response::json(200, $token);
+        // Send response
+        return Response::json(200, [
+            'message' => 'Login successful',
+            'token'   => $token,
+            'user'    => [
+                'id'    => $result['id'],
+                'email' => $result['email'],
+            ]
+        ]);
     }
 }
