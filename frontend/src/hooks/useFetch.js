@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 export function useFetch(url, options = {}, immediate = true) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -13,7 +15,7 @@ export function useFetch(url, options = {}, immediate = true) {
       try {
         const isFormData = overrideOptions.body instanceof FormData;
 
-        const response = await fetch(url, {
+        const response = await fetch(BASE_URL + url, {
           credentials: "include",
           ...options,
           ...overrideOptions,

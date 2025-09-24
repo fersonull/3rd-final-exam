@@ -153,3 +153,13 @@
     @apply tracking-tighter font-bold font-outfit text-primary;
   }
 }
+
+@layer components {
+  .toast {
+    @apply font-outfit;
+  }
+
+  .toast-description {
+    @apply text-muted-foreground;
+  }
+}

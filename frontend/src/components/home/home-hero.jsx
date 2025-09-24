@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import useResponsive from "@/hooks/useResponsive";
+import { Link } from "react-router-dom";
 
 export default function HomeHero() {
   const { isMobile } = useResponsive();
@@ -15,9 +16,11 @@ export default function HomeHero() {
           esse.
         </p>
 
-        <Button className="mt-4" size={isMobile ? "sm" : ""}>
-          Get started
-        </Button>
+        <Link to={"/auth?tab=register"}>
+          <Button className="mt-4" size={isMobile ? "sm" : ""}>
+            Get started
+          </Button>
+        </Link>
       </div>
 
       <div className="w-md">{/* <HeroMessageMainWrapper /> */}</div>

@@ -6,7 +6,9 @@ export default function HomeNavbar() {
   return (
     <div className="flex-center lg:px-24 px-4 py-2">
       <div className="flex-between w-full">
-        <Link className="logo">Tracksikel</Link>
+        <Link to="/" className="logo">
+          Tracksikel
+        </Link>
 
         <div className="md:hidden">
           <Button variant="ghost">
@@ -15,10 +17,14 @@ export default function HomeNavbar() {
         </div>
 
         <div className="hidden md:flex gap-2 font-outfit">
-          <Button size="sm" variant="ghost">
-            Login
-          </Button>
-          <Button size="sm">Get started</Button>
+          <Link to={"/auth?tab=login"}>
+            <Button size="sm" variant="ghost">
+              Login
+            </Button>
+          </Link>
+          <Link to={"/auth?tab=register"}>
+            <Button size="sm">Get started</Button>
+          </Link>
         </div>
       </div>
     </div>

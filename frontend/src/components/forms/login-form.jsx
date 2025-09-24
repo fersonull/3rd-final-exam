@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useFetch } from "@/hooks/useFetch";
 import { useFormData } from "@/hooks/useFormData";
 import DotLoading from "../loadings/dot-loading";
+import { toast } from "sonner";
 
 export default function LoginForm() {
   const { values, handleChange, getFormData } = useFormData({
@@ -15,14 +16,25 @@ export default function LoginForm() {
     error,
     loading,
     refetch: login,
-  } = useFetch("http://localhost:2234/login", { method: "POST" }, false);
+  } = useFetch("/login", { method: "POST" }, false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = getFormData();
 
-    login({ body: formData });
+    const result = await login({ body: formData });
+
+    if (result?.message && !result.error) {
+      toast.success(result.message);
+    }
+
+    if (result?.error) {
+      toast.warning(result.error, {
+        closeButton: true,
+        position: "top-center",
+      });
+    }
   };
 
   return (
@@ -48,7 +60,9 @@ export default function LoginForm() {
             placeholder="you@example.com"
           />
           {error?.email && (
-            <span className="text-red-500 text-sm mt-1">{error?.email}</span>
+            <span className="text-red-500 text-xs md:text-sm mt-1">
+              {error?.email}
+            </span>
           )}
         </div>
         <div className="flex flex-col">
@@ -64,7 +78,9 @@ export default function LoginForm() {
             placeholder="juantamad123"
           />
           {error?.password && (
-            <span className="text-red-500 text-sm mt-1">{error?.password}</span>
+            <span className="text-red-500 text-xs md:text-sm mt-1">
+              {error?.password}
+            </span>
           )}
         </div>
         <Button type="submit" className="w-full" disabled={loading}>
