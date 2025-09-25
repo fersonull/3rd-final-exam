@@ -25,6 +25,8 @@ export default function LoginForm() {
 
     const result = await login({ body: formData });
 
+    console.log(result);
+
     if (result?.message && !result.error) {
       toast.success(result.message);
     }
@@ -32,7 +34,6 @@ export default function LoginForm() {
     if (result?.error) {
       toast.warning(result.error, {
         closeButton: true,
-        position: "top-center",
       });
     }
   };

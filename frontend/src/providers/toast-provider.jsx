@@ -9,6 +9,8 @@ export default function ToastProvider({ children }) {
         toastOptions={{
           classNames: toastClasses,
         }}
+        position="top-center"
+        duration={3000}
       />
     </>
   );
