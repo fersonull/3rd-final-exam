@@ -19,7 +19,6 @@ class AuthController
     {
         $request = $_POST;
 
-        // Validate request
         $validator = Validate::make($request, [
             'email' => 'required|email',
             'password' => 'required'
@@ -31,7 +30,6 @@ class AuthController
             ]);
         }
 
-        // Find user
         $result = $this->userModel->findByEmail($request['email']);
 
         if (!$result) {
@@ -40,33 +38,29 @@ class AuthController
             ]);
         }
 
-        // Verify password
         if (!password_verify($request['password'], $result['password'])) {
             return Response::json(401, [
                 'errors' => ['password' => 'Incorrect password']
             ]);
         }
 
-        // Generate token
         $token = AuthService::generateToken([
             'user_id' => $result['id'],
-            'email'   => $result['email'],
-            'iat'     => time(),
-            'exp'     => time() + 3600 // 1 hour expiry
+            'email' => $result['email'],
+            'iat' => time(),
         ]);
 
-        // Store in session
         Session::store('auth', [
             'user_id' => $result['id'],
             'token'   => $token,
         ]);
 
-        // Send response
         return Response::json(200, [
             'message' => 'Login successful',
             'token'   => $token,
             'user'    => [
                 'id'    => $result['id'],
+                'name' => $result['name'],
                 'email' => $result['email'],
             ]
         ]);

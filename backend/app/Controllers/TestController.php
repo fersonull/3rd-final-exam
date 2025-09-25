@@ -13,4 +13,9 @@ class TestController
     {
         Response::json(200, ["test id" => $id, "history id" => $historyID]);
     }
+
+    public function pageParams()
+    {
+        Response::json(200, $_GET);
+    }
 }

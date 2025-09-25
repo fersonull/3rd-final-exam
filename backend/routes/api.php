@@ -7,15 +7,26 @@ require_once "./app/Controllers/AuthController.php";
 require_once "./app/Controllers/UserController.php";
 require_once "./app/Middlewares/AuthMiddleware.php";
 
-Router::get('/', function () {
-    Response::json(200, "Welcome to Home Page!");
+
+Router::get('/v1/movies/{id}/page/{page}', function ($id, $page) {
+    Response::json(200, "Movie ID: $id, Page: $page");
 });
 
-Router::post('/new', function () {
+// Router::get('/v1/{name}', function ($name) {
+//     Response::json(200, "Welcome, $name!");
+// });
+
+Router::post('/v1/new', function () {
     Response::json(201, "Success post");
 });
 
 // auth relatedt routes
-Router::post('/login', 'AuthController@login');
+Router::post('/v1/login', 'AuthController@login');
+
+
+// test
+
+Router::get('/v1/params', 'TestController@pageParams');
+
 
 Router::dispatch();
