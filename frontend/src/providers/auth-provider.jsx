@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { AuthContext } from "@/contexts/auth-context";
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
 
   useEffect(() => {
-    console.log(user);
-    console.log(token);
+    localStorage.setItem("token", token)
+    localStorage.setItem("user", JSON.stringify(user))
   }, [user, token]);
 
   return (

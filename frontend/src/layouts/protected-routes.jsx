@@ -1,15 +1,21 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/contexts/auth-context";
 import { Outlet } from "react-router-dom";
 
 export default function ProtectedRoutes() {
   const { token } = useContext(AuthContext);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  console.log(token);
+  useEffect(() => {
+    if (token) {
+      setIsAuthenticated(true)
+    }
+  }, [token])
+  
 
   if (token) {
-    <Outlet />;
+    return <Outlet />;
   }
 
-  return <div>Unauthorized.</div>;
+  return <h1>Unauthorized.</h1>
 }
