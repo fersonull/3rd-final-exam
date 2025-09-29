@@ -15,6 +15,13 @@ class AuthController
         $this->userModel = new User;
     }
 
+    public function session()
+    {
+        $auth = Session::get("auth");
+
+        Response::json(200, $auth);
+    }
+
     public function login()
     {
         $request = $_POST;
@@ -50,19 +57,21 @@ class AuthController
             'iat' => time(),
         ]);
 
+        $user = [
+            'id'    => $result['id'],
+            'name' => $result['name'],
+            'email' => $result['email'],
+        ];
+
         Session::store('auth', [
-            'user_id' => $result['id'],
+            'user' => $user,
             'token'   => $token,
         ]);
 
         return Response::json(200, [
             'message' => 'Login successful',
             'token'   => $token,
-            'user'    => [
-                'id'    => $result['id'],
-                'name' => $result['name'],
-                'email' => $result['email'],
-            ]
+            'user'    => $user
         ]);
     }
 }

@@ -49,7 +49,7 @@ export function useFetch(url, options = {}, immediate = true) {
     if (immediate) {
       fetchData();
     }
-  }, [fetchData, immediate]);
+  }, []);
 
   return { data, error, loading, refetch: fetchData };
 }

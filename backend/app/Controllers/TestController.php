@@ -1,5 +1,6 @@
 <?php
 
+require_once "./app/Core/Session.php";
 require_once "./app/Support/Response.php";
 
 class TestController
@@ -17,5 +18,12 @@ class TestController
     public function pageParams()
     {
         Response::json(200, $_GET);
+    }
+
+    public function getToken()
+    {
+        $auth = Session::get("auth");
+
+        Response::json(200, $auth);
     }
 }

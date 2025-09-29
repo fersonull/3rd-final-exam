@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
 export const AuthContext = createContext({
     user: null,
@@ -6,3 +6,6 @@ export const AuthContext = createContext({
     login: () => {},
     logout: () => {},
 });
+
+
+export const useAuthContext = () => useContext(AuthContext);

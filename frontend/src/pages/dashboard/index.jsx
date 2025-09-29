@@ -1,5 +1,7 @@
-import React from "react";
+import { useAuthContext } from "@/contexts/auth-context";
 
 export default function Index() {
-  return <div>Dashboard</div>;
+  const { user } = useAuthContext()
+
+  return <div>Welcome, {user?.name}</div>;
 }
