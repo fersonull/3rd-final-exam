@@ -9,7 +9,7 @@ import DotLoading from "../loadings/dot-loading";
 import { toast } from "sonner";
 
 export default function LoginForm() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { setUser, setToken } = useAuthContext();
   const { values, handleChange, getFormData } = useFormData({
     email: "",

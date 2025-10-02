@@ -26,6 +26,7 @@ export function useFetch(url, options = {}, immediate = true) {
           },
         });
 
+        
         const result = await response.json();
 
         if (!response.ok && result.errors) {
