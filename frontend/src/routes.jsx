@@ -14,7 +14,7 @@ export const routes = [
     element: <PublicRoutes />,
     children: [
       {
-        path: "/",
+        path: "/home",
         element: <Home />,
       },
     ],
@@ -32,7 +32,7 @@ export const routes = [
     element: <ProtectedRoutes />,
     children: [
       {
-        path: "/dashboard",
+        path: "/",
         element: <DashboardLayout />,
         children: [
           {
@@ -44,7 +44,7 @@ export const routes = [
             ),
           },
           {
-            path: "/dashboard/inbox",
+            path: "/inbox",
             element: (
               <Suspense fallback={<div>Loading...</div>}>
                 <Inbox />

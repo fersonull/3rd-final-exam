@@ -28,27 +28,27 @@ import {
 const items = [
   {
     title: "Home",
-    url: "/dashboard",
+    url: "/",
     icon: Home,
   },
   {
     title: "Inbox",
-    url: "/dashboard/inbox",
+    url: "/inbox",
     icon: Inbox,
   },
   {
     title: "Calendar",
-    url: "/dashboard/calendar",
+    url: "/calendar",
     icon: Calendar,
   },
   {
     title: "Search",
-    url: "/dashboard/search",
+    url: "/search",
     icon: Search,
   },
   {
     title: "Settings",
-    url: "/dashboard/settings",
+    url: "/settings",
     icon: Settings,
   },
 ];

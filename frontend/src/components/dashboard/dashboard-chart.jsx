@@ -9,17 +9,17 @@ import {
 } from "recharts";
 
 const sales = [
-  { date: "Aug 29", product1: 234, product2: 344 },
-  { date: "Aug 30", product1: 22, product2: 1 },
-  { date: "Sept 1", product1: 1234, product2: 23 },
-  { date: "Sept 2", product1: 300, product2: 3000 },
-  { date: "Sept 3", product1: 300, product2: 3000 },
-  { date: "Sept 4", product1: 6677, product2: 4333 },
-  { date: "Sept 5", product1: 2313, product2: 2344 },
-  { date: "Sept 6", product1: 23, product2: 1122 },
-  { date: "Sept 7", product1: 233, product2: 44 },
-  { date: "Sept 8", product1: 2233, product2: 111 },
-  { date: "Sept 9", product1: 2355, product2: 2345 },
+  { date: "Aug 29", contributions: 234, feedback: 344 },
+  { date: "Aug 30", contributions: 22, feedback: 1 },
+  { date: "Sept 1", contributions: 1234, feedback: 23 },
+  { date: "Sept 2", contributions: 300, feedback: 3000 },
+  { date: "Sept 3", contributions: 300, feedback: 3000 },
+  { date: "Sept 4", contributions: 6677, feedback: 4333 },
+  { date: "Sept 5", contributions: 2313, feedback: 2344 },
+  { date: "Sept 6", contributions: 23, feedback: 1122 },
+  { date: "Sept 7", contributions: 233, feedback: 44 },
+  { date: "Sept 8", contributions: 2233, feedback: 111 },
+  { date: "Sept 9", contributions: 2355, feedback: 2345 },
 ];
 
 export default function DashboardChart() {
@@ -46,7 +46,7 @@ export default function DashboardChart() {
         <Tooltip content={<CustomTooltip />} />
         <Area
           type="natural"
-          dataKey="product1"
+          dataKey="contributions"
           stroke="#fff"
           fillOpacity={1}
           fill="url(#color1)"
@@ -54,7 +54,7 @@ export default function DashboardChart() {
         />
         <Area
           type="natural"
-          dataKey="product2"
+          dataKey="feedback"
           stroke="#fff"
           fillOpacity={1}
           fill="url(#color2)"
@@ -74,14 +74,14 @@ function CustomTooltip({ active, payload, label }) {
           <div className="flex gap-4">
             <span className="flex-center flex-1">
               <div className="p-1 border-accent me-1 bg-[#7ba6e4]"></div>
-              <p className="flex-1">Product 1</p>
+              <p className="flex-1">Contributions</p>
             </span>
             <p className="font-bold">{payload[0].value}</p>
           </div>
           <div className="flex gap-4">
             <span className="flex-center flex-1">
               <div className="p-1 border-accent me-1 bg-[#465f82]"></div>
-              <p className="flex-1">Product 2</p>
+              <p className="flex-1">Feedbacks</p>
             </span>
             <p className="font-bold">{payload[1].value}</p>
           </div>

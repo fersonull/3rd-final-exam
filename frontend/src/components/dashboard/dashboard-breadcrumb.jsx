@@ -16,7 +16,7 @@ export default function DashboardBreadcrumb() {
 
   return (
     <BreadcrumbTemplate
-      items={[{ label: "Home", href: "/dashboard" }, ...breadcrumbItems]}
+      items={[{ label: "Home", href: "/" }, ...breadcrumbItems]}
     />
   );
 }
