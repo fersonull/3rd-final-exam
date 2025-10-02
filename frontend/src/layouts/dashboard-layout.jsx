@@ -1,15 +1,21 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "@/components/dashboard/sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import DashboardBreadcrumb from "@/components/dashboard/dashboard-breadcrumb";
 
 export default function DashboardLayout() {
   return (
     <SidebarProvider>
-      <div className="flex">
+      <div className="flex w-full font-outfit">
         <Sidebar />
         <div className="flex-1 p-3">
-          <SidebarTrigger />
-          <Outlet />
+          <div className="flex items-center gap-2">
+            <SidebarTrigger />
+            <DashboardBreadcrumb />
+          </div>
+          <div className="py-3">
+            <Outlet />
+          </div>
         </div>
       </div>
     </SidebarProvider>

@@ -5,6 +5,7 @@ import ProtectedRoutes from "./layouts/protected-routes";
 import Home from "./pages/home";
 import AuthPage from "./pages/auth/auth-page";
 import DashboardLayout from "./layouts/dashboard-layout";
+import Inbox from "./pages/dashboard/inbox";
 
 const Index = lazy(() => import("@/pages/dashboard/index"));
 
@@ -39,6 +40,14 @@ export const routes = [
             element: (
               <Suspense fallback={<div>Loading...</div>}>
                 <Index />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/dashboard/inbox",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Inbox />
               </Suspense>
             ),
           },
