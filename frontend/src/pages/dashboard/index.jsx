@@ -1,6 +1,6 @@
 import { useAuthContext } from "@/contexts/auth-context";
 import { Button } from "@/components/ui/button";
-import { useFetch } from "@/hooks/useFetch";
+import { useFetch } from "@/hooks/use-fetch";
 import { useNavigate } from "react-router-dom";
 
 export default function Index() {

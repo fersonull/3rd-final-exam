@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import useResponsive from "@/hooks/useResponsive";
+import useResponsive from "@/hooks/use-responsive";
 import { Link } from "react-router-dom";
 
 export default function HomeHero() {

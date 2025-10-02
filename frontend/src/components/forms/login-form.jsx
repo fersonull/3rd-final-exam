@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useFetch } from "@/hooks/useFetch";
-import { useFormData } from "@/hooks/useFormData";
+import { useFetch } from "@/hooks/use-fetch";
+import { useFormData } from "@/hooks/use-formdata";
 import DotLoading from "../loadings/dot-loading";
 import { toast } from "sonner";
 
@@ -29,6 +29,8 @@ export default function LoginForm() {
 
     const result = await login({ body: formData });
 
+    console.log(result);
+
     if (result?.message && !result.error) {
       toast.success(result.message);
       setUser(result?.user);
@@ -40,11 +42,9 @@ export default function LoginForm() {
     }
 
     if (result?.error) {
-      toast.warning(result.error, {
+      toast.warning(result?.error, {
         closeButton: true,
       });
-
-      return;
     }
   };
 

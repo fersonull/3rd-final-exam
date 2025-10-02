@@ -65,13 +65,13 @@ class AuthController
 
         Session::store('auth', [
             'user' => $user,
-            'token'   => $token,
+            'token' => $token,
         ]);
 
         return Response::json(200, [
             'message' => 'Login successful',
-            'token'   => $token,
-            'user'    => $user
+            'token' => $token,
+            'user' => $user
         ]);
     }
 

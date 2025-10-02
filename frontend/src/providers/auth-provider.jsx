@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { AuthContext } from "@/contexts/auth-context";
-import { useFetch } from "@/hooks/useFetch";
+import { useFetch } from "@/hooks/use-fetch";
 
 export default function AuthProvider({ children }) {
   const { refetch } = useFetch("/session");
