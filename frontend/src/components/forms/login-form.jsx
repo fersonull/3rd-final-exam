@@ -1,5 +1,5 @@
-import { AuthContext } from "@/contexts/auth-context";
-import { useContext } from "react";
+import { useAuthContext } from "@/contexts/auth-context";
+import { useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,8 @@ import DotLoading from "../loadings/dot-loading";
 import { toast } from "sonner";
 
 export default function LoginForm() {
-  const { setUser, setToken } = useContext(AuthContext);
+  const navigate = useNavigate()
+  const { setUser, setToken } = useAuthContext();
   const { values, handleChange, getFormData } = useFormData({
     email: "",
     password: "",
@@ -32,12 +33,18 @@ export default function LoginForm() {
       toast.success(result.message);
       setUser(result?.user);
       setToken(result?.token);
+
+      navigate("/dashboard");
+
+      return;
     }
 
     if (result?.error) {
       toast.warning(result.error, {
         closeButton: true,
       });
+
+      return;
     }
   };
 

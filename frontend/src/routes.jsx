@@ -4,8 +4,9 @@ import AuthRoutes from "./layouts/auth-routes";
 import ProtectedRoutes from "./layouts/protected-routes";
 import Home from "./pages/home";
 import AuthPage from "./pages/auth/auth-page";
+import DashboardLayout from "./layouts/dashboard-layout";
 
-const Index = lazy(() => import("@/pages/dashboard/index"))
+const Index = lazy(() => import("@/pages/dashboard/index"));
 
 export const routes = [
   {
@@ -31,11 +32,17 @@ export const routes = [
     children: [
       {
         path: "/dashboard",
-        element: (
-          <Suspense fallback={<h1>Loading Dashboard...</h1>}>
-            <Index />
-          </Suspense>
-        ),
+        element: <DashboardLayout />,
+        children: [
+          {
+            index: true,
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Index />
+              </Suspense>
+            ),
+          },
+        ],
       },
     ],
   },

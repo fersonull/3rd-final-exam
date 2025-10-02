@@ -74,4 +74,11 @@ class AuthController
             'user'    => $user
         ]);
     }
+
+    public function logout()
+    {
+        Session::destroy();
+
+        return ["success" => true];
+    }
 }
