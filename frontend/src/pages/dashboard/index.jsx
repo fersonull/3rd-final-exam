@@ -1,8 +1,8 @@
 import { useAuthContext } from "@/contexts/auth-context";
-import { Button } from "@/components/ui/button";
 import { useFetch } from "@/hooks/use-fetch";
 import { useNavigate } from "react-router-dom";
 import OverviewCard from "@/components/dashboard/overview-card";
+import { CheckCircle, Folders, FolderClockIcon } from "lucide-react";
 import DashboardChart from "@/components/dashboard/dashboard-chart";
 import {
   Card,
@@ -29,14 +29,14 @@ export default function Index() {
   return (
     <>
       <div className="grid grid-cols-1 gap-4">
-        <div className="grid md:grid-cols-3 gap-4">
-          <OverviewCard title="Total projects" content={200} />
-          <OverviewCard title="Ongoing projects" content={12} />
-          <OverviewCard title="Finished projects" content={188} />
+        <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
+          <OverviewCard title="Total projects" content={200} icon={<Folders color="blue" />} />
+          <OverviewCard title="Ongoing projects" content={12} icon={<FolderClockIcon color="orange" />} />
+          <OverviewCard title="Finished projects" content={188} icon={<CheckCircle color="green" />} />
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-4">
-          <div className="col-span-2">
+        <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
+          <div className="lg:col-span-2">
             <Card>
               <CardHeader>
                 <div className="flex-col-center">
@@ -65,7 +65,7 @@ export default function Index() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="w-full h-64 font-medium text-xs">
+            <CardContent className="w-full font-medium text-xs">
               {/* <DashboardChart /> */}
             </CardContent>
           </Card>

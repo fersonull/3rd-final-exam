@@ -9,17 +9,17 @@ import {
 } from "recharts";
 
 const sales = [
-  { date: "Aug 29", contributions: 234, feedback: 344 },
-  { date: "Aug 30", contributions: 22, feedback: 1 },
-  { date: "Sept 1", contributions: 1234, feedback: 23 },
-  { date: "Sept 2", contributions: 300, feedback: 3000 },
-  { date: "Sept 3", contributions: 300, feedback: 3000 },
-  { date: "Sept 4", contributions: 6677, feedback: 4333 },
-  { date: "Sept 5", contributions: 2313, feedback: 2344 },
+  { date: "Aug 29", contributions: 2, feedback: 344 },
+  { date: "Aug 30", contributions: 2682, feedback: 1879 },
+  { date: "Sept 1", contributions: 3000, feedback: 23 },
+  { date: "Sept 2", contributions: 2982, feedback: 123 },
+  { date: "Sept 3", contributions: 300, feedback: 1000 },
+  { date: "Sept 4", contributions: 12, feedback: 4333 },
+  { date: "Sept 5", contributions: 2313, feedback: 24 },
   { date: "Sept 6", contributions: 23, feedback: 1122 },
   { date: "Sept 7", contributions: 233, feedback: 44 },
   { date: "Sept 8", contributions: 2233, feedback: 111 },
-  { date: "Sept 9", contributions: 2355, feedback: 2345 },
+  { date: "Sept 9", contributions: 2355, feedback: 25 },
 ];
 
 export default function DashboardChart() {
