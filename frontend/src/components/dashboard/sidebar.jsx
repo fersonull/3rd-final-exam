@@ -1,3 +1,4 @@
+import { Button } from "../ui/button";
 import {
   Calendar,
   LayoutDashboard,
@@ -16,6 +17,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter
 } from "@/components/ui/sidebar";
 import {
   Select,
@@ -126,6 +128,28 @@ export default function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <div className="flex flex-col gap-0.5 px-2 py-1.5 rounded-md border">
+          <div className="flex items-center gap-2">
+            <img
+              src="https://ui-avatars.com/api/?name=Jasfer+Monton&background=random"
+              alt="Jasfer Monton"
+              className="w-8 h-8 rounded-full border"
+            />
+            <div className="flex flex-col flex-1 min-w-0">
+              <span className="font-medium text-sm truncate">Jasfer Monton</span>
+              <span className="text-xs text-muted-foreground truncate">jasfer@example.com</span>
+            </div>
+            <Button
+              variant='icon'
+              title="Settings"
+            >
+              <Settings />
+            </Button>
+          </div>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }
