@@ -6,6 +6,7 @@ import {
   Search,
   Settings,
   ClipboardList,
+  UsersRound
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -32,7 +33,7 @@ import {
 
 const projectItems = [
   {
-    title: "Dashboard",
+    title: "Overview",
     url: "/",
     icon: LayoutDashboard,
   },
@@ -40,6 +41,11 @@ const projectItems = [
     title: "Tasks",
     url: "/tasks",
     icon: ClipboardList,
+  },
+  {
+    title: "Members",
+    url: "/members",
+    icon: UsersRound,
   },
 ];
 

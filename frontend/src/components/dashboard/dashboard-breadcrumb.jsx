@@ -6,8 +6,19 @@ export default function DashboardBreadcrumb() {
   const paths = location.pathname.split("/").filter(Boolean);
 
   const breadcrumbItems = paths.map((path, index) => {
-    const href = "/" + paths.slice(0, index + 1).join("/");
-    const label = path.charAt(0).toUpperCase() + path.slice(1);
+    // Remove hyphens for display label and replace with space, capitalize each word
+    const label = path
+      .split("-")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+    // Remove hyphens from the path for the href
+    const href =
+      "/" +
+      paths
+        .slice(0, index + 1)
+        .map(p => p.replace(/-/g, ""))
+        .join("/");
+
     return {
       label,
       to: index === paths.length - 1 ? null : href,
@@ -16,7 +27,7 @@ export default function DashboardBreadcrumb() {
 
   return (
     <BreadcrumbTemplate
-      items={[{ label: "Dashboard", href: "/" }, ...breadcrumbItems]}
+      items={[{ label: "Overview", href: "/" }, ...breadcrumbItems]}
     />
   );
 }

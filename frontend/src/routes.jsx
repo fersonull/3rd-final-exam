@@ -6,9 +6,11 @@ import Home from "./pages/home";
 import AuthPage from "./pages/auth/auth-page";
 import DashboardLayout from "./layouts/dashboard-layout";
 import Inbox from "./pages/dashboard/inbox";
+import NewTask from "./pages/tasks/new-task";
 
 const Dashboard = lazy(() => import("@/pages/dashboard/index"));
 const Tasks = lazy(() => import("@/pages/tasks/index"));
+const Members = lazy(() => import("@/pages/members/index"));
 
 export const routes = [
   {
@@ -45,7 +47,7 @@ export const routes = [
             ),
           },
           {
-            path: "/tasks",
+            path: "tasks",
             element: (
               <Suspense fallback={<div>Loading...</div>}>
                 <Tasks />
@@ -53,10 +55,22 @@ export const routes = [
             ),
           },
           {
-            path: "/inbox",
+            path: "tasks/new-task",
+            element: <NewTask />,
+          },
+          {
+            path: "inbox",
             element: (
               <Suspense fallback={<div>Loading...</div>}>
                 <Inbox />
+              </Suspense>
+            ),
+          },
+          {
+            path: "members",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Members />
               </Suspense>
             ),
           },

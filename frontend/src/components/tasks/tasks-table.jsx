@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import Banner from "../ui/banner";
 import { Button } from "../ui/button";
-import { InputGroup, InputGroupInput, InputGroupAddon } from "../ui/input-group";
+import {
+  InputGroup,
+  InputGroupInput,
+  InputGroupAddon,
+} from "../ui/input-group";
 import {
   Select,
   SelectContent,
@@ -22,7 +27,7 @@ import {
 import { ChevronUp, ChevronDown, Plus, SearchIcon } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 
-const initialTableData = [  
+const initialTableData = [
   {
     task: "Create a modal",
     project: "UI/UX",
@@ -135,7 +140,9 @@ export default function TasksTable() {
       search === "" ||
       row.task.toLowerCase().includes(search.toLowerCase()) ||
       row.project.toLowerCase().includes(search.toLowerCase()) ||
-      (row.assignee ? row.assignee.toLowerCase().includes(search.toLowerCase()) : false);
+      (row.assignee
+        ? row.assignee.toLowerCase().includes(search.toLowerCase())
+        : false);
     const matchesStatus = statusFilter === "all" || row.status === statusFilter;
     const matchesPriority =
       priorityFilter === "all" || row.priority === priorityFilter;
@@ -149,181 +156,176 @@ export default function TasksTable() {
   // Layout
   return (
     <>
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">Tasks</h1>
-          <p className="text-muted-foreground text-sm">
-            Manage and track your team's tasks.
-          </p>
-        </div>
-        <Button
-          size="sm"
-          // onClick={handleAddTask} // Placeholder for add task action
-        >
-          <Plus size={18} />
-          Add Task
-        </Button>
-      </div>
-
       {/* Filters and Search */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-        <div className="flex flex-wrap gap-2">
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Status</SelectLabel>
-                <SelectItem value="all">All</SelectItem>
-                {statusOptions.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Priority" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Priority</SelectLabel>
-                <SelectItem value="all">All</SelectItem>
-                {priorityOptions.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Select value={assigneeFilter} onValueChange={setAssigneeFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Assignee" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Assignee</SelectLabel>
-                <SelectItem value="all">All</SelectItem>
-                {teamMembers.map((member) => (
-                  <SelectItem key={member.value} value={member.value}>
-                    {member.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="w-full md:w-64">
-          <InputGroup>
-            <InputGroupInput
-              placeholder="Search tasks..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-      </div>
 
-      {/* Table */}
-      <Card>
-        <CardContent>
-          <Table>
-            <TableCaption>A list of all tasks.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                {columns.map((col) => (
-                  <TableHead
-                    key={col.key}
-                    className={col.className}
-                    style={{
-                      cursor: col.sortable ? "pointer" : "default",
-                      userSelect: "none",
-                    }}
-                    onClick={
-                      col.sortable ? () => handleSort(col.key) : undefined
-                    }
-                  >
-                    <span className="inline-flex items-center gap-1">
-                      {col.label}
-                      {col.sortable &&
-                        (sortKey === col.key ? (
-                          sortOrder === "asc" ? (
-                            <ChevronUp size={14} />
-                          ) : (
-                            <ChevronDown size={14} />
-                          )
-                        ) : (
-                          <span className="opacity-30">
-                            <ChevronUp size={14} style={{ marginBottom: -4 }} />
-                            <ChevronDown size={14} style={{ marginTop: -4 }} />
-                          </span>
-                        ))}
-                    </span>
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {sortedData.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="text-center py-8"
-                  >
-                    <span className="text-muted-foreground">
-                      No tasks found.
-                    </span>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                sortedData.map((data, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="py-3 font-medium">{data.task}</TableCell>
-                    <TableCell className="py-3">{data.project}</TableCell>
-                    <TableCell className="py-3">{data.status}</TableCell>
-                    <TableCell className="py-3">{data.priority}</TableCell>
-                    <TableCell className="py-3">{data.dueDate}</TableCell>
-                    <TableCell className="py-3 flex-end">
-                      {data.assignee === null ? (
-                        <div>
-                          <Select>
-                            <SelectTrigger className="w-[180px]">
-                              <SelectValue placeholder="Select assignee" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectLabel>Your team</SelectLabel>
-                                {teamMembers.map((member) => (
-                                  <SelectItem
-                                    key={member.value}
-                                    value={member.value}
-                                  >
-                                    {member.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      ) : (
-                        <span>{data.assignee}</span>
-                      )}
-                    </TableCell>
+      <div className="grid grid-cols-1">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+          <div className="flex flex-wrap gap-2">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Status</SelectLabel>
+                  <SelectItem value="all">All</SelectItem>
+                  {statusOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Priority</SelectLabel>
+                  <SelectItem value="all">All</SelectItem>
+                  {priorityOptions.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Select value={assigneeFilter} onValueChange={setAssigneeFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Assignee" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Assignee</SelectLabel>
+                  <SelectItem value="all">All</SelectItem>
+                  {teamMembers.map((member) => (
+                    <SelectItem key={member.value} value={member.value}>
+                      {member.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-full md:w-64">
+            <InputGroup>
+              <InputGroupInput
+                placeholder="Search tasks..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+            </InputGroup>
+          </div>
+        </div>
+        {/* Table */}
+        <Card>
+          <CardContent>
+            <div className="overflow-x-auto w-full">
+              <Table className="min-w-[700px] w-full">
+                <TableCaption>A list of all tasks.</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    {columns.map((col) => (
+                      <TableHead
+                        key={col.key}
+                        className={col.className}
+                        style={{
+                          cursor: col.sortable ? "pointer" : "default",
+                          userSelect: "none",
+                        }}
+                        onClick={
+                          col.sortable ? () => handleSort(col.key) : undefined
+                        }
+                      >
+                        <span className="inline-flex items-center gap-1">
+                          {col.label}
+                          {col.sortable &&
+                            (sortKey === col.key ? (
+                              sortOrder === "asc" ? (
+                                <ChevronUp size={14} />
+                              ) : (
+                                <ChevronDown size={14} />
+                              )
+                            ) : (
+                              <span className="opacity-30">
+                                <ChevronUp
+                                  size={14}
+                                  style={{ marginBottom: -4 }}
+                                />
+                                <ChevronDown
+                                  size={14}
+                                  style={{ marginTop: -4 }}
+                                />
+                              </span>
+                            ))}
+                        </span>
+                      </TableHead>
+                    ))}
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                </TableHeader>
+                <TableBody>
+                  {sortedData.length === 0 ? (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="text-center py-8"
+                      >
+                        <span className="text-muted-foreground">
+                          No tasks found.
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    sortedData.map((data, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="py-3 font-medium">
+                          {data.task}
+                        </TableCell>
+                        <TableCell className="py-3">{data.project}</TableCell>
+                        <TableCell className="py-3">{data.status}</TableCell>
+                        <TableCell className="py-3">{data.priority}</TableCell>
+                        <TableCell className="py-3">{data.dueDate}</TableCell>
+                        <TableCell className="py-3 flex-end">
+                          {data.assignee === null ? (
+                            <div>
+                              <Select>
+                                <SelectTrigger className="w-[180px]">
+                                  <SelectValue placeholder="Select assignee" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectLabel>Your team</SelectLabel>
+                                    {teamMembers.map((member) => (
+                                      <SelectItem
+                                        key={member.value}
+                                        value={member.value}
+                                      >
+                                        {member.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          ) : (
+                            <span>{data.assignee}</span>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </>
   );
 }

@@ -1,7 +1,9 @@
+import Banner from "@/components/ui/banner";
+
 export default function Inbox() {
   return (
     <>
-      <h1>Inbox</h1>
+      <Banner title='Inbox' sub={'View and manage notifications.'} />
     </>
   );
 }
