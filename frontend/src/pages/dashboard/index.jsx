@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import OverviewCard from "@/components/dashboard/overview-card";
 import { CheckCircle, Folders, FolderClockIcon } from "lucide-react";
 import DashboardChart from "@/components/dashboard/dashboard-chart";
+import DashboardTable from "@/components/dashboard/dashboard-table";
 import {
   Card,
   CardContent,
@@ -30,9 +31,21 @@ export default function Index() {
     <>
       <div className="grid grid-cols-1 gap-4">
         <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
-          <OverviewCard title="Total projects" content={200} icon={<Folders color="blue" />} />
-          <OverviewCard title="Ongoing projects" content={12} icon={<FolderClockIcon color="orange" />} />
-          <OverviewCard title="Finished projects" content={188} icon={<CheckCircle color="green" />} />
+          <OverviewCard
+            title="Total tasks"
+            content={200}
+            icon={<Folders color="blue" />}
+          />
+          <OverviewCard
+            title="Ongoing tasks"
+            content={12}
+            icon={<FolderClockIcon color="orange" />}
+          />
+          <OverviewCard
+            title="Completed tasks"
+            content={188}
+            icon={<CheckCircle color="green" />}
+          />
         </div>
 
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
@@ -70,6 +83,12 @@ export default function Index() {
             </CardContent>
           </Card>
         </div>
+
+        <Card>
+          <CardContent>
+            <DashboardTable />
+          </CardContent>
+        </Card>
       </div>
     </>
   );

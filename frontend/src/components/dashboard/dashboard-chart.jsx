@@ -9,17 +9,17 @@ import {
 } from "recharts";
 
 const sales = [
-  { date: "Aug 29", contributions: 2, feedback: 344 },
-  { date: "Aug 30", contributions: 2682, feedback: 1879 },
-  { date: "Sept 1", contributions: 3000, feedback: 23 },
-  { date: "Sept 2", contributions: 2982, feedback: 123 },
-  { date: "Sept 3", contributions: 300, feedback: 1000 },
-  { date: "Sept 4", contributions: 12, feedback: 4333 },
-  { date: "Sept 5", contributions: 2313, feedback: 24 },
-  { date: "Sept 6", contributions: 23, feedback: 1122 },
-  { date: "Sept 7", contributions: 233, feedback: 44 },
-  { date: "Sept 8", contributions: 2233, feedback: 111 },
-  { date: "Sept 9", contributions: 2355, feedback: 25 },
+  { date: "Aug 29", tasksCreated: 2, tasksCompleted: 344 },
+  { date: "Aug 30", tasksCreated: 2682, tasksCompleted: 1879 },
+  { date: "Sept 1", tasksCreated: 3000, tasksCompleted: 23 },
+  { date: "Sept 2", tasksCreated: 2982, tasksCompleted: 123 },
+  { date: "Sept 3", tasksCreated: 300, tasksCompleted: 1000 },
+  { date: "Sept 4", tasksCreated: 12, tasksCompleted: 4333 },
+  { date: "Sept 5", tasksCreated: 2313, tasksCompleted: 24 },
+  { date: "Sept 6", tasksCreated: 23, tasksCompleted: 1122 },
+  { date: "Sept 7", tasksCreated: 233, tasksCompleted: 44 },
+  { date: "Sept 8", tasksCreated: 2233, tasksCompleted: 111 },
+  { date: "Sept 9", tasksCreated: 2355, tasksCompleted: 25 },
 ];
 
 export default function DashboardChart() {
@@ -46,7 +46,7 @@ export default function DashboardChart() {
         <Tooltip content={<CustomTooltip />} />
         <Area
           type="natural"
-          dataKey="contributions"
+          dataKey="tasksCreated"
           stroke="#fff"
           fillOpacity={1}
           fill="url(#color1)"
@@ -54,7 +54,7 @@ export default function DashboardChart() {
         />
         <Area
           type="natural"
-          dataKey="feedback"
+          dataKey="tasksCompleted"
           stroke="#fff"
           fillOpacity={1}
           fill="url(#color2)"
@@ -74,14 +74,14 @@ function CustomTooltip({ active, payload, label }) {
           <div className="flex gap-4">
             <span className="flex-center flex-1">
               <div className="p-1 border-accent me-1 bg-[#7ba6e4]"></div>
-              <p className="flex-1">Contributions</p>
+              <p className="flex-1">Tasks created</p>
             </span>
             <p className="font-bold">{payload[0].value}</p>
           </div>
           <div className="flex gap-4">
             <span className="flex-center flex-1">
               <div className="p-1 border-accent me-1 bg-[#465f82]"></div>
-              <p className="flex-1">Feedbacks</p>
+              <p className="flex-1">Tasks completed</p>
             </span>
             <p className="font-bold">{payload[1].value}</p>
           </div>
