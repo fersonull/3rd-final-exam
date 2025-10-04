@@ -1,4 +1,4 @@
-import { Button } from "../ui/button";
+import SidebarUserAvatar from "./sidebar-user-avatar";
 import {
   Calendar,
   LayoutDashboard,
@@ -17,7 +17,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarFooter
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import {
   Select,
@@ -67,24 +67,16 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <Select>
-              <SelectTrigger className="w-full">  
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select project" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Your projects</SelectLabel>
-                  <SelectItem value="Project 1">
-                    Project 1
-                  </SelectItem>
-                  <SelectItem value="Project 2">
-                    Project 2
-                  </SelectItem>
-                  <SelectItem value="Project 3">
-                    Project 3
-                  </SelectItem>
-                  <SelectItem value="Project 4">
-                    Project 4
-                  </SelectItem>
+                  <SelectItem value="Project 1">Project 1</SelectItem>
+                  <SelectItem value="Project 2">Project 2</SelectItem>
+                  <SelectItem value="Project 3">Project 3</SelectItem>
+                  <SelectItem value="Project 4">Project 4</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -130,25 +122,7 @@ export default function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <div className="flex flex-col gap-0.5 px-2 py-1.5 rounded-md border">
-          <div className="flex items-center gap-2">
-            <img
-              src="https://ui-avatars.com/api/?name=Jasfer+Monton&background=random"
-              alt="Jasfer Monton"
-              className="w-8 h-8 rounded-full border"
-            />
-            <div className="flex flex-col flex-1 min-w-0">
-              <span className="font-medium text-sm truncate">Jasfer Monton</span>
-              <span className="text-xs text-muted-foreground truncate">jasfer@example.com</span>
-            </div>
-            <Button
-              variant='icon'
-              title="Settings"
-            >
-              <Settings />
-            </Button>
-          </div>
-        </div>
+        <SidebarUserAvatar />
       </SidebarFooter>
     </Sidebar>
   );
