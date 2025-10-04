@@ -9,7 +9,7 @@ import {
 
 export default function DashboardChart() {
   return (
-    <Card>
+    <Card className="md:h-full h-80">
       <CardHeader>
         <div className="flex-col-center">
           <div className="flex flex-1 flex-col gap-1 w-full">
@@ -20,7 +20,7 @@ export default function DashboardChart() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="w-full h-64 font-medium text-xs">
+      <CardContent className="w-full h-full font-medium text-xs">
         <InfoChart />
       </CardContent>
     </Card>

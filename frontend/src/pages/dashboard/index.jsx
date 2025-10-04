@@ -6,6 +6,7 @@ import OverviewCard from "@/components/dashboard/overview-card";
 import { CheckCircle, Folders, FolderClockIcon } from "lucide-react";
 import ChartSkeleton from "@/components/dashboard/chart-skeleton";
 import DashboardTable from "@/components/dashboard/dashboard-table";
+import RecentOverview from "@/components/dashboard/recent-overview";
 import {
   Card,
   CardContent,
@@ -35,16 +36,16 @@ export default function Index() {
   return (
     <>
       <div className="grid grid-cols-1 gap-4">
-        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1   gap-4">
+        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
           <OverviewCard
             title="Total tasks"
             content={200}
-            icon={<Folders color="blue" />}
+            icon={<Folders color="orange" />}
           />
           <OverviewCard
             title="Ongoing tasks"
             content={12}
-            icon={<FolderClockIcon color="orange" />}
+            icon={<FolderClockIcon color="blue" />}
           />
           <OverviewCard
             title="Completed tasks"
@@ -60,21 +61,7 @@ export default function Index() {
             </Suspense>
           </div>
 
-          <Card>
-            <CardHeader>
-              <div className="flex-col-center">
-                <div className="flex flex-1 flex-col gap-1 w-full">
-                  <CardTitle>Your recent contributions</CardTitle>
-                  <CardDescription>
-                    Showing your recent contributions to the team
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="w-full font-medium text-xs">
-              {/* <DashboardChart /> */}
-            </CardContent>
-          </Card>
+          <RecentOverview />
         </div>
 
         <Card>
