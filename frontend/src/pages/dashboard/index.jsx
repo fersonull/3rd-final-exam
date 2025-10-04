@@ -1,9 +1,10 @@
+import { lazy, Suspense } from "react";
 import { useAuthContext } from "@/contexts/auth-context";
 import { useFetch } from "@/hooks/use-fetch";
 import { useNavigate } from "react-router-dom";
 import OverviewCard from "@/components/dashboard/overview-card";
 import { CheckCircle, Folders, FolderClockIcon } from "lucide-react";
-import DashboardChart from "@/components/dashboard/dashboard-chart";
+import ChartSkeleton from "@/components/dashboard/chart-skeleton";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import {
   Card,
@@ -12,6 +13,10 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+
+const DashboardChart = lazy(() =>
+  import("@/components/dashboard/dashboard-chart")
+);
 
 export default function Index() {
   const navigate = useNavigate();
@@ -50,21 +55,9 @@ export default function Index() {
 
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
           <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <div className="flex-col-center">
-                  <div className="flex flex-1 flex-col gap-1 w-full">
-                    <CardTitle>Your last 7-day activities</CardTitle>
-                    <CardDescription>
-                      Showing your recent activies within week
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="w-full h-64 font-medium text-xs">
-                <DashboardChart />
-              </CardContent>
-            </Card>
+            <Suspense fallback={<ChartSkeleton />}>
+              <DashboardChart />
+            </Suspense>
           </div>
 
           <Card>

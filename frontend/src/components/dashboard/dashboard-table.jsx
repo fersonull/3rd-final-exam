@@ -8,6 +8,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+const tableData = [
+  {
+    task: "Create a modal",
+    project: "UI/UX",
+    status: "In Progress",
+    priority: "Low",
+    dueDate: "2023-09-15",
+    assignee: "Jasfer Monton",
+  },
+  {
+    task: "Toast popups for actions",
+    project: "UI/UX",
+    status: "In Progress",
+    priority: "High",
+    dueDate: "2024-09-18",
+    assignee: "Kimberly Macatangay",
+  },
+];
+
 export default function DashboardTable() {
   return (
     <div>
@@ -24,24 +43,16 @@ export default function DashboardTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">Create a modal</TableCell>
-            <TableCell>UI/UX</TableCell>
-            <TableCell>In Progress</TableCell>
-            <TableCell>Low</TableCell>
-            <TableCell>2023-09-15</TableCell>
-            <TableCell className="text-right">Jasfer Monton</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">
-              Toast popups for actions
-            </TableCell>
-            <TableCell>UI/UX</TableCell>
-            <TableCell>In Progress</TableCell>
-            <TableCell>High</TableCell>
-            <TableCell>2024-09-18</TableCell>
-            <TableCell className="text-right">Kimberly Macatangay</TableCell>
-          </TableRow>
+          {tableData.map((data, index) => (
+            <TableRow key={index}>
+              <TableCell className="font-medium">{data.task}</TableCell>
+              <TableCell>{data.project}</TableCell>
+              <TableCell>{data.status}</TableCell>
+              <TableCell>{data.priority}</TableCell>
+              <TableCell>{data.dueDate}</TableCell>
+              <TableCell className="text-right">{data.assignee}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>
