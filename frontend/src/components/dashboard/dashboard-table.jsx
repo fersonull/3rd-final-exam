@@ -1,4 +1,13 @@
 import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectItem,
+  SelectGroup,
+  SelectValue,
+  SelectLabel,
+} from "../ui/select";
+import {
   Table,
   TableBody,
   TableCaption,
@@ -31,7 +40,7 @@ export default function DashboardTable() {
   return (
     <div>
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableCaption>A list of recent tasks.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[200px]">Tasks</TableHead>
@@ -50,7 +59,24 @@ export default function DashboardTable() {
               <TableCell>{data.status}</TableCell>
               <TableCell>{data.priority}</TableCell>
               <TableCell>{data.dueDate}</TableCell>
-              <TableCell className="text-right">{data.assignee}</TableCell>
+              <TableCell className="flex-end">
+                <Select defaultValue={data.assignee}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select assignee" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Your team</SelectLabel>
+                      <SelectItem selected value="Jasfer Monton">
+                        Jasfer Monton
+                      </SelectItem>
+                      <SelectItem value="Kimberly Macatangay">
+                        Kimberly Macatangay
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

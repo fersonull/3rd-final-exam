@@ -35,7 +35,7 @@ export default function Index() {
   return (
     <>
       <div className="grid grid-cols-1 gap-4">
-        <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1   gap-4">
           <OverviewCard
             title="Total tasks"
             content={200}

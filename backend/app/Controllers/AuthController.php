@@ -41,7 +41,7 @@ class AuthController
 
         if (!$result) {
             return Response::json(404, [
-                'errors' => ['email' => 'Invalid email address']
+                'errors' => ['email' => 'Email not found']
             ]);
         }
 
