@@ -8,27 +8,54 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const sales = [
-  { date: "Aug 29", tasksCreated: 2, tasksCompleted: 344 },
-  { date: "Aug 30", tasksCreated: 2682, tasksCompleted: 1879 },
-  { date: "Sept 1", tasksCreated: 3000, tasksCompleted: 23 },
-  { date: "Sept 2", tasksCreated: 2982, tasksCompleted: 123 },
-  { date: "Sept 3", tasksCreated: 300, tasksCompleted: 1000 },
-  { date: "Sept 4", tasksCreated: 12, tasksCompleted: 4333 },
-  { date: "Sept 5", tasksCreated: 2313, tasksCompleted: 24 },
-  { date: "Sept 6", tasksCreated: 23, tasksCompleted: 1122 },
-  { date: "Sept 7", tasksCreated: 233, tasksCompleted: 44 },
-  { date: "Sept 8", tasksCreated: 2233, tasksCompleted: 111 },
-  { date: "Sept 9", tasksCreated: 2355, tasksCompleted: 25 },
-];
+function getLast7DaysData() {
+  const today = new Date();
+  const data = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const month = d.toLocaleString("default", { month: "short" });
+    const day = d.getDate();
+    data.push({
+      date: `${month} ${day}`,
+      tasksCreated: Math.floor(Math.random() * 3000) + 1,
+      tasksCompleted: Math.floor(Math.random() * 3500) + 1,
+    });
+  }
+  return data;
+}
 
-export default function InfoChart() {
+function getLast1MonthData() {
+  const today = new Date();
+  const data = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const month = d.toLocaleString("default", { month: "short" });
+    const day = d.getDate();
+    data.push({
+      date: `${month} ${day}`,
+      tasksCreated: Math.floor(Math.random() * 3000) + 1,
+      tasksCompleted: Math.floor(Math.random() * 3500) + 1,
+    });
+  }
+  return data;
+}
+
+/**
+ * InfoChart component
+ * @param {Object} props
+ * @param {'7d'|'1m'} [props.range='7d'] - Range to display: '7d' for 7 days, '1m' for 1 month
+ */
+export default function InfoChart({ range = "7d" }) {
+  const data = range === "1m" ? getLast1MonthData() : getLast7DaysData();
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart
         width={730}
         height={250}
-        data={sales}
+        data={data}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
         <defs>
@@ -67,8 +94,6 @@ export default function InfoChart() {
 
 function CustomTooltip({ active, payload, label }) {
   if (active && payload && payload.length) {
-    console.log(payload);
-
     return (
       <div className="p-3 rounded-md shadow bg-background border-accent">
         <p className="font-medium text-sm mb-1">{label}</p>
