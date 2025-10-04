@@ -3,7 +3,7 @@ import {
   AreaChart,
   Area,
   XAxis,
-  YAxis,
+  YAxis,  
   Tooltip,
   CartesianGrid,
 } from "recharts";
@@ -42,11 +42,6 @@ function getLast1MonthData() {
   return data;
 }
 
-/**
- * InfoChart component
- * @param {Object} props
- * @param {'7d'|'1m'} [props.range='7d'] - Range to display: '7d' for 7 days, '1m' for 1 month
- */
 export default function InfoChart({ range = "7d" }) {
   const data = range === "1m" ? getLast1MonthData() : getLast7DaysData();
 

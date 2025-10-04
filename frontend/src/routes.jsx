@@ -7,7 +7,8 @@ import AuthPage from "./pages/auth/auth-page";
 import DashboardLayout from "./layouts/dashboard-layout";
 import Inbox from "./pages/dashboard/inbox";
 
-const Index = lazy(() => import("@/pages/dashboard/index"));
+const Dashboard = lazy(() => import("@/pages/dashboard/index"));
+const Tasks = lazy(() => import("@/pages/tasks/index"));
 
 export const routes = [
   {
@@ -39,7 +40,15 @@ export const routes = [
             index: true,
             element: (
               <Suspense fallback={<div>Loading...</div>}>
-                <Index />
+                <Dashboard />
+              </Suspense>
+            ),
+          },
+          {
+            path: "/tasks",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Tasks />
               </Suspense>
             ),
           },

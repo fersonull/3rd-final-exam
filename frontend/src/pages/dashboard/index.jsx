@@ -35,6 +35,15 @@ export default function Index() {
 
   return (
     <>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground text-sm">
+            View key metrics, track progress, and manage your team's tasks all in one place.
+          </p>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 gap-4">
         <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
           <OverviewCard

@@ -5,6 +5,7 @@ import {
   Inbox,
   Search,
   Settings,
+  ClipboardList,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -34,6 +35,11 @@ const projectItems = [
     title: "Dashboard",
     url: "/",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Tasks",
+    url: "/tasks",
+    icon: ClipboardList,
   },
 ];
 
