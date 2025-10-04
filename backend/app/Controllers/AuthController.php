@@ -79,6 +79,6 @@ class AuthController
     {
         Session::destroy();
 
-        return ["success" => true];
+        return ["success" => true, "message" => "You've logged out successfuly."];
     }
 }
