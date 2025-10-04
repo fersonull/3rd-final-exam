@@ -44,7 +44,12 @@ const columns = [
   { key: "status", label: "Status", sortable: true },
   { key: "priority", label: "Priority", sortable: true },
   { key: "dueDate", label: "Due Date", sortable: true },
-  { key: "assignee", label: "Assignee", sortable: true, className: "text-right" },
+  {
+    key: "assignee",
+    label: "Assignee",
+    sortable: true,
+    className: "text-right",
+  },
 ];
 
 function getSortedData(data, sortKey, sortOrder) {
@@ -90,13 +95,16 @@ export default function DashboardTable() {
               <TableHead
                 key={col.key}
                 className={col.className}
-                style={{ cursor: col.sortable ? "pointer" : "default", userSelect: "none" }}
+                style={{
+                  cursor: col.sortable ? "pointer" : "default",
+                  userSelect: "none",
+                }}
                 onClick={col.sortable ? () => handleSort(col.key) : undefined}
               >
                 <span className="inline-flex items-center gap-1">
                   {col.label}
-                  {col.sortable && (
-                    sortKey === col.key ? (
+                  {col.sortable &&
+                    (sortKey === col.key ? (
                       sortOrder === "asc" ? (
                         <ChevronUp size={14} />
                       ) : (
@@ -107,8 +115,7 @@ export default function DashboardTable() {
                         <ChevronUp size={14} style={{ marginBottom: -4 }} />
                         <ChevronDown size={14} style={{ marginTop: -4 }} />
                       </span>
-                    )
-                  )}
+                    ))}
                 </span>
               </TableHead>
             ))}
