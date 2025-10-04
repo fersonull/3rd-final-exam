@@ -18,8 +18,8 @@ function getLast7DaysData() {
     const day = d.getDate();
     data.push({
       date: `${month} ${day}`,
-      tasksCreated: Math.floor(Math.random() * 3000) + 1,
-      tasksCompleted: Math.floor(Math.random() * 3500) + 1,
+      tasksCreated: Math.floor(Math.random() * 10) + 1,
+      tasksCompleted: Math.floor(Math.random() * 9) + 1,
     });
   }
   return data;
@@ -35,8 +35,8 @@ function getLast1MonthData() {
     const day = d.getDate();
     data.push({
       date: `${month} ${day}`,
-      tasksCreated: Math.floor(Math.random() * 3000) + 1,
-      tasksCompleted: Math.floor(Math.random() * 3500) + 1,
+      tasksCreated: Math.floor(Math.random() * 10) + 1,
+      tasksCompleted: Math.floor(Math.random() * 9) + 1,
     });
   }
   return data;

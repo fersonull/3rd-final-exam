@@ -45,7 +45,7 @@ const initialTableData = [
     status: "In Progress",
     priority: "Low",
     dueDate: "2023-09-15",
-    assignee: "Jasfer Monton",
+    assignee: null,
   },
   {
     task: "Fix dashboard bugs",
