@@ -45,11 +45,36 @@ const initialTableData = [
 ];
 
 const columns = [
-  { key: "task", label: "Tasks", sortable: true, className: "min-w-[140px] w-[200px]" },
-  { key: "project", label: "Project", sortable: true, className: "min-w-[100px]" },
-  { key: "status", label: "Status", sortable: true, className: "min-w-[100px]" },
-  { key: "priority", label: "Priority", sortable: true, className: "min-w-[100px]" },
-  { key: "dueDate", label: "Due Date", sortable: true, className: "min-w-[120px]" },
+  {
+    key: "task",
+    label: "Tasks",
+    sortable: true,
+    className: "min-w-[140px] w-[200px]",
+  },
+  {
+    key: "project",
+    label: "Project",
+    sortable: true,
+    className: "min-w-[100px]",
+  },
+  {
+    key: "status",
+    label: "Status",
+    sortable: true,
+    className: "min-w-[100px]",
+  },
+  {
+    key: "priority",
+    label: "Priority",
+    sortable: true,
+    className: "min-w-[100px]",
+  },
+  {
+    key: "dueDate",
+    label: "Due Date",
+    sortable: true,
+    className: "min-w-[120px]",
+  },
   {
     key: "assignee",
     label: "Assignee",
@@ -94,7 +119,6 @@ export default function DashboardTable() {
   return (
     <div className="overflow-x-auto w-full">
       <Table className="min-w-[700px] w-full">
-        <TableCaption>A list of recent tasks.</TableCaption>
         <TableHeader>
           <TableRow>
             {columns.map((col) => (

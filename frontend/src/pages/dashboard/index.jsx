@@ -3,7 +3,7 @@ import { useAuthContext } from "@/contexts/auth-context";
 import { useFetch } from "@/hooks/use-fetch";
 import { useNavigate } from "react-router-dom";
 import OverviewCard from "@/components/dashboard/overview-card";
-import { CheckCircle, Folders, FolderClockIcon } from "lucide-react";
+import { CheckCircle, Notebook, Timer, ListChecks } from "lucide-react";
 import ChartSkeleton from "@/components/dashboard/chart-skeleton";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import RecentOverview from "@/components/dashboard/recent-overview";
@@ -32,17 +32,26 @@ export default function Index() {
           <OverviewCard
             title="Total tasks"
             content={200}
-            icon={<Folders color="orange" />}
+            icon={<Notebook color="orange" />}
+            description="All tasks in the system"
+            trend={5}
+            trendLabel="since last week"
           />
           <OverviewCard
             title="Ongoing tasks"
             content={12}
-            icon={<FolderClockIcon color="blue" />}
+            icon={<Timer color="blue" />}
+            description="Currently in progress"
+            trend={-2}
+            trendLabel="since last week"
           />
           <OverviewCard
             title="Completed tasks"
             content={188}
-            icon={<CheckCircle color="green" />}
+            icon={<ListChecks color="green" />}
+            description="Tasks marked as done"
+            trend={7}
+            trendLabel="since last week"
           />
         </div>
 

@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Banner from "../ui/banner";
-import { Button } from "../ui/button";
 import {
   InputGroup,
   InputGroupInput,
@@ -18,7 +16,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -156,19 +153,17 @@ export default function TasksTable() {
   // Layout
   return (
     <>
-      {/* Filters and Search */}
-
       <div className="grid grid-cols-1">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
           <div className="flex flex-wrap gap-2">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Status</SelectLabel>
-                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="all">Filter by status</SelectItem>
                   {statusOptions.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
@@ -179,12 +174,12 @@ export default function TasksTable() {
             </Select>
             <Select value={priorityFilter} onValueChange={setPriorityFilter}>
               <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Priority" />
+                <SelectValue placeholder="Filter by priority" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Priority</SelectLabel>
-                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="all">Filter by priority</SelectItem>
                   {priorityOptions.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
@@ -195,12 +190,12 @@ export default function TasksTable() {
             </Select>
             <Select value={assigneeFilter} onValueChange={setAssigneeFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Assignee" />
+                <SelectValue placeholder="Filter by assignee" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Assignee</SelectLabel>
-                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="all">Filter by assignee</SelectItem>
                   {teamMembers.map((member) => (
                     <SelectItem key={member.value} value={member.value}>
                       {member.label}
@@ -223,12 +218,10 @@ export default function TasksTable() {
             </InputGroup>
           </div>
         </div>
-        {/* Table */}
         <Card>
           <CardContent>
             <div className="overflow-x-auto w-full">
               <Table className="min-w-[700px] w-full">
-                <TableCaption>A list of all tasks.</TableCaption>
                 <TableHeader>
                   <TableRow>
                     {columns.map((col) => (
