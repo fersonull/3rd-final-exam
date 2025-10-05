@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import { ChevronUp, ChevronDown, Plus, SearchIcon } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
+import TaskStatusPill from "./task-status-pill";
 
 const initialTableData = [
   {
@@ -131,7 +132,6 @@ export default function TasksTable() {
     }
   };
 
-  // Filtering logic
   const filteredData = tableData.filter((row) => {
     const matchesSearch =
       search === "" ||
@@ -150,7 +150,6 @@ export default function TasksTable() {
 
   const sortedData = getSortedData(filteredData, sortKey, sortOrder);
 
-  // Layout
   return (
     <>
       <div className="grid grid-cols-1">
@@ -281,7 +280,9 @@ export default function TasksTable() {
                           {data.task}
                         </TableCell>
                         <TableCell className="py-3">{data.project}</TableCell>
-                        <TableCell className="py-3">{data.status}</TableCell>
+                        <TableCell className="py-3">
+                          <TaskStatusPill status={data.status} />
+                        </TableCell>
                         <TableCell className="py-3">{data.priority}</TableCell>
                         <TableCell className="py-3">{data.dueDate}</TableCell>
                         <TableCell className="py-3 flex-end">

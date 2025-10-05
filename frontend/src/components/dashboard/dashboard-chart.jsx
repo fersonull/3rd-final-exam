@@ -6,6 +6,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  CardAction,
 } from "../ui/card";
 import {
   Select,
@@ -19,7 +20,7 @@ export default function DashboardChart() {
   const [range, setRange] = useState("7d");
 
   return (
-    <Card className="md:h-full h-80">
+    <Card className="lg:h-full h-80">
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
           <CardTitle>

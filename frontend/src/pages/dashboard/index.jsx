@@ -3,7 +3,7 @@ import { useAuthContext } from "@/contexts/auth-context";
 import { useFetch } from "@/hooks/use-fetch";
 import { useNavigate } from "react-router-dom";
 import OverviewCard from "@/components/dashboard/overview-card";
-import { CheckCircle, Notebook, Timer, ListChecks } from "lucide-react";
+import { List, Notebook, Timer, ListChecks } from "lucide-react";
 import ChartSkeleton from "@/components/dashboard/chart-skeleton";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import RecentOverview from "@/components/dashboard/recent-overview";
@@ -13,8 +13,10 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  CardAction
 } from "@/components/ui/card";
 import Banner from "@/components/ui/banner";
+import { Button } from "@/components/ui/button";
 
 const DashboardChart = lazy(() =>
   import("@/components/dashboard/dashboard-chart")  
@@ -28,7 +30,7 @@ export default function Index() {
       <Banner title='Overview' sub={`View key metrics, track progress, and manage your team's tasks all in one place.`} />
 
       <div className="grid grid-cols-1 gap-4">
-        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+        <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
           <OverviewCard
             title="Total tasks"
             content={200}
@@ -66,6 +68,21 @@ export default function Index() {
         </div>
 
         <Card>
+          <CardHeader>
+            <div>
+              <CardTitle>List of recent tasks</CardTitle>
+              <CardDescription>
+                All recent activities on tasks
+              </CardDescription>
+            </div>
+
+            <CardAction>
+              <Button variant="outline">
+                <List />
+                Browse all
+              </Button>
+            </CardAction>
+          </CardHeader>
           <CardContent>
             <DashboardTable />
           </CardContent>

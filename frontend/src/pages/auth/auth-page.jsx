@@ -9,7 +9,10 @@ export default function AuthPage() {
   return (
     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 bg-accent-foreground">
       <div className="flex flex-col items-center justify-between h-full md:px-10 px-8 py-6 rounded-t-2xl md:rounded-none bg-background order-1 md:order-0">
-        <a className="logo text-xl font-bold hidden md:block">Logo</a>
+        <div className="text-center">
+          <a className="logo text-xl font-bold hidden md:block">Nebulo</a>
+          <span className="text-xs text-muted-foreground hidden md:block tracking-widest mt-1">work. flow. evolve.</span>
+        </div>
 
         <Tabs
           defaultValue={searchParams.get("tab") || "login"}
