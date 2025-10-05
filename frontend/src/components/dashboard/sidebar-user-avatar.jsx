@@ -13,7 +13,17 @@ import { useFetch } from "@/hooks/use-fetch";
 import { useNavigate } from "react-router-dom";
 
 export default function SidebarUserAvatar() {
-  const { refetch: logout, loading: loggingOut } = useFetch("/logout", { method: "POST" }, false)
+  const { token } = useAuthContext();
+  const { refetch: logout, loading: loggingOut } = useFetch(
+    "/logout",
+    {
+      method: "POST",
+      headers: {
+        Authorization: token ? `Bearer ${token}` : undefined,
+      },
+    },
+    false
+  );
   const { user, setToken } = useAuthContext();
   const navigate = useNavigate();
 
