@@ -1,12 +1,11 @@
 import { lazy, Suspense } from "react";
-import { useAuthContext } from "@/contexts/auth-context";
-import { useFetch } from "@/hooks/use-fetch";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import OverviewCard from "@/components/dashboard/overview-card";
 import { List, Notebook, Timer, ListChecks } from "lucide-react";
 import ChartSkeleton from "@/components/dashboard/chart-skeleton";
 import DashboardTable from "@/components/dashboard/dashboard-table";
-import RecentOverview from "@/components/dashboard/recent-overview";
+import DistributionChart from "@/components/dashboard/distribution-chart";
 import {
   Card,
   CardContent,
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import Banner from "@/components/ui/banner";
 import { Button } from "@/components/ui/button";
+
 
 const DashboardChart = lazy(() =>
   import("@/components/dashboard/dashboard-chart")  
@@ -49,7 +49,7 @@ export default function Index() {
           />
           <OverviewCard
             title="Completed tasks"
-            content={188}
+            content={122}
             icon={<ListChecks color="green" />}
             description="Tasks marked as done"
             trend={7}
@@ -64,7 +64,8 @@ export default function Index() {
             </Suspense>
           </div>
 
-          <RecentOverview />
+          {/* Pie Chart Card */}
+          <DistributionChart />
         </div>
 
         <Card>
@@ -77,10 +78,12 @@ export default function Index() {
             </div>
 
             <CardAction>
-              <Button variant="outline">
-                <List />
-                Browse all
-              </Button>
+              <Link to="/tasks">
+                <Button variant="outline">
+                  <List />
+                  Browse all
+                </Button>
+              </Link>
             </CardAction>
           </CardHeader>
           <CardContent>

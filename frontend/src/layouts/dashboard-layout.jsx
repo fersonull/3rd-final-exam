@@ -8,7 +8,7 @@ export default function DashboardLayout() {
     <SidebarProvider>
       <div className="flex w-full font-outfit">
         <Sidebar />
-        <div className="flex-1 p-3">
+        <div className="flex-1 p-4">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
             <DashboardBreadcrumb />
