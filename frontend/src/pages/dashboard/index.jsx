@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import OverviewCard from "@/components/dashboard/overview-card";
+import OverviewCards from "@/components/dashboard/overview-cards";
 import { List, Notebook, Timer, ListChecks } from "lucide-react";
 import ChartSkeleton from "@/components/dashboard/chart-skeleton";
 import DashboardTable from "@/components/dashboard/dashboard-table";
@@ -32,32 +32,7 @@ export default function Index() {
       />
 
       <div className="grid grid-cols-1 gap-4">
-        <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
-          <OverviewCard
-            title="Total tasks"
-            content={200}
-            icon={<Notebook color="orange" />}
-            description="All tasks in the system"
-            trend={5}
-            trendLabel="since last week"
-          />
-          <OverviewCard
-            title="Ongoing tasks"
-            content={12}
-            icon={<Timer color="blue" />}
-            description="Currently in progress"
-            trend={-2}
-            trendLabel="since last week"
-          />
-          <OverviewCard
-            title="Completed tasks"
-            content={122}
-            icon={<ListChecks color="green" />}
-            description="Tasks marked as done"
-            trend={7}
-            trendLabel="since last week"
-          />
-        </div>
+        <OverviewCards />
 
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
           <div className="lg:col-span-2">

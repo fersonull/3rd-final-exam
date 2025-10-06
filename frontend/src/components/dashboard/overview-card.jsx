@@ -1,9 +1,13 @@
 import { Card, CardContent, CardHeader } from "../ui/card";
 
-export default function OverviewCard({ title, content, icon, description, trend, trendLabel }) {
-  // description: optional string for extra info
-  // trend: optional number, positive/negative for up/down
-  // trendLabel: optional string, e.g. "since last week"
+export default function OverviewCard({
+  title,
+  content,
+  icon,
+  description,
+  trend,
+  trendLabel,
+}) {
   return (
     <Card>
       <CardHeader>
@@ -34,7 +38,9 @@ export default function OverviewCard({ title, content, icon, description, trend,
               {trend > 0 ? "▲" : trend < 0 ? "▼" : ""}
               {Math.abs(trend)}%
               {trendLabel && (
-                <span className="ml-1 text-muted-foreground/70">{trendLabel}</span>
+                <span className="ml-1 text-muted-foreground/70">
+                  {trendLabel}
+                </span>
               )}
             </span>
           )}
