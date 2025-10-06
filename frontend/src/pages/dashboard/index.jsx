@@ -12,14 +12,13 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardAction
+  CardAction,
 } from "@/components/ui/card";
 import Banner from "@/components/ui/banner";
 import { Button } from "@/components/ui/button";
 
-
 const DashboardChart = lazy(() =>
-  import("@/components/dashboard/dashboard-chart")  
+  import("@/components/dashboard/dashboard-chart")
 );
 
 export default function Index() {
@@ -27,7 +26,10 @@ export default function Index() {
 
   return (
     <>
-      <Banner title='Overview' sub={`View key metrics, track progress, and manage your team's tasks all in one place.`} />
+      <Banner
+        title="Overview"
+        sub={`View key metrics, track progress, and manage your team's tasks all in one place.`}
+      />
 
       <div className="grid grid-cols-1 gap-4">
         <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
@@ -70,12 +72,10 @@ export default function Index() {
 
         <Card>
           <CardHeader>
-            <div>
-              <CardTitle>List of recent tasks</CardTitle>
-              <CardDescription>
-                All recent activities on tasks
-              </CardDescription>
-            </div>
+            <CardTitle>Recent Task Activity</CardTitle>
+            <CardDescription>
+              See the latest updates and changes to your team's tasks
+            </CardDescription>
 
             <CardAction>
               <Link to="/tasks">

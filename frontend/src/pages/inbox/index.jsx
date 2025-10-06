@@ -4,8 +4,8 @@ export default function Index() {
   return (
     <>
       <Banner
-        title="Members"
-        sub="All your team members are listed here. Add, remove, or update member details."
+        title="Inbox"
+        sub="All your notifications, messages, and updates are collected here."
       />
     </>
   );
