@@ -21,66 +21,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronUp, ChevronDown, Plus, SearchIcon } from "lucide-react";
-import { Card, CardContent } from "../ui/card";
+import {
+  statusOptions,
+  columns,
+  priorityOptions,
+} from "@/lib/tasks-table-definitions";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardAction,
+} from "../ui/card";
+import { initialTableData, teamMembers } from "@/lib/tasks-data-placeholder";
+import {
+  ChevronUp,
+  ChevronDown,
+  Plus,
+  SearchIcon,
+  ListPlus,
+} from "lucide-react";
 import TaskStatusPill from "./task-status-pill";
-
-const initialTableData = [
-  {
-    task: "Create a modal",
-    project: "UI/UX",
-    status: "In Progress",
-    priority: "Low",
-    dueDate: "2023-09-15",
-    assignee: "Jasfer Monton",
-  },
-  {
-    task: "Toast popups for actions",
-    project: "UI/UX",
-    status: "In Progress",
-    priority: "High",
-    dueDate: "2024-09-18",
-    assignee: "Kimberly Macatangay",
-  },
-  {
-    task: "Create login form",
-    project: "e-dolo",
-    status: "In Progress",
-    priority: "Low",
-    dueDate: "2023-09-15",
-    assignee: null,
-  },
-  {
-    task: "Fix dashboard bugs",
-    project: "e-dolo",
-    status: "Finished",
-    priority: "High",
-    dueDate: "2023-09-20",
-    assignee: "Jasfer Monton",
-  },
-  {
-    task: "Fix authentication",
-    project: "e-dolo",
-    status: "In Progress",
-    priority: "High",
-    dueDate: "2023-09-12",
-    assignee: null,
-  },
-];
-
-const columns = [
-  { key: "task", label: "Tasks", sortable: true, className: "w-[200px]" },
-  { key: "project", label: "Project", sortable: true },
-  { key: "status", label: "Status", sortable: true },
-  { key: "priority", label: "Priority", sortable: true },
-  { key: "dueDate", label: "Due Date", sortable: true },
-  {
-    key: "assignee",
-    label: "Assignee",
-    sortable: true,
-    className: "text-right",
-  },
-];
+import { formatDate } from "@/lib/utils";
+import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
 function getSortedData(data, sortKey, sortOrder) {
   if (!sortKey) return data;
@@ -98,21 +63,6 @@ function getSortedData(data, sortKey, sortOrder) {
     return 0;
   });
 }
-
-const teamMembers = [
-  { value: "Jasfer Monton", label: "Jasfer Monton" },
-  { value: "Kimberly Macatangay", label: "Kimberly Macatangay" },
-];
-
-const statusOptions = [
-  { value: "In Progress", label: "In Progress" },
-  { value: "Finished", label: "Finished" },
-];
-
-const priorityOptions = [
-  { value: "High", label: "High" },
-  { value: "Low", label: "Low" },
-];
 
 export default function TasksTable() {
   const [sortKey, setSortKey] = useState(null);
@@ -218,6 +168,20 @@ export default function TasksTable() {
           </div>
         </div>
         <Card>
+          <CardHeader>
+            <CardTitle>All Tasks</CardTitle>
+            <CardDescription>
+              View, filter, and manage all tasks assigned to your team
+            </CardDescription>
+            <CardAction>
+              <Link to="/tasks/new-task">
+                <Button variant="default" size="sm" title="Create new task">
+                  <ListPlus />
+                  Add Task
+                </Button>
+              </Link>
+            </CardAction>
+          </CardHeader>
           <CardContent>
             <div className="overflow-x-auto w-full">
               <Table className="min-w-[700px] w-full">
@@ -284,7 +248,9 @@ export default function TasksTable() {
                           <TaskStatusPill status={data.status} />
                         </TableCell>
                         <TableCell className="py-3">{data.priority}</TableCell>
-                        <TableCell className="py-3">{data.dueDate}</TableCell>
+                        <TableCell className="py-3">
+                          {formatDate(data.dueDate)}
+                        </TableCell>
                         <TableCell className="py-3 flex-end">
                           {data.assignee === null ? (
                             <div>

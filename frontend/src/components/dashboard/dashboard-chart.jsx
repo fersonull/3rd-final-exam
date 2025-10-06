@@ -20,7 +20,7 @@ export default function DashboardChart() {
   const [range, setRange] = useState("7d");
 
   return (
-    <Card className="lg:h-full h-full h-104">
+    <Card className="lg:h-full h-104">
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
           <CardTitle>
@@ -34,7 +34,6 @@ export default function DashboardChart() {
               : "Showing your recent activities within month"}
           </CardDescription>
         </div>
-            
 
         <div className="md:px-6 md:pt-2 p-0 w-full md:w-auto flex justify-start">
           <Select value={range} onValueChange={setRange}>
