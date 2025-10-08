@@ -58,7 +58,7 @@ class AuthController
         ]);
 
         $user = [
-            'id'    => $result['id'],
+            'id' => $result['id'],
             'name' => $result['name'],
             'email' => $result['email'],
         ];
@@ -69,9 +69,51 @@ class AuthController
         ]);
 
         return Response::json(200, [
+            'success' => true,
             'message' => 'Login successful',
             'token' => $token,
             'user' => $user
+        ]);
+    }
+
+    public function signup()
+    {
+        $request = $_POST;
+
+        $validator = Validate::make($request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            return Response::json(400, [
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        $result = $this->userModel->findByEmail($request['email']);
+
+        if ($result) {
+            return Response::json(409, ["errors" => [
+                "email" => "Email already taken"
+            ]]);
+        }
+
+        $hashedPass = password_hash($request["password"], PASSWORD_DEFAULT);
+
+        $user = [
+            "email" => $request["email"],
+            "name" => $request["name"],
+            "password" => $hashedPass,
+        ];
+
+        $result = $this->userModel->create($user);
+
+        return Response::json(201, [
+            "success" => true,
+            "message" => "Signed up succesfully",
+            "user" => $result
         ]);
     }
 

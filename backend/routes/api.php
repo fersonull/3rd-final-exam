@@ -9,6 +9,7 @@ require_once "./app/Middlewares/AuthMiddleware.php";
 
 // auth related routes
 Router::post('/v1/login', 'AuthController@login');
+Router::post('/v1/signup', 'AuthController@signup');
 Router::get('/v1/session', 'AuthController@session');
 Router::post('/v1/logout', 'AuthController@logout', ['AuthMiddleware']);
 
