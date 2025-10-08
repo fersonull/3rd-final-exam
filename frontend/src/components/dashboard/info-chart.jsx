@@ -5,7 +5,7 @@ import {
   BarChart,
   Area,
   XAxis,
-  YAxis,  
+  YAxis,
   Tooltip,
   CartesianGrid,
   Bar,
@@ -69,7 +69,7 @@ export default function InfoChart({ range = "7d" }) {
         <XAxis dataKey="date" tickLine={false} axisLine={false} />
         <CartesianGrid vertical={false} opacity={0.1} />
         <Tooltip content={<CustomTooltip />} />
-        
+
         <Bar
           name="Tasks Created"
           dataKey="tasksCreated"

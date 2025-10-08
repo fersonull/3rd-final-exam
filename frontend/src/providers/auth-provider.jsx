@@ -28,11 +28,9 @@ export default function AuthProvider({ children }) {
       return;
     }
 
-    // Save to storage
     localStorage.setItem("token", res.token);
     localStorage.setItem("user", JSON.stringify(res.user));
 
-    // Update state
     setToken(res.token);
     setUser(res.user);
     setIsAuthenticated(true);

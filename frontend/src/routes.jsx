@@ -6,6 +6,7 @@ import Home from "./pages/home";
 import AuthPage from "./pages/auth/auth-page";
 import DashboardLayout from "./layouts/dashboard-layout";
 import NewTask from "./pages/tasks/new-task";
+import NewMember from "./pages/members/new-member";
 
 const Dashboard = lazy(() => import("@/pages/dashboard/index"));
 const Tasks = lazy(() => import("@/pages/tasks/index"));
@@ -73,6 +74,10 @@ export const routes = [
                 <Members />
               </Suspense>
             ),
+          },
+          {
+            path: "members/new-member",
+            element: <NewMember />,
           },
         ],
       },

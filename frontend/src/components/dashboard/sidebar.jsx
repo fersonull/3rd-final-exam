@@ -1,4 +1,5 @@
 import SidebarUserAvatar from "./sidebar-user-avatar";
+import { projects } from "@/lib/projetcs-data-placeholder";
 import {
   Calendar,
   LayoutDashboard,
@@ -6,7 +7,7 @@ import {
   Search,
   Settings,
   ClipboardList,
-  UsersRound
+  UsersRound,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -85,10 +86,11 @@ export default function AppSidebar() {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Your projects</SelectLabel>
-                  <SelectItem value="Project 1">Project 1</SelectItem>
-                  <SelectItem value="Project 2">Project 2</SelectItem>
-                  <SelectItem value="Project 3">Project 3</SelectItem>
-                  <SelectItem value="Project 4">Project 4</SelectItem>
+                  {projects.map(({ id, name }) => (
+                    <SelectItem key={id} value={name}>
+                      {name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>

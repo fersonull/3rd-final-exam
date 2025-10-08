@@ -1,6 +1,6 @@
 import React from "react";
 import OverviewCard from "./overview-card";
-import { ListChecks, Notebook, Timer } from "lucide-react";
+import { ListChecks, Notebook, Timer, TimerOff, List } from "lucide-react";
 
 export default function OverviewCards() {
   return (
@@ -8,7 +8,7 @@ export default function OverviewCards() {
       <OverviewCard
         title="Total tasks"
         content={200}
-        icon={<Notebook color="orange" />}
+        icon={<List color="orange" />}
         description="All tasks in the system"
         trend={5}
         trendLabel="since last week"
@@ -32,7 +32,7 @@ export default function OverviewCards() {
       <OverviewCard
         title="Overdue tasks"
         content={8}
-        icon={<Timer color="red" />}
+        icon={<TimerOff color="red" />}
         description="Tasks past their due date"
         trend={1}
         trendLabel="since last week"

@@ -112,7 +112,11 @@ export default function DashboardTable() {
                   {formatDate(data.dueDate)}
                 </TableCell>
                 <TableCell className="py-3 flex-end">
-                  {data.assignee ? data.assignee : "No assignee"}
+                  {data.assignee ? (
+                    data.assignee
+                  ) : (
+                    <p className="text-muted-foreground">No assignee</p>
+                  )}
                 </TableCell>
               </TableRow>
             ))

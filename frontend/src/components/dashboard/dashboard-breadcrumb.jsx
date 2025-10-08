@@ -6,17 +6,15 @@ export default function DashboardBreadcrumb() {
   const paths = location.pathname.split("/").filter(Boolean);
 
   const breadcrumbItems = paths.map((path, index) => {
-    // Remove hyphens for display label and replace with space, capitalize each word
     const label = path
       .split("-")
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
-    // Remove hyphens from the path for the href
     const href =
       "/" +
       paths
         .slice(0, index + 1)
-        .map(p => p.replace(/-/g, ""))
+        .map((p) => p.replace(/-/g, ""))
         .join("/");
 
     return {

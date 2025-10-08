@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 const statusVariantMap = {
   Finished: "success",
   "In Progress": "ongoing",
-  Due: "due",
+  Due: "warning",
   Overdue: "destructive",
 };
 

@@ -247,7 +247,21 @@ export default function TasksTable() {
                         <TableCell className="py-3">
                           <TaskStatusPill status={data.status} />
                         </TableCell>
-                        <TableCell className="py-3">{data.priority}</TableCell>
+                        <TableCell className="py-3">
+                          <span
+                            className={
+                              data.priority === "High"
+                                ? "text-red-600 font-semibold"
+                                : data.priority === "Medium"
+                                ? "text-yellow-600 font-medium"
+                                : data.priority === "Low"
+                                ? "text-green-600"
+                                : ""
+                            }
+                          >
+                            {data.priority}
+                          </span>
+                        </TableCell>
                         <TableCell className="py-3">
                           {formatDate(data.dueDate)}
                         </TableCell>

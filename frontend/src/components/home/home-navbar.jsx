@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
-import { PanelRightOpen } from "lucide-react";
+import { PanelRightOpen, Workflow } from "lucide-react";
 import { Button } from "../ui/button";
+import { useAuthContext } from "@/contexts/auth-context";
 
 export default function HomeNavbar() {
+  const { isAuthenticated } = useAuthContext();
+
   return (
     <div className="flex-center lg:px-24 px-4 py-2">
       <div className="flex-between w-full">
         <Link to="/" className="logo">
-          Tracksikel
+          Nebulo
         </Link>
 
         <div className="md:hidden">
@@ -17,14 +20,24 @@ export default function HomeNavbar() {
         </div>
 
         <div className="hidden md:flex gap-2 font-outfit">
-          <Link to={"/auth?tab=login"}>
-            <Button size="sm" variant="ghost">
-              Login
-            </Button>
-          </Link>
-          <Link to={"/auth?tab=register"}>
-            <Button size="sm">Get started</Button>
-          </Link>
+          {isAuthenticated ? (
+            <Link to="/">
+              <Button>
+                <Workflow /> Go to workspace
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link to={"/auth?tab=login"}>
+                <Button size="sm" variant="ghost">
+                  Login
+                </Button>
+              </Link>
+              <Link to={"/auth?tab=register"}>
+                <Button size="sm">Get started</Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>
