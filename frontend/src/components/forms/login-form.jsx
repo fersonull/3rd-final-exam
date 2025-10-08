@@ -31,7 +31,7 @@ export default function LoginForm() {
 
     console.log(result);
 
-    if (result?.message && !result.error) {
+    if (result?.success && !result.error) {
       toast.success(result.message);
       setUser(result?.user);
       setToken(result?.token);
