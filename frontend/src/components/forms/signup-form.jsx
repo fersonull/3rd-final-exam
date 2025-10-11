@@ -26,15 +26,11 @@ export default function SignupForm() {
 
     const result = await login({ body: formData });
 
-    console.log(result);
-
     if (result?.success) {
       toast.success(result?.message);
 
       navigate("/auth");
     }
-
-    console.log(error);
   };
   return (
     <>
