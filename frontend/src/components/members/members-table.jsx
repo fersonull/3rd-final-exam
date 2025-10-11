@@ -64,7 +64,7 @@ export default function MembersTable() {
         </CardDescription>
 
         <CardAction>
-          <Link to="/members/new-member">
+          <Link to="new-member">
             <Button>
               <UserPlus2 />
               Add member

@@ -35,17 +35,17 @@ import {
 const projectItems = [
   {
     title: "Overview",
-    url: "/",
+    url: "/p/smaple-project-url",
     icon: LayoutDashboard,
   },
   {
     title: "Tasks",
-    url: "/tasks",
+    url: "tasks",
     icon: ClipboardList,
   },
   {
     title: "Members",
-    url: "/members",
+    url: "members",
     icon: UsersRound,
   },
 ];
@@ -53,7 +53,7 @@ const projectItems = [
 const appItems = [
   {
     title: "Inbox",
-    url: "/inbox",
+    url: "inbox",
     icon: Inbox,
   },
   {

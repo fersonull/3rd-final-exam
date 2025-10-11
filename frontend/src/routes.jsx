@@ -19,12 +19,8 @@ export const routes = [
     element: <PublicRoutes />,
     children: [
       {
-        path: "/home",
+        path: "home",
         element: <Home />,
-      },
-      {
-        path: "/p/:pid",
-        element: <TestParam />,
       },
     ],
   },
@@ -32,7 +28,7 @@ export const routes = [
     element: <AuthRoutes />,
     children: [
       {
-        path: "/auth",
+        path: "auth",
         element: <AuthPage />,
       },
     ],
@@ -41,7 +37,7 @@ export const routes = [
     element: <ProtectedRoutes />,
     children: [
       {
-        path: "/",
+        path: "p/:pid",
         element: <DashboardLayout />,
         children: [
           {

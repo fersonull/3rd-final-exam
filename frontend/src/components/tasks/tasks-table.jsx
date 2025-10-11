@@ -174,7 +174,7 @@ export default function TasksTable() {
               View, filter, and manage all tasks assigned to your team
             </CardDescription>
             <CardAction>
-              <Link to="/tasks/new-task">
+              <Link to="new-task">
                 <Button variant="default" size="sm" title="Create new task">
                   <ListPlus />
                   Add Task
