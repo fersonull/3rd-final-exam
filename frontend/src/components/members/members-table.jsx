@@ -15,7 +15,7 @@ import {
   TableBody,
   TableCell,
 } from "../ui/table";
-import { UserPlus2 } from "lucide-react";
+import { UserPlus2, Pencil } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 
@@ -46,6 +46,7 @@ export default function MembersTable() {
               <TableHead>Email</TableHead>
               <TableHead>Role</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -64,6 +65,18 @@ export default function MembersTable() {
                   >
                     {member.status}
                   </span>
+                </TableCell>
+                <TableCell>
+                  <Link to={`/members/edit/${member.id || idx}`}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex items-center gap-1"
+                    >
+                      <Pencil size={16} />
+                      Edit
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}
