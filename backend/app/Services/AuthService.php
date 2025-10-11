@@ -1,4 +1,5 @@
 <?php
+require_once "./app/Models/User.php";
 
 class AuthService
 {
@@ -12,5 +13,17 @@ class AuthService
         $signature = base64_encode($signature);
 
         return "$header.$body.$signature";
+    }
+
+    public static function generateID(): string
+    {
+        $userModel = new User;
+
+        do {
+            $id = bin2hex(random_bytes(16));
+            $userExists = $userModel->find($id);
+        } while ($userExists);
+
+        return $id;
     }
 }

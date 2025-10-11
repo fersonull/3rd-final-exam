@@ -101,8 +101,10 @@ class AuthController
         }
 
         $hashedPass = password_hash($request["password"], PASSWORD_DEFAULT);
+        $userID = AuthService::generateID();
 
         $user = [
+            "id" => $userID,
             "email" => $request["email"],
             "name" => $request["name"],
             "password" => $hashedPass,

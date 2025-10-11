@@ -15,7 +15,7 @@ class User extends Model
         return $rows ?: null;
     }
 
-    public function find(int $id): ?array
+    public function find(string $id): ?array
     {
         $stmt = self::db()->prepare("SELECT * FROM $this->table WHERE id = :id");
         $stmt->execute(['id' => $id]);
@@ -26,15 +26,16 @@ class User extends Model
 
     public function create(array $data): ?array
     {
-        $stmt = self::db()->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)');
+        $stmt = self::db()->prepare('INSERT INTO users (id, name, email, password) VALUES (:id, :name, :email, :password)');
         $stmt->execute([
+            'id' => $data['id'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
         ]);
 
-        $id = self::db()->lastInsertId();
-        $user = $this->find((int)$id);
+        $id = $data["id"];
+        $user = $this->find($id);
 
         return [
             "id" => $id,
