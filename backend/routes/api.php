@@ -15,6 +15,7 @@ Router::post('/v1/logout', 'AuthController@logout', ['AuthMiddleware']);
 
 // project related routes
 Router::get('/v1/projects', 'ProjectController@index', ['AuthMiddleware']);
+Router::get('/v1/projects/users', 'ProjectController@getUsersProjects', ['AuthMiddleware']);
 Router::post('/v1/projects', 'ProjectController@store', ['AuthMiddleware']);
 
 Router::dispatch();

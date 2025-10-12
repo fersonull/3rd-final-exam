@@ -2,6 +2,8 @@
 
 require_once "./app/Models/Project.php";
 require_once "./app/Support/Response.php";
+require_once "./app/Core/Session.php";
+require_once "./app/Services/AuthService.php";
 
 class ProjectController
 {
@@ -20,8 +22,22 @@ class ProjectController
 
     public function store()
     {
-        $data = $_POST;
+        $request = $_POST;
 
-        $project = $this->projectModel->create($data);
+        $user = Session::get("auth")["user"];
+
+        $request["id"] = AuthService::generateID();
+        $request["owner_id"] = $user["id"];
+
+        $project = $this->projectModel->create($request);
+    }
+
+    public function getUsersProjects()
+    {
+        $authUser = Session::get("auth")["user"];
+
+        $projects = $this->projectModel->userProjects($authUser["id"]);
+
+        Response::json(200, $projects);
     }
 }
