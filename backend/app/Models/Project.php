@@ -8,15 +8,13 @@ class Project extends Model
 
     public function all(): ?array
     {
-        $stmt = self::db()->prepare("
-            SELECT 
+        $stmt = self::db()->prepare("SELECT 
             projects.*,
             users.id AS owner_id,
             users.name AS owner_name,
             users.email AS owner_email
             FROM projects
-            LEFT JOIN users ON projects.owner_id = users.id
-        ");
+            LEFT JOIN users ON projects.owner_id = users.id");
 
         $stmt->execute();
 

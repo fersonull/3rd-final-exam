@@ -15,14 +15,13 @@ class ProjectController
     public function index()
     {
         $projects = $this->projectModel->all();
-
         Response::json(200, $projects);
     }
 
-    public function store()
+    public function create()
     {
-        $project = $_POST;
+        $data = $_POST;
 
-        Response::json(200, $project);
+        $project = $this->projectModel->create($data);
     }
 }
