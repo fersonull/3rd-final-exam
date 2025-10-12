@@ -6,7 +6,7 @@ import {
   Inbox,
   Search,
   Settings,
-  ClipboardList,
+  FolderTree,
   UsersRound,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -34,9 +34,9 @@ import {
 
 const projectItems = [
   {
-    title: "Overview",
-    url: "/p/smaple-project-url",
-    icon: LayoutDashboard,
+    title: "Projects",
+    url: "",
+    icon: FolderTree,
   },
   {
     title: "Members",
