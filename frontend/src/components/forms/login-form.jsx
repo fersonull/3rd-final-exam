@@ -36,7 +36,7 @@ export default function LoginForm() {
       setUser(result?.user);
       setToken(result?.token);
 
-      navigate("/");
+      navigate("/p");
 
       return;
     }
