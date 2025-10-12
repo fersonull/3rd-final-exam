@@ -18,7 +18,7 @@ class ProjectController
         Response::json(200, $projects);
     }
 
-    public function create()
+    public function store()
     {
         $data = $_POST;
 
