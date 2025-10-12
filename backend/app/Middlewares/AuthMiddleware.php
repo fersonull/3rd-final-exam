@@ -13,7 +13,7 @@ class AuthMiddleware
                 "error" => "Unauthorized",
                 "message" => "Missing Authorization header. Please provide a Bearer token in the Authorization header."
             ]);
-            
+
             return false;
         }
 
@@ -22,7 +22,7 @@ class AuthMiddleware
                 "error" => "Unauthorized",
                 "message" => "Malformed Authorization header. Expected format: 'Bearer <token>'."
             ]);
-            
+
             return false;
         }
 
@@ -36,7 +36,7 @@ class AuthMiddleware
                 "error" => "Forbidden",
                 "message" => "Invalid or expired token. Access denied."
             ]);
-            
+
             return false;
         }
 

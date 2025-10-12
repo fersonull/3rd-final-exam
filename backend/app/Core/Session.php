@@ -16,10 +16,10 @@ class Session
         return $value;
     }
 
-    public static function get(string $key, mixed $default = null): mixed
+    public static function get(string $key): mixed
     {
         self::start();
-        return $_SESSION[$key] ?? $default;
+        return $_SESSION[$key] ?? null;
     }
 
     public static function destroy(): void
