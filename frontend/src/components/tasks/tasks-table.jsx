@@ -34,7 +34,6 @@ import {
   CardDescription,
   CardAction,
 } from "../ui/card";
-import { initialTableData, teamMembers } from "@/lib/tasks-data-placeholder";
 import {
   ChevronUp,
   ChevronDown,
@@ -42,12 +41,16 @@ import {
   SearchIcon,
   ListPlus,
 } from "lucide-react";
+import { initialTableData, teamMembers } from "@/lib/tasks-data-placeholder";
 import TaskStatusPill from "./task-status-pill";
 import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import { useFetch } from "@/hooks/use-fetch";
+import { useAuthContext } from "@/contexts/auth-context";
 
 function getSortedData(data, sortKey, sortOrder) {
+  
   if (!sortKey) return data;
   return [...data].sort((a, b) => {
     let aValue = a[sortKey];
@@ -65,9 +68,14 @@ function getSortedData(data, sortKey, sortOrder) {
 }
 
 export default function TasksTable() {
+  const { token } = useAuthContext();
+
+  const { data: tasks, isLoading, error } = useFetch("/tasks", { method: "GET", headers: { Authorization: `Bearer ${token}` } }, true);
+  console.log(tasks);
+
   const [sortKey, setSortKey] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
-  const [tableData, setTableData] = useState(initialTableData);
+  const [tableData, setTableData] = useState(tasks);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
@@ -82,7 +90,7 @@ export default function TasksTable() {
     }
   };
 
-  const filteredData = tableData.filter((row) => {
+  const filteredData = tasks?.filter((row) => {
     const matchesSearch =
       search === "" ||
       row.task.toLowerCase().includes(search.toLowerCase()) ||
@@ -226,7 +234,7 @@ export default function TasksTable() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {sortedData.length === 0 ? (
+                  {sortedData?.length === 0 ? (
                     <TableRow>
                       <TableCell
                         colSpan={columns.length}
@@ -238,23 +246,23 @@ export default function TasksTable() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    sortedData.map((data, index) => (
+                    sortedData?.map((data, index) => (
                       <TableRow key={index}>
                         <TableCell className="py-3 font-medium">
-                          {data.task}
+                          {data.title}
                         </TableCell>
-                        <TableCell className="py-3">{data.project}</TableCell>
+                        <TableCell className="py-3">{data.project_id}</TableCell>
                         <TableCell className="py-3">
                           <TaskStatusPill status={data.status} />
                         </TableCell>
                         <TableCell className="py-3">
                           <span
                             className={
-                              data.priority === "High"
+                              data.priority === "high"
                                 ? "text-red-600 font-semibold"
-                                : data.priority === "Medium"
+                                : data.priority === "normal"
                                 ? "text-yellow-600 font-medium"
-                                : data.priority === "Low"
+                                : data.priority === "low"
                                 ? "text-green-600"
                                 : ""
                             }
@@ -263,10 +271,10 @@ export default function TasksTable() {
                           </span>
                         </TableCell>
                         <TableCell className="py-3">
-                          {formatDate(data.dueDate)}
+                          {formatDate(data.due_date)}
                         </TableCell>
                         <TableCell className="py-3 flex-end">
-                          {data.assignee === null ? (
+                          {data.assignee_id === null ? (
                             <div>
                               <Select>
                                 <SelectTrigger className="w-[180px]">
@@ -288,7 +296,7 @@ export default function TasksTable() {
                               </Select>
                             </div>
                           ) : (
-                            <span>{data.assignee}</span>
+                            <span>{data.assignee_id}</span>
                           )}
                         </TableCell>
                       </TableRow>

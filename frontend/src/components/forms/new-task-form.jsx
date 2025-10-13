@@ -4,6 +4,7 @@ import { useFetch } from "@/hooks/use-fetch";
 import { useFormData } from "@/hooks/use-formdata";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const initialForm = {
     title: "",
@@ -49,8 +50,8 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
         e.preventDefault();
         setSubmitting(true);
         try {
-            
-            const form = getFormData(); 
+
+            const form = getFormData();
 
 
             const res = await createTask({ body: form });
@@ -107,65 +108,85 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                     <label className="block font-medium mb-1">
                         Project <span className="text-red-500">*</span>
                     </label>
-                    <select
+                    <Select
                         name="project_id"
                         className="w-full border rounded px-3 py-2"
                         value={values.project_id}
-                        onChange={handleChange}
-
+                        onValueChange={handleChange}
+                    
                     >
-                        <option value="">Select project</option>
-                        {projects.map((p) => (
-                            <option key={p.id} value={p.id}>{p.name}</option>
-                        ))}
-                    </select>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select project" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="">Select project</SelectItem>
+                            {projects.map((p) => (
+                                <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                     {error?.project_id && <span className="text-xs text-red-500">{error.project_id}</span>}
                 </div>
             }
 
             <div>
                 <label className="block font-medium mb-1">Assign To</label>
-                <select
+                <Select
                     name="assignee_id"
                     className="w-full border rounded px-3 py-2"
                     value={values.assignee_id}
-                    onChange={handleChange}
+                    onValueChange={handleChange}
                 >
-                    <option value="">Unassigned</option>
-                    {members.map((m) => (
-                        <option key={m.id} value={m.id}>{m.name || m.email}</option>
-                    ))}
-                </select>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Unassigned" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="null">Unassigned</SelectItem>
+                        {members.map((m) => (
+                            <SelectItem key={m.id} value={m.id}>{m.name || m.email}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
                 {error?.assignee_id && <span className="text-xs text-red-500">{error.assignee_id}</span>}
             </div>
 
             <div className="flex flex-wrap gap-4">
                 <div>
                     <label className="block font-medium mb-1">Priority</label>
-                    <select
+                    <Select
                         name="priority"
                         className="border rounded px-3 py-2"
                         value={values.priority}
-                        onChange={handleChange}
+                        onValueChange={handleChange}
                     >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select priority" />
+                        </SelectTrigger>
+                        <SelectContent>
                         {PRIORITY_OPTIONS.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
                         ))}
-                    </select>
+                        </SelectContent>
+                    </Select>
                     {error?.priority && <span className="text-xs text-red-500">{error.priority}</span>}
                 </div>
                 <div>
                     <label className="block font-medium mb-1">Status</label>
-                    <select
+                    <Select
                         name="status"
                         className="border rounded px-3 py-2"
                         value={values.status}
-                        onChange={handleChange}
+                        onValueChange={handleChange}
                     >
-                        {STATUS_OPTIONS.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                        ))}
-                    </select>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {STATUS_OPTIONS.map(opt => (
+                                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                     {error?.status && <span className="text-xs text-red-500">{error.status}</span>}
                 </div>
                 <div>
