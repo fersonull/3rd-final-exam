@@ -1,9 +1,10 @@
 import { LayoutDashboard, ClipboardList, UsersRound, Inbox, Calendar, Search, Settings } from "lucide-react";
 
+
 export const projectItems = [
     {
         title: "Overview",
-        url: "/p/smaple-project-url",
+        url: "overview",
         icon: LayoutDashboard,
     },
     {

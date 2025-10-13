@@ -39,7 +39,7 @@ export default function AppSidebar() {
 
   const handleProjectChange = (value) => {
     set(value);
-    navigate(`/p/${value}`);
+    navigate(`/p/${value}/overview`);
   };
 
   return (

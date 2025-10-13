@@ -20,7 +20,7 @@ export default function DashboardBreadcrumb() {
     // Project page root breadcrumb
     breadcrumbItems.push({
       label: active.activeProject?.name || "Project",
-      to: `/p/${paths[1]}`,
+      to: `/p/${paths[1]}/overview`,
     });
 
 
@@ -32,7 +32,7 @@ export default function DashboardBreadcrumb() {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
       const href =
-        `/p/${paths[1]}` +
+        `/p/${paths[1]}/overview` +
         (i > 2
           ? "/" + paths.slice(2, i + 1).join("/")
           : i === 2

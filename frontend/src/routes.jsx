@@ -54,11 +54,11 @@ export const routes = [
         ],
       },
       {
-        path: "p/:pid",
+        path: "/p/:pid",
         element: <DashboardLayout />,
         children: [
           {
-            index: true,
+            path: "overview",
             element: (
               <Suspense fallback={<div>Loading...</div>}>
                 <Dashboard />
