@@ -19,4 +19,8 @@ Router::get('/v1/projects/users', 'ProjectController@getUsersProjects', ['AuthMi
 Router::get('/v1/projects/{id}', 'ProjectController@find', ['AuthMiddleware']);
 Router::post('/v1/projects', 'ProjectController@store', ['AuthMiddleware']);
 
+// task related routes
+Router::post('/v1/tasks', 'TaskController@store', ['AuthMiddleware']);
+Router::get('/v1/tasks/{id}', 'TaskController@find', ['AuthMiddleware']);
+
 Router::dispatch();
