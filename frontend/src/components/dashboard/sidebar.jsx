@@ -58,7 +58,7 @@ const appItems = [
   },
   {
     title: "Calendar",
-    url: "/calendar",
+    url: "calendar",
     icon: Calendar,
   },
   {

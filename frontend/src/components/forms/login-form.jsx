@@ -25,28 +25,32 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = getFormData();
+    try {
+      const formData = getFormData();
 
-    const result = await login({ body: formData });
+      const result = await login({ body: formData });
 
-    console.log(result);
+      console.log(result);
 
-    if (result?.success && !result.error) {
-      toast.success(result.message);
-      setUser(result?.user);
-      setToken(result?.token);
+      if (result?.success && !result.error) {
+        toast.success(result.message);
+        setUser(result?.user);
+        setToken(result?.token);
+        
+        return;
+      }
 
-      navigate("/p");
-
-      return;
-    }
-
-    if (result?.error) {
-      toast.warning(result?.error, {
-        closeButton: true,
-      });
+      if (result?.error) {
+        toast.warning(result?.error, {
+          closeButton: true,
+        });
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
+
 
   return (
     <>

@@ -53,7 +53,7 @@ export default function Index() {
             </CardDescription>
 
             <CardAction>
-              <Link to="/tasks">
+              <Link to="tasks">
                 <Button variant="outline">
                   <List />
                   Browse all

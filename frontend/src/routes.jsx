@@ -8,8 +8,7 @@ import DashboardLayout from "./layouts/dashboard-layout";
 import ProjectsLayout from "./layouts/projects-layout";
 import NewTask from "./pages/tasks/new-task";
 import NewMember from "./pages/members/new-member";
-import TestParam from "./pages/test-param";
-import PageNotFount from "./pages/fallbacks/404-page";
+import Calendar from "./pages/calendar";
 
 const Dashboard = lazy(() => import("@/pages/dashboard/index"));
 const Tasks = lazy(() => import("@/pages/tasks/index"));
@@ -77,6 +76,14 @@ export const routes = [
           {
             path: "tasks/new-task",
             element: <NewTask />,
+          },
+          {
+            path: "calendar",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Calendar />
+              </Suspense>
+            ),
           },
           {
             path: "inbox",

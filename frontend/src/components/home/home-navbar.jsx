@@ -21,7 +21,7 @@ export default function HomeNavbar() {
 
         <div className="hidden md:flex gap-2 font-outfit">
           {isAuthenticated ? (
-            <Link to="/">
+            <Link to="p">
               <Button>
                 <Workflow /> Go to workspace
               </Button>

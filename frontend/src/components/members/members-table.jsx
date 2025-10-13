@@ -123,7 +123,7 @@ export default function MembersTable() {
                   </span>
                 </TableCell>
                 <TableCell>
-                  <Link to={`/members/edit/${member.id || idx}`}>
+                  <Link to={`members/edit/${member.id || idx}`}>
                     <Button
                       size="sm"
                       variant="outline"
