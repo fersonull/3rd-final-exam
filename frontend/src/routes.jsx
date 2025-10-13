@@ -15,6 +15,7 @@ const Tasks = lazy(() => import("@/pages/tasks/index"));
 const Members = lazy(() => import("@/pages/members/index"));
 const Inbox = lazy(() => import("@/pages/inbox/index"));
 const ProjectDashboard = lazy(() => import("@/pages/projects/dashboard"));
+const Task = lazy(() => import("@/pages/tasks/task"));
 
 export const routes = [
   {
@@ -76,6 +77,14 @@ export const routes = [
           {
             path: "tasks/new-task",
             element: <NewTask />,
+          },
+          {
+            path: "tasks/:tid",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Task />
+              </Suspense>
+            ),
           },
           {
             path: "calendar",

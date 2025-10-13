@@ -3,12 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Check, ListCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useResponsive from "@/hooks/use-responsive";
+import NewTaskForm from "@/components/forms/new-task-form";
+import { useParams } from "react-router-dom";
 
 export default function NewTask() {
   const navigate = useNavigate();
   const { isTablet, isDesktop } = useResponsive();
+  const { pid } = useParams();
 
-  return (
+    return (
     <>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-4">
         <Banner
@@ -27,13 +30,15 @@ export default function NewTask() {
               {/* <Check size={18} /> */}
               Cancel
             </Button>
-            <Button size="sm" title="Save task">
+            <Button title="Save task">
               <ListCheck />
               Save Task
             </Button>
           </div>
         )}
       </div>
+
+      <NewTaskForm projectId={pid} />
     </>
   );
 }
