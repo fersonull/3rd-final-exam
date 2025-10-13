@@ -1,11 +1,13 @@
-import { useLocation, useParams, matchPath, Link } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import BreadcrumbTemplate from "./breadcrumb-templ";
+import useActiveProject from "@/hooks/use-active-project";
 
 export default function DashboardBreadcrumb() {
   const location = useLocation();
-  const { pid } = useParams(); // TODO: apply backend fetching for current project
+  const { pid } = useParams();
 
-  console.log(pid);
+  // Fetch the active project using pid
+  const active = useActiveProject({ projectId: pid });
 
   // Split the path, e.g. /p/123/tasks -> ["p", "123", "tasks"]
   const paths = location.pathname.split("/").filter(Boolean);
@@ -17,9 +19,10 @@ export default function DashboardBreadcrumb() {
   if (paths[0] === "p" && paths[1]) {
     // Project page root breadcrumb
     breadcrumbItems.push({
-      label: pid?.name || "Project 1",
+      label: active.activeProject?.name || "Project",
       to: `/p/${paths[1]}`,
     });
+
 
     // Add additional breadcrumbs for each sub path
     for (let i = 2; i < paths.length; i++) {

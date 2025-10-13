@@ -17,12 +17,12 @@ import {
 import { Search, FolderPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// FAKE: Simulated user info and invited projects for demonstration
 const currentUser = {
   id: "u1",
   name: "Jane Smith",
   email: "jane@example.com",
 };
+
 const invitedProjects = [
   {
     id: "invd1",
@@ -92,8 +92,7 @@ export default function Dashboard() {
         sub="All your owned and shared projects are visible here. Quickly create, browse or join new workspaces."
       />
 
-      {/* Enhanced Toolbar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-white/80 backdrop-blur-md border rounded-lg shadow-sm px-4 py-4 sticky top-3 z-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div className="flex flex-1 gap-3">
           <InputGroup className="w-full max-w-xs">
             <InputGroupAddon>
@@ -122,12 +121,9 @@ export default function Dashboard() {
             </SelectContent>
           </Select>
         </div>
-        <Button
-          size="lg"
-          className="mt-2 md:mt-0 flex gap-2 items-center shadow active:scale-95"
-        >
-          <FolderPlus className="w-5 h-5" />
-          <span className="font-semibold">New Project</span>
+        <Button>
+          <FolderPlus />
+          New Project
         </Button>
       </div>
 

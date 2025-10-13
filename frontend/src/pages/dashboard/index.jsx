@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import OverviewCards from "@/components/dashboard/overview-cards";
-import { List, Notebook, Timer, ListChecks } from "lucide-react";
+import { List } from "lucide-react";
 import ChartSkeleton from "@/components/dashboard/chart-skeleton";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DistributionChart from "@/components/dashboard/distribution-chart";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import Banner from "@/components/ui/banner";
 import { Button } from "@/components/ui/button";
+import useActiveProject from "@/hooks/use-active-project";
 
 const DashboardChart = lazy(() =>
   import("@/components/dashboard/dashboard-chart")
@@ -23,6 +24,9 @@ const DashboardChart = lazy(() =>
 
 export default function Index() {
   const navigate = useNavigate();
+  const { pid } = useParams();
+
+  const { activeProject, loading } = useActiveProject({ projectId: pid });
 
   return (
     <>

@@ -1,15 +1,5 @@
 import SidebarUserAvatar from "./sidebar-user-avatar";
-import { projects } from "@/lib/projetcs-data-placeholder";
-import {
-  Calendar,
-  LayoutDashboard,
-  Inbox,
-  Search,
-  Settings,
-  ClipboardList,
-  UsersRound,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarHeader,
@@ -31,63 +21,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { projects } from "@/lib/projetcs-data-placeholder";
+import { projectItems, appItems } from "@/lib/dashboard-sidebar-definitions";
+import { useFetch } from "@/hooks/use-fetch";
+import { useAuthContext } from "@/contexts/auth-context";
+import useLocalStorage from "@/hooks/use-localstorage";
+import { useEffect } from "react";
 
-const projectItems = [
-  {
-    title: "Overview",
-    url: "/p/smaple-project-url",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Tasks",
-    url: "tasks",
-    icon: ClipboardList,
-  },
-  {
-    title: "Members",
-    url: "members",
-    icon: UsersRound,
-  },
-];
 
-const appItems = [
-  {
-    title: "Inbox",
-    url: "inbox",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "calendar",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "/search",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-];
 
 export default function AppSidebar() {
+  const navigate = useNavigate();
+  const { get, set } = useLocalStorage("activeProject");
+  const { token } = useAuthContext();
+  const { data: projects, loading: projectsLoading } = useFetch("/projects/users", { method: "GET", headers: { Authorization: "Bearer " + token } }, true);
+
+
+  const handleProjectChange = (value) => {
+    set(value);
+    navigate(`/p/${value}`);
+  };
+
   return (
     <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Select>
+            <Select defaultValue={get()} onValueChange={handleProjectChange}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select project" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Your projects</SelectLabel>
-                  {projects.map(({ id, name }) => (
-                    <SelectItem key={id} value={name}>
+                  {projects?.map(({ id, name }) => (
+                    <SelectItem key={id} value={id}>
                       {name}
                     </SelectItem>
                   ))}
