@@ -1,7 +1,13 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import HomeNavbar from "@/components/home/home-navbar";
+import { useAuthContext } from "@/contexts/auth-context";
 
 export default function PublicRoutes() {
+
+  const { isAuthenticated } = useAuthContext();
+
+  if (isAuthenticated) return <Navigate to="/p" />;
+
   return (
     <div className="flex flex-col h-screen font-geist">
       <HomeNavbar />

@@ -36,6 +36,7 @@ export default function LoginForm() {
         toast.success(result.message);
         setUser(result?.user);
         setToken(result?.token);
+
         
         return;
       }
