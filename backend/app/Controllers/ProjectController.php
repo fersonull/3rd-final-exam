@@ -20,6 +20,21 @@ class ProjectController
         Response::json(200, $projects);
     }
 
+    public function find($id)
+    {
+        $project = $this->projectModel->find($id);
+
+        if (!$project) {
+            Response::json(404, [
+                "error" => "Project not found"
+            ]);
+        }
+
+        Response::json(200, [
+            "data" => $project
+        ]);
+    }
+
     public function store()
     {
         $request = $_POST;
