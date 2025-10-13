@@ -112,7 +112,7 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                         name="project_id"
                         className="w-full border rounded px-3 py-2"
                         value={values.project_id}
-                        onValueChange={handleChange}
+                        onValueChange={(value) => handleChange({ target: { name: "project_id", value } })}
                     
                     >
                         <SelectTrigger>
@@ -135,7 +135,7 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                     name="assignee_id"
                     className="w-full border rounded px-3 py-2"
                     value={values.assignee_id}
-                    onValueChange={handleChange}
+                    onValueChange={(value) => handleChange({ target: { name: "assignee_id", value } })}
                 >
                     <SelectTrigger>
                         <SelectValue placeholder="Unassigned" />
@@ -157,7 +157,7 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                         name="priority"
                         className="border rounded px-3 py-2"
                         value={values.priority}
-                        onValueChange={handleChange}
+                        onValueChange={(value) => handleChange({ target: { name: "priority", value } })}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select priority" />
@@ -176,7 +176,7 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                         name="status"
                         className="border rounded px-3 py-2"
                         value={values.status}
-                        onValueChange={handleChange}
+                        onValueChange={(value) => handleChange({ target: { name: "status", value } })}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select status" />

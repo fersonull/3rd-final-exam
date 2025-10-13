@@ -6,6 +6,22 @@ class Task extends Model
 {
     protected string $table = "tasks";
 
+    public function all(): ?array
+    {
+        $stmt = self::db()->prepare("SELECT * FROM $this->table");
+        $stmt->execute();
+        $rows = $stmt->fetchAll();
+        return $rows ?: null;
+    }
+
+    public function total(): ?int
+    {
+        $stmt = self::db()->prepare("SELECT COUNT(*) FROM $this->table");
+        $stmt->execute();
+        $total = $stmt->fetchColumn();
+        return $total ?: null;
+    }
+
     public function create(array $data): ?array
     {
 

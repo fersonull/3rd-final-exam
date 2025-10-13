@@ -14,6 +14,18 @@ class TaskController
         $this->taskModel = new Task;
     }
 
+    public function index()
+    {
+        $tasks = $this->taskModel->all();
+        Response::json(200, $tasks);
+    }
+
+    public function total()
+    {
+        $total = $this->taskModel->total();
+        Response::json(200, $total);
+    }
+
     public function store()
     {
         $request = $_POST;
