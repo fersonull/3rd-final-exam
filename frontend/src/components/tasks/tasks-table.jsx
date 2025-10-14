@@ -43,6 +43,7 @@ import {
 } from "lucide-react";
 import { initialTableData, teamMembers } from "@/lib/tasks-data-placeholder";
 import TaskStatusPill from "./task-status-pill";
+import TaskPriorityPill from "./task-priority-pill";
 import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
@@ -50,7 +51,7 @@ import { useFetch } from "@/hooks/use-fetch";
 import { useAuthContext } from "@/contexts/auth-context";
 
 function getSortedData(data, sortKey, sortOrder) {
-  
+
   if (!sortKey) return data;
   return [...data].sort((a, b) => {
     let aValue = a[sortKey];
@@ -256,19 +257,7 @@ export default function TasksTable() {
                           <TaskStatusPill status={data.status} />
                         </TableCell>
                         <TableCell className="py-3">
-                          <span
-                            className={
-                              data.priority === "high"
-                                ? "text-red-600 font-semibold"
-                                : data.priority === "normal"
-                                ? "text-yellow-600 font-medium"
-                                : data.priority === "low"
-                                ? "text-green-600"
-                                : ""
-                            }
-                          >
-                            {data.priority}
-                          </span>
+                          <TaskPriorityPill priority={data.priority} />
                         </TableCell>
                         <TableCell className="py-3">
                           {formatDate(data.due_date)}

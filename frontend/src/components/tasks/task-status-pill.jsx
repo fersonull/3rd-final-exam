@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 
 const statusVariantMap = {
-  Finished: "success",
-  "In Progress": "ongoing",
-  Due: "warning",
-  Overdue: "destructive",
+  finished: "success",
+  ongoing: "ongoing",
+  due: "warning",
+  overdue: "destructive",
 };
 
 export default function TaskStatusPill({ status }) {

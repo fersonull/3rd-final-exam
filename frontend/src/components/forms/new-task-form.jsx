@@ -24,8 +24,8 @@ const PRIORITY_OPTIONS = [
 
 const STATUS_OPTIONS = [
     { value: "pending", label: "Pending" },
-    { value: "in_progress", label: "In Progress" },
-    { value: "completed", label: "Completed" }
+    { value: "ongoing", label: "Ongoing" },
+    { value: "finished", label: "Finished" }
 ];
 
 export default function NewTaskForm({ projectId, projects = [], members = [], onSubmit }) {
@@ -113,7 +113,7 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                         className="w-full border rounded px-3 py-2"
                         value={values.project_id}
                         onValueChange={(value) => handleChange({ target: { name: "project_id", value } })}
-                    
+
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select project" />
@@ -163,9 +163,9 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                             <SelectValue placeholder="Select priority" />
                         </SelectTrigger>
                         <SelectContent>
-                        {PRIORITY_OPTIONS.map(opt => (
-                            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                        ))}
+                            {PRIORITY_OPTIONS.map(opt => (
+                                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                     {error?.priority && <span className="text-xs text-red-500">{error.priority}</span>}

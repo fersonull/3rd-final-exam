@@ -25,7 +25,7 @@ export default function ProjectCard({ project }) {
     status = "active",
     total_members, // Added
     total_tasks, // Added
-    createdAt, // Add createdAt for the date
+    created_at, // Add createdAt for the date
   } = project;
 
   // Fallback for demo if data not provided
@@ -89,7 +89,7 @@ export default function ProjectCard({ project }) {
             {/* Add created date below owner */}
             <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
               <Calendar size={14} className="text-gray-300" />
-              <span>Created: {formatDate(createdAt)}</span>
+              <span>Created: {formatDate(created_at)}</span>
             </div>
           </div>
           <CardAction>
