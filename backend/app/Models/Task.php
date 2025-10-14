@@ -49,4 +49,12 @@ class Task extends Model
         $row = $stmt->fetch();
         return $row ?: null;
     }
+
+    public function project(string $projectId): ?array
+    {
+        $stmt = self::db()->prepare("SELECT * FROM $this->table WHERE project_id = :project_id");
+        $stmt->execute(["project_id" => $projectId]);
+        $rows = $stmt->fetchAll();
+        return $rows ?: null;
+    }
 }

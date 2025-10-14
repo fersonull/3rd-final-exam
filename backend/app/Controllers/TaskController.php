@@ -69,4 +69,10 @@ class TaskController
 
         return Response::json(200, $task);
     }
+
+    public function project($projectId)
+    {
+        $tasks = $this->taskModel->project($projectId);
+        Response::json(200, $tasks);
+    }
 }

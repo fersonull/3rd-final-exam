@@ -57,4 +57,10 @@ class ProjectController
 
         Response::json($statusCode, $projects);
     }
+
+    public function tasks($projectId)
+    {
+        $tasks = $this->projectModel->tasks($projectId);
+        Response::json(200, $tasks);
+    }
 }

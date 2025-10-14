@@ -70,4 +70,12 @@ class Project extends Model
             "data" => $project
         ] : ["success" => false, "data" => null];
     }
+
+    public function tasks(string $projectId): ?array
+    {
+        $stmt = self::db()->prepare("SELECT * FROM tasks WHERE project_id = :project_id");
+        $stmt->execute(["project_id" => $projectId]);
+        $rows = $stmt->fetchAll();
+        return $rows ?: null;
+    }
 }
