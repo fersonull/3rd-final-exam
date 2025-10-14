@@ -22,7 +22,7 @@ class Project extends Model
         return $rows ?: null;
     }
 
-    public function userProjects(string $userId): ?array
+    public function users(string $userId): ?array
     {
         $stmt = self::db()->prepare("SELECT 
             projects.*,
@@ -36,7 +36,10 @@ class Project extends Model
         $stmt->execute(['user_id' => $userId]);
         $rows = $stmt->fetchAll();
 
-        return $rows ?: null;
+        return $rows ? [
+            "success" => true, 
+            "data" => $rows
+        ] : ["success" => false, "data" => null];
     }
 
     public function find(string $id): ?array
@@ -62,6 +65,9 @@ class Project extends Model
         $projectID = $data["id"];
         $project = $this->find($projectID);
 
-        return $project ?: null;
+        return $project ? [
+            "success" => true, 
+            "data" => $project
+        ] : ["success" => false, "data" => null];
     }
 }

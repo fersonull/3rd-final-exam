@@ -51,8 +51,10 @@ class ProjectController
     {
         $authUser = Session::get("auth")["user"];
 
-        $projects = $this->projectModel->userProjects($authUser["id"]);
+        $projects = $this->projectModel->users($authUser["id"]);
 
-        Response::json(200, $projects);
+        $statusCode = $projects["success"] ? 200 : 404;
+
+        Response::json($statusCode, $projects);
     }
 }
