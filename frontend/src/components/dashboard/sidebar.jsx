@@ -26,7 +26,7 @@ import { projectItems, appItems } from "@/lib/dashboard-sidebar-definitions";
 import { useFetch } from "@/hooks/use-fetch";
 import { useAuthContext } from "@/contexts/auth-context";
 import useLocalStorage from "@/hooks/use-localstorage";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 
 
@@ -37,28 +37,35 @@ export default function AppSidebar() {
   const { data: projects, loading: projectsLoading } = useFetch("/projects/users", { method: "GET", headers: { Authorization: "Bearer " + token } }, true);
 
 
-  const handleProjectChange = (value) => {
+  const setActiveProject = get();
+
+  const handleProjectChange = useCallback((value) => {
+
     set(value);
     navigate(`/p/${value}/overview`);
-  };
+  }, [setActiveProject]);
 
   return (
     <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Select defaultValue={get()} onValueChange={handleProjectChange}>
+            <Select defaultValue={setActiveProject?.id} onValueChange={handleProjectChange}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select project" />
+                <SelectValue placeholder="Select project" disabled={projectsLoading} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Your projects</SelectLabel>
-                  {projects?.map(({ id, name }) => (
-                    <SelectItem key={id} value={id}>
-                      {name}
-                    </SelectItem>
-                  ))}
+                  {projects?.data?.length > 0 ? (
+                    projects?.data?.map(({ id, name }) => (
+                      <SelectItem key={id} value={id} disabled={projectsLoading}>
+                        {name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="empty" disabled>No projects found</SelectItem>
+                  )}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -106,6 +113,6 @@ export default function AppSidebar() {
       <SidebarFooter>
         <SidebarUserAvatar />
       </SidebarFooter>
-    </Sidebar>
+    </Sidebar >
   );
 }

@@ -28,9 +28,14 @@ export default function Index() {
 
   const { activeProject, loading } = useActiveProject({ projectId: pid });
 
+
   if (loading) {
     return <div>Loading...</div>;
   }
+
+  // if (!activeProject) {
+  //   return <div>Project not found</div>;
+  // }
 
   return (
     <>

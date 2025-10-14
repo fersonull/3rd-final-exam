@@ -8,10 +8,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Users, ListTodo, Calendar } from "lucide-react"; // Add relevant icons
+import useLocalStorage from "@/hooks/use-localstorage";
 
 export default function ProjectCard({ project }) {
+  const navigate = useNavigate();
+  const {
+    set,
+  } = useLocalStorage("activeProject");
   const {
     id,
     name,
@@ -63,6 +68,13 @@ export default function ProjectCard({ project }) {
     }
   };
 
+
+  const handleView = () => {
+    set(project);
+
+    navigate(`/p/${id}/overview`);
+  }
+
   return (
     <Card className="hover:shadow-md transition-shadow duration-200 cursor-pointer group">
       <CardHeader>
@@ -111,12 +123,12 @@ export default function ProjectCard({ project }) {
           <div className="flex items-center justify-between pt-2">
             <div className="text-xs text-gray-500">Project ID: {id}</div>
             <Button
-              asChild
               variant="outline"
               size="sm"
               className="opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={handleView}
             >
-              <Link to={`/p/${id}`}>View Details</Link>
+              View
             </Button>
           </div>
         </div>

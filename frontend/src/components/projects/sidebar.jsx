@@ -38,11 +38,6 @@ const projectItems = [
     url: "",
     icon: FolderTree,
   },
-  {
-    title: "Members",
-    url: "members",
-    icon: UsersRound,
-  },
 ];
 
 const appItems = [
@@ -72,25 +67,14 @@ export default function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <Select>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select project" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Your projects</SelectLabel>
-                  {projects.map(({ id, name }) => (
-                    <SelectItem key={id} value={name}>
-                      {name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <Link to="/" className="flex items-center gap-2 px-2 py-3 group">
+          <span className="bg-blue-600 w-8 h-8 flex items-center justify-center rounded-md text-white text-lg font-bold">
+            P
+          </span>
+          <span className="font-bold text-xl tracking-tight text-gray-900 group-hover:text-blue-700 transition-colors">
+            Projectify
+          </span>
+        </Link>
       </SidebarHeader>
 
       <SidebarContent>

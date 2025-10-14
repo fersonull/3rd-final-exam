@@ -30,14 +30,12 @@ export default function LoginForm() {
 
       const result = await login({ body: formData });
 
-      console.log(result);
-
       if (result?.success && !result.error) {
         toast.success(result.message);
         setUser(result?.user);
         setToken(result?.token);
 
-        
+
         return;
       }
 
@@ -46,6 +44,7 @@ export default function LoginForm() {
           closeButton: true,
         });
       }
+
     } catch (err) {
       console.error("Login failed:", err);
       toast.error("An unexpected error occurred. Please try again.");

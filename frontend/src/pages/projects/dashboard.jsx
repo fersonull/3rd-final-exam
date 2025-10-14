@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import ProjectCard from "@/components/projects/project-card";
 import { projects } from "@/lib/projetcs-data-placeholder";
 import Banner from "@/components/ui/banner";
@@ -14,14 +14,12 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Search, FolderPlus } from "lucide-react";
+import EmptyProject from "@/components/projects/empty-project";
+import { Search, FolderPlus, FolderCode, UsersRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useFetch } from "@/hooks/use-fetch";
+import { useAuthContext } from "@/contexts/auth-context";
 
-const currentUser = {
-  id: "u1",
-  name: "Jane Smith",
-  email: "jane@example.com",
-};
 
 const invitedProjects = [
   {
@@ -52,7 +50,7 @@ const sortOptions = [
 ];
 
 function sortAndFilter(projectList, search, sort) {
-  let filtered = projectList.filter((project) =>
+  let filtered = projectList?.filter((project) =>
     project.name.toLowerCase().includes(search.toLowerCase())
   );
   switch (sort) {
@@ -67,23 +65,39 @@ function sortAndFilter(projectList, search, sort) {
       break;
     case "created-newest":
     default:
-      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      filtered?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       break;
   }
   return filtered;
 }
 
 export default function Dashboard() {
+  const { token } = useAuthContext();
+  const { data: projects, loading } = useFetch(
+    "/projects/users",
+    {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : undefined
+      }
+    },
+    true
+  );
+
+
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(sortOptions[0].value);
 
   const filteredAndSortedProjects = useMemo(() => {
-    return sortAndFilter(projects, search, sort);
-  }, [search, sort]);
+    return sortAndFilter(projects?.data, search, sort);
+  }, [search, sort, projects?.data]);
 
   const filteredAndSortedInvitedProjects = useMemo(() => {
     return sortAndFilter(invitedProjects, search, sort);
-  }, [search, sort]);
+  }, [search, sort, projects?.data]);
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
@@ -130,37 +144,33 @@ export default function Dashboard() {
       <div className="space-y-12">
         <section>
           <div className="flex items-center mb-4 gap-2">
-            <span className="font-semibold text-2xl flex-shrink-0">
+            <span className="font-medium">
               Your Projects
             </span>
             <span className="bg-green-100 text-green-700 ml-2 px-2 rounded-full text-xs h-6 flex items-center">
-              {filteredAndSortedProjects.length} active
+              {filteredAndSortedProjects?.length} active
             </span>
           </div>
-          {filteredAndSortedProjects.length > 0 ? (
+          {filteredAndSortedProjects?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
               {filteredAndSortedProjects.map((project) => (
                 <ProjectCard key={project.id + "-owned"} project={project} />
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-14 border rounded-lg bg-gray-50 text-gray-700">
-              <div className="text-3xl mb-2">😕</div>
-              <div className="text-lg font-semibold">No projects found</div>
-              <p className="text-gray-500 mt-1 text-sm">
-                You don&apos;t have any projects yet.
-                <br />
-                <Button className="mt-5" size="sm" variant="outline">
-                  <FolderPlus className="w-4 h-4 mr-2" /> Create Project
+            <EmptyProject>
+              <div className="flex gap-2">
+                <Button>
+                  Create Project
                 </Button>
-              </p>
-            </div>
+              </div>
+            </EmptyProject>
           )}
         </section>
 
         <section>
           <div className="flex items-center mb-4 gap-2">
-            <span className="font-semibold text-2xl flex-shrink-0">
+            <span className="font-medium">
               Invited Projects
             </span>
             <span className="ml-1 bg-blue-100 text-blue-600 px-2 rounded-full text-xs h-6 flex items-center">
@@ -177,13 +187,13 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-12 border rounded-lg bg-gray-50 text-gray-700">
-              <div className="text-lg font-semibold">No invited projects</div>
-              <p className="text-gray-500 mt-1 text-sm">
-                You are not a member of any shared projects yet.
-              </p>
-            </div>
+            <EmptyProject icon={<UsersRound />} title={"No Invited Projects"} desc={"You are not a member of any shared projects yet."} />
           )}
+
+          <Button className="mt-5" size="sm" variant="outline">
+            <UsersRound />
+            Browse all
+          </Button>
         </section>
       </div>
     </>

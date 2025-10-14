@@ -5,13 +5,14 @@ import { useFormData } from "@/hooks/use-formdata";
 import { useFetch } from "@/hooks/use-fetch";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import DotLoading from "../loadings/dot-loading";
 
 export default function SignupForm() {
   const navigate = useNavigate();
   const {
     error,
     loading,
-    refetch: login,
+    refetch: signup,
   } = useFetch("/signup", { method: "POST" }, false);
   const { values, handleChange, getFormData } = useFormData({
     name: "",
@@ -22,14 +23,28 @@ export default function SignupForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = getFormData();
+    try {
+      const formData = getFormData();
 
-    const result = await login({ body: formData });
+      const result = await signup({ body: formData });
 
-    if (result?.success) {
-      toast.success(result?.message);
 
-      navigate("/auth");
+      if (result?.success && !result.error) {
+        toast.success(result.message);
+        navigate("/auth");
+
+
+        return;
+      }
+
+      if (result?.error) {
+        toast.warning(result?.error, {
+          closeButton: true,
+        });
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
   return (
@@ -96,8 +111,8 @@ export default function SignupForm() {
             </span>
           )}
         </div>
-        <Button type="submit" className="w-full">
-          Create account
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? <DotLoading /> : "Create account"}
         </Button>
       </form>
     </>
