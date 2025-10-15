@@ -45,8 +45,8 @@ function getLast1MonthData() {
   return data;
 }
 
-export default function InfoChart({ range = "7d" }) {
-  const data = range === "1m" ? getLast1MonthData() : getLast7DaysData();
+export default function InfoChart({ data }) {
+
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -72,7 +72,7 @@ export default function InfoChart({ range = "7d" }) {
 
         <Bar
           name="Tasks Created"
-          dataKey="tasksCreated"
+          dataKey="total_created"
           stroke="#fff"
           fillOpacity={1}
           fill="url(#color1)"
@@ -80,7 +80,7 @@ export default function InfoChart({ range = "7d" }) {
 
         <Bar
           name="Tasks Completed"
-          dataKey="tasksCompleted"
+          dataKey="total_finished"
           stroke="#fff"
           fillOpacity={1}
           fill="url(#color2)"

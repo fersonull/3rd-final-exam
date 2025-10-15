@@ -26,10 +26,11 @@ const DashboardChart = lazy(() =>
 export default function Index() {
   const navigate = useNavigate();
   const { pid } = useParams();
+  const [range, setRange] = useState("7");
 
+  const { data: stats, loading: statsLoading, error } = useFetch(`/stats/${pid}`)
 
-  const { data: stats, loading: statsLoading, error } = useFetch(`/stats?pid=${pid}`)
-
+  const { data: chart, loading: chartLoading, error: chartError } = useFetch(`/stats/${pid}/chart/${range}`)
 
   const { activeProject, loading: projectLoading } = useActiveProject({ projectId: pid });
 
@@ -54,9 +55,13 @@ export default function Index() {
 
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
           <div className="lg:col-span-2">
-            <Suspense fallback={<ChartSkeleton />}>
-              <DashboardChart />
-            </Suspense>
+            {chartLoading ? <ChartSkeleton /> :
+              <Suspense fallback={<ChartSkeleton />}>
+                <DashboardChart data={chart?.data} setRange={setRange} range={range} />
+              </Suspense>
+            }
+
+
           </div>
 
           {/* Pie Chart Card */}

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import InfoChart from "./info-chart";
 import {
   Card,
@@ -16,20 +15,19 @@ import {
   SelectItem,
 } from "../ui/select";
 
-export default function DashboardChart() {
-  const [range, setRange] = useState("7d");
-
+// Expecting setRange and range to be passed from parent
+export default function DashboardChart({ data, range = "7", setRange }) {
   return (
     <Card className="lg:h-full h-104">
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
           <CardTitle>
-            {range === "7d"
+            {range === "7"
               ? "Your last 7-day activities"
               : "Your last 1-month activities"}
           </CardTitle>
           <CardDescription>
-            {range === "7d"
+            {range === "30"
               ? "Showing your recent activities within week"
               : "Showing your recent activities within month"}
           </CardDescription>
@@ -41,14 +39,14 @@ export default function DashboardChart() {
               <SelectValue placeholder="Select range" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="7d">7 Days</SelectItem>
-              <SelectItem value="1m">1 Month</SelectItem>
+              <SelectItem value="7">7 Days</SelectItem>
+              <SelectItem value="30">1 Month</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </CardHeader>
       <CardContent className="w-full h-full font-medium text-xs">
-        <InfoChart range={range} />
+        <InfoChart data={data} range={range} />
       </CardContent>
     </Card>
   );

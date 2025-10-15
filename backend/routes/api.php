@@ -17,7 +17,7 @@ Router::post('/v1/logout', 'AuthController@logout', ['AuthMiddleware']);
 Router::get('/v1/projects', 'ProjectController@index', ['AuthMiddleware']);
 Router::get('/v1/projects/users', 'ProjectController@getUsersProjects', ['AuthMiddleware','ProjectOwnerRights']);
 Router::get('/v1/projects/{id}/tasks', 'ProjectController@tasks', ['AuthMiddleware']);
-Router::get('/v1/projects/{id}', 'ProjectController@find', ['AuthMiddleware']);
+Router::get('/v1/projects/{id}', 'ProjectController@find', ['AuthMiddleware', 'ProjectOwnerRights']);
 Router::post('/v1/projects', 'ProjectController@store', ['AuthMiddleware']);
 
 // task related routes
@@ -28,6 +28,7 @@ Router::get('/v1/tasks/total', 'TaskController@total', ['AuthMiddleware', 'Proje
 Router::get('/v1/tasks/project/{projectId}', 'TaskController@project', ['AuthMiddleware']);
 
 // analytics
-Router::get("/v1/stats", "AnalyticsController@tasks", ['AuthMiddleware','ProjectOwnerRights']);
+Router::get("/v1/stats/{pid}", "AnalyticsController@tasks", ['AuthMiddleware','ProjectOwnerRights']);
+Router::get("/v1/stats/{pid}/chart/{days}", "AnalyticsController@chart");
 
 Router::dispatch();

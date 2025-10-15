@@ -12,18 +12,36 @@ class AnalyticsController
         $this->analyticsModel = new Analytics;
     }
 
-    public function tasks()
+    public function tasks(string $pid)
     {
-        $params = $_GET;
 
-        if (!$params['pid']) {
+        if (!$pid) {
             return Response::json(400, [
                 "error" => "Project ID is required"
             ]);
         }
 
-        $result = $this->analyticsModel->tasks($params['pid']);
+        $result = $this->analyticsModel->tasks($pid);
 
         Response::json(200, $result);
+    }
+
+    public function chart(string $pid, int $days = 7)
+    {
+        $result = $this->analyticsModel->tasksByDateRange($pid, $days);
+
+
+        if (!$result) {
+            return Response::json(400, [
+                "success" => false,
+                "error" => "No data found"
+            ]);
+        }
+
+        Response::json(200, [
+            "success" => true,
+            "message" => "Showing data last $days days",
+            "data" => $result
+        ]);
     }
 }
