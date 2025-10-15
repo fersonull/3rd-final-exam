@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
 import { useFetch } from "@/hooks/use-fetch";
-import { useAuthContext } from "@/contexts/auth-context";
+import useLocalStorage from "./use-localstorage";
 
 export default function useActiveProject({ projectId }) {
     const [projectID, setProjectID] = useState(projectId);
     const [loading, setLoading] = useState(false);
     const [activeProject, setActiveProject] = useState(null);
-    const { token } = useAuthContext();
-    const { refetch: getProjects } = useFetch("/projects/" + projectId, { method: "GET", headers: { Authorization: "Bearer " + token } }, false);
+    const { refetch: getProjects } = useFetch("/projects/" + projectId);
+    const { get, set } = useLocalStorage("activeProject");
 
     useEffect(() => {
         setProjectID(projectId);
+        setActiveProject(get() ?? null);
     }, [projectId]);
 
     useEffect(() => {
@@ -21,13 +22,16 @@ export default function useActiveProject({ projectId }) {
 
                 // console.log(project);
 
-                if (!project || project.error) {
+                if ((!project || project?.error) && !get()) {
                     console.error("Error fetching project:", project?.error);
                     setActiveProject(null);
                     return;
                 }
 
-                setActiveProject(project.data);
+                setActiveProject(project?.data);
+
+                set(project?.data);
+
             } catch (error) {
                 console.error("Error fetching project:", error);
             } finally {

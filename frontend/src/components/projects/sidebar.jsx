@@ -1,5 +1,4 @@
 import SidebarUserAvatar from "@/components/dashboard/sidebar-user-avatar";
-import { projects } from "@/lib/projetcs-data-placeholder";
 import {
   Calendar,
   LayoutDashboard,
@@ -67,13 +66,8 @@ export default function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <Link to="/" className="flex items-center gap-2 px-2 py-3 group">
-          <span className="bg-blue-600 w-8 h-8 flex items-center justify-center rounded-md text-white text-lg font-bold">
-            P
-          </span>
-          <span className="font-bold text-xl tracking-tight text-gray-900 group-hover:text-blue-700 transition-colors">
-            Projectify
-          </span>
+        <Link to="/" className="flex-center">
+          logo-logo
         </Link>
       </SidebarHeader>
 

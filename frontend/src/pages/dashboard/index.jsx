@@ -28,10 +28,7 @@ export default function Index() {
   const { pid } = useParams();
 
 
-  const { data, loading: statsLoading, error } = useFetch(
-    `/stats?pid=${pid}`,
-    true
-  )
+  const { data: stats, loading: statsLoading, error } = useFetch(`/stats?pid=${pid}`)
 
 
   const { activeProject, loading: projectLoading } = useActiveProject({ projectId: pid });
@@ -53,7 +50,7 @@ export default function Index() {
       />
 
       <div className="grid grid-cols-1 gap-4">
-        <OverviewCards data={data} loading={statsLoading} />
+        <OverviewCards data={stats} loading={statsLoading} />
 
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
           <div className="lg:col-span-2">

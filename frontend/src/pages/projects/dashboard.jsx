@@ -18,8 +18,7 @@ import EmptyProject from "@/components/projects/empty-project";
 import { Search, FolderPlus, FolderCode, UsersRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useFetch } from "@/hooks/use-fetch";
-import { useAuthContext } from "@/contexts/auth-context";
-
+import useLocalStorage from "@/hooks/use-localstorage";
 
 const invitedProjects = [
   {
@@ -72,6 +71,13 @@ function sortAndFilter(projectList, search, sort) {
 }
 
 export default function Dashboard() {
+  const { remove } = useLocalStorage("activeProject")
+
+
+  useEffect(() => {
+    remove();
+  }, []);
+
   const { data: projects, loading } = useFetch(
     "/projects/users",
     true
@@ -176,7 +182,7 @@ export default function Dashboard() {
           {filteredAndSortedInvitedProjects.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
               {filteredAndSortedInvitedProjects.map((project) => (
-                <ProjectCard key={project.id + "-invited"} project={project} />
+                <ProjectCard key={project.id} project={project} />
               ))}
             </div>
           ) : (

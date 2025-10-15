@@ -27,6 +27,7 @@ import { useFetch } from "@/hooks/use-fetch";
 import { useAuthContext } from "@/contexts/auth-context";
 import useLocalStorage from "@/hooks/use-localstorage";
 import { useCallback, useEffect } from "react";
+import useActiveProject from "@/hooks/use-active-project";
 
 
 
@@ -34,16 +35,24 @@ export default function AppSidebar() {
   const navigate = useNavigate();
   const { get, set } = useLocalStorage("activeProject");
   const { token } = useAuthContext();
-  const { data: projects, loading: projectsLoading } = useFetch("/projects/users", { method: "GET", headers: { Authorization: "Bearer " + token } }, true);
-
+  const { data: projects, loading: projectsLoading } = useFetch("/projects/users");
 
   const setActiveProject = get();
+
+  const { activeProject, loading: projectLoading } = useActiveProject({ projectId: setActiveProject?.id });
+
 
   const handleProjectChange = useCallback((value) => {
 
     set(value);
+
+
     navigate(`/p/${value}/overview`);
   }, [setActiveProject]);
+
+  // useEffect(() => {
+  //   console.log(activeProject)
+  // }, [activeProject, projectLoading])
 
   return (
     <Sidebar>
