@@ -17,7 +17,7 @@ import {
 import Banner from "@/components/ui/banner";
 import { Button } from "@/components/ui/button";
 import useActiveProject from "@/hooks/use-active-project";
-import { useAuthContext } from "@/contexts/auth-context";
+import { useFetch } from "@/hooks/use-fetch";
 
 const DashboardChart = lazy(() =>
   import("@/components/dashboard/dashboard-chart")
@@ -25,9 +25,13 @@ const DashboardChart = lazy(() =>
 
 export default function Index() {
   const navigate = useNavigate();
-  const { token } = useAuthContext()
   const { pid } = useParams();
 
+
+  const { data, loading: statsLoading, error } = useFetch(
+    `/stats?pid=${pid}`,
+    true
+  )
 
 
   const { activeProject, loading } = useActiveProject({ projectId: pid });
@@ -35,6 +39,10 @@ export default function Index() {
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error?.forbidden) {
+    return <div>{error?.forbidden}</div>
   }
 
   if (!activeProject) {
@@ -49,7 +57,7 @@ export default function Index() {
       />
 
       <div className="grid grid-cols-1 gap-4">
-        <OverviewCards />
+        <OverviewCards data={data} />
 
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
           <div className="lg:col-span-2">

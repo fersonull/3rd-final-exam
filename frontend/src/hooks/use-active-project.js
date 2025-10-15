@@ -7,22 +7,22 @@ export default function useActiveProject({ projectId }) {
     const [loading, setLoading] = useState(false);
     const [activeProject, setActiveProject] = useState(null);
     const { token } = useAuthContext();
-    const { refetch: getProject } = useFetch("/projects/" + projectId, { method: "GET", headers: { Authorization: "Bearer " + token }}, false);
+    const { refetch: getProjects } = useFetch("/projects/" + projectId, { method: "GET", headers: { Authorization: "Bearer " + token } }, false);
 
     useEffect(() => {
-        setProjectID(projectId);    
+        setProjectID(projectId);
     }, [projectId]);
 
     useEffect(() => {
         const fetchProject = async () => {
             try {
                 setLoading(true);
-                const project = await getProject();
+                const project = await getProjects();
 
                 // console.log(project);
 
                 if (!project || project.error) {
-                    console.error("Error fetching project:", project.error);
+                    console.error("Error fetching project:", project?.error);
                     setActiveProject(null);
                     return;
                 }
@@ -34,7 +34,7 @@ export default function useActiveProject({ projectId }) {
                 setLoading(false);
             }
         };
-        
+
         fetchProject();
     }, [projectID]);
 

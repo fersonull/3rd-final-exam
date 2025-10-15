@@ -72,19 +72,10 @@ function sortAndFilter(projectList, search, sort) {
 }
 
 export default function Dashboard() {
-  const { token } = useAuthContext();
   const { data: projects, loading } = useFetch(
     "/projects/users",
-    {
-      headers: {
-        Authorization: token ? `Bearer ${token}` : undefined
-      }
-    },
     true
   );
-
-  console.log(projects)
-
 
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(sortOptions[0].value);

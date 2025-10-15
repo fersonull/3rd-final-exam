@@ -47,8 +47,6 @@ import TaskPriorityPill from "./task-priority-pill";
 import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
-import { useFetch } from "@/hooks/use-fetch";
-import { useAuthContext } from "@/contexts/auth-context";
 
 function getSortedData(data, sortKey, sortOrder) {
 
@@ -68,11 +66,8 @@ function getSortedData(data, sortKey, sortOrder) {
   });
 }
 
-export default function TasksTable() {
-  const { token } = useAuthContext();
+export default function TasksTable({ tasks }) {
 
-  const { data: tasks, isLoading, error } = useFetch("/tasks", { method: "GET", headers: { Authorization: `Bearer ${token}` } }, true);
-  console.log(tasks);
 
   const [sortKey, setSortKey] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
