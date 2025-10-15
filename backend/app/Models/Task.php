@@ -24,8 +24,8 @@ class Task extends Model
 
     public function create(array $data): ?array
     {
-
-        $stmt = self::db()->prepare("INSERT INTO $this->table (id, title, description, priority, status, due_date, assignee_id, project_id) VALUES (:id, :title, :description, :priority, :status, :due_date, :assignee_id, :project_id)");
+        $stmt = self::db()->prepare("
+        INSERT INTO $this->table (id, title, description, priority, status, due_date, assignee_id, project_id) VALUES (:id, :title, :description, :priority, :status, :due_date, :assignee_id, :project_id)");
         $stmt->execute([
             "id" => $data["id"],
             "title" => $data["title"],
@@ -52,7 +52,15 @@ class Task extends Model
 
     public function project(string $projectId): ?array
     {
-        $stmt = self::db()->prepare("SELECT * FROM $this->table WHERE project_id = :project_id");
+        $stmt = self::db()->prepare("SELECT 
+                t.*,
+                u.id AS assignee_id, 
+                u.name AS assignee_name, 
+                u.email AS assignee_email
+            FROM $this->table t
+            LEFT JOIN users u ON t.assignee_id = u.id
+            WHERE t.project_id = :project_id
+        ");
         $stmt->execute(["project_id" => $projectId]);
         $rows = $stmt->fetchAll();
         return $rows ?: null;

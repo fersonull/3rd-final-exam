@@ -247,7 +247,6 @@ export default function TasksTable({ tasks }) {
                         <TableCell className="py-3 font-medium">
                           {data.title}
                         </TableCell>
-                        <TableCell className="py-3">{data.project_id}</TableCell>
                         <TableCell className="py-3">
                           <TaskStatusPill status={data.status} />
                         </TableCell>
@@ -280,7 +279,7 @@ export default function TasksTable({ tasks }) {
                               </Select>
                             </div>
                           ) : (
-                            <span>{data.assignee_id}</span>
+                            <span>{data.assignee_name}</span>
                           )}
                         </TableCell>
                       </TableRow>

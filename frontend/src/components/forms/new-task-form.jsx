@@ -60,10 +60,6 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                 toast.success(res.message);
                 navigate(`/p/${projectId}/tasks/${res.task.id}`);
             }
-
-            if (error) {
-                console.log(error);
-            }
         } catch (e) {
             console.error("Error creating task:", e);
             toast.error("An unexpected error occurred. Please try again.");

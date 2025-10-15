@@ -36,8 +36,8 @@ class TaskController
             'priority' => 'required|string|in:low,normal,high',
             'status' => 'required|string|in:pending,in_progress,completed',
             'due_date' => 'required|date',
-            'assignee_id' => '|string|max:255',
-            'project_id' => 'required|string|max:255'
+            'assignee_id' => 'max:32',
+            'project_id' => 'required|string|max:32'
         ]);
 
         if ($validator->fails()) {
@@ -47,7 +47,10 @@ class TaskController
         }
 
         $request["id"] = AuthService::generateID();
-        $request["assignee_id"] = Session::get("auth")["user"]["id"];
+
+        if (!isset($request["assignee_id"]) || $request["assignee_id"] === "" || $request["assignee_id"] === "null") {
+            $request["assignee_id"] = null;
+        }
 
         $task = $this->taskModel->create($request);
 
