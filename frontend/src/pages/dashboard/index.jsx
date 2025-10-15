@@ -28,9 +28,14 @@ export default function Index() {
   const { pid } = useParams();
   const [range, setRange] = useState("7");
 
-  const { data: stats, loading: statsLoading, error } = useFetch(`/stats/${pid}`)
+  const { data: stats, loading: statsLoading, error } = useFetch(`/stats/${pid}`);
+  console.log("stats:", stats);
 
-  const { data: chart, loading: chartLoading, error: chartError } = useFetch(`/stats/${pid}/chart/${range}`)
+  const { data: chart, loading: chartLoading, error: chartError } = useFetch(`/stats/${pid}/chart/${range}`);
+  console.log("chart:", chart);
+
+  const { data: distribution, loading: disLoading, error: disError } = useFetch(`/stats/${pid}/chart`);
+  console.log("distribution:", distribution);
 
   const { activeProject, loading: projectLoading } = useActiveProject({ projectId: pid });
 
@@ -65,7 +70,7 @@ export default function Index() {
           </div>
 
           {/* Pie Chart Card */}
-          <DistributionChart />
+          <DistributionChart distribution={distribution} />
         </div>
 
         <Card>

@@ -54,26 +54,46 @@ class Analytics extends Model
 
     public function tasksByDateRange(string $pid, int $days = 7): ?array
     {        
-        $sql = "
-            SELECT 
-                DATE(created_at) AS date,
-                COUNT(*) AS total_created,
-                COUNT(CASE WHEN status = 'finished' THEN 1 END) AS total_finished
+        $sql = "SELECT 
+            DATE(created_at) AS date,
+            COUNT(*) AS total_created,
+            COUNT(CASE WHEN status = 'finished' THEN 1 END) AS total_finished
             FROM {$this->taskstb}
             WHERE project_id = :pid
-              AND created_at >= (CURRENT_DATE - INTERVAL :days DAY)
+            AND created_at >= (CURRENT_DATE - INTERVAL :days DAY)
             GROUP BY DATE(created_at)
             ORDER BY DATE(created_at) ASC
         ";
+
         $stmt = self::db()->prepare($sql);
         $stmt->execute([
             "pid" => $pid,
             "days" => $days
         ]);
 
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $stmt->fetchAll();
 
         return !empty($rows) ? $rows : null;
+    }
+
+    public function tasksDistribution(string $pid): ?array
+    {
+        $sql = "SELECT
+            COUNT(*) AS total,
+            COUNT(CASE WHEN status = 'finished' THEN 1 END) AS completed,
+            COUNT(CASE WHEN status = 'ongoing' THEN 1 END) AS ongoing
+            FROM {$this->taskstb}
+            WHERE project_id = :pid
+        ";
+
+        $stmt = self::db()->prepare($sql);
+        $stmt->execute([
+            "pid" => $pid,
+        ]);
+
+        $row = $stmt->fetch();
+
+        return !empty($row) ? $row : null;
     }
 
 }

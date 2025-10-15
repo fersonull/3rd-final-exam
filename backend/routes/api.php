@@ -29,6 +29,7 @@ Router::get('/v1/tasks/project/{projectId}', 'TaskController@project', ['AuthMid
 
 // analytics
 Router::get("/v1/stats/{pid}", "AnalyticsController@tasks", ['AuthMiddleware','ProjectOwnerRights']);
+Router::get("/v1/stats/{pid}/chart", "AnalyticsController@getDistributionData");
 Router::get("/v1/stats/{pid}/chart/{days}", "AnalyticsController@chart");
 
 Router::dispatch();

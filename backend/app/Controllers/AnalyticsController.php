@@ -44,4 +44,22 @@ class AnalyticsController
             "data" => $result
         ]);
     }
+
+    public function getDistributionData(string $pid)
+    {
+        $result = $this->analyticsModel->tasksDistribution($pid);
+
+
+        if (!$result) {
+            return Response::json(400, [
+                "success" => false,
+                "error" => "No data found"
+            ]);
+        }
+
+        Response::json(200, [
+            "success" => true,
+            "data" => $result
+        ]);
+    }
 }

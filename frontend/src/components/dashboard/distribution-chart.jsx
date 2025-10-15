@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -19,11 +20,7 @@ const totalTasks = 200;
 const completedTasks = 122;
 const ongoingTasks = 12;
 
-const pieData = [
-  { name: "Completed", value: completedTasks },
-  { name: "Ongoing", value: ongoingTasks },
-  { name: "Remaining", value: totalTasks - completedTasks - ongoingTasks },
-];
+
 
 // Color palette from InfoChart
 const PIE_COLORS = [
@@ -32,7 +29,19 @@ const PIE_COLORS = [
   "#9ca3af", // Remaining (darker gray, tailwind gray-400)
 ];
 
-export default function DistributionChart() {
+export default function DistributionChart({ distribution }) {
+  const [pie, setPie] = useState(distribution?.data);
+
+  useEffect(() => {
+    setPie(distribution?.data)
+  }, [distribution])
+
+  const pieData = [
+    { name: "Completed", value: pie?.total },
+    { name: "Ongoing", value: pie?.completed },
+    { name: "Remaining", value: pie?.total - pie?.completed - pie?.ongoing },
+  ];
+
   return (
     <Card>
       <CardHeader>
