@@ -83,6 +83,8 @@ export default function Dashboard() {
     true
   );
 
+  console.log(projects)
+
 
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(sortOptions[0].value);

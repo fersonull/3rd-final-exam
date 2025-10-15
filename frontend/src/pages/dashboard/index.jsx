@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import OverviewCards from "@/components/dashboard/overview-cards";
@@ -17,6 +17,7 @@ import {
 import Banner from "@/components/ui/banner";
 import { Button } from "@/components/ui/button";
 import useActiveProject from "@/hooks/use-active-project";
+import { useAuthContext } from "@/contexts/auth-context";
 
 const DashboardChart = lazy(() =>
   import("@/components/dashboard/dashboard-chart")
@@ -24,7 +25,10 @@ const DashboardChart = lazy(() =>
 
 export default function Index() {
   const navigate = useNavigate();
+  const { token } = useAuthContext()
   const { pid } = useParams();
+
+
 
   const { activeProject, loading } = useActiveProject({ projectId: pid });
 
@@ -33,9 +37,9 @@ export default function Index() {
     return <div>Loading...</div>;
   }
 
-  // if (!activeProject) {
-  //   return <div>Project not found</div>;
-  // }
+  if (!activeProject) {
+    return <div>Project not found</div>;
+  }
 
   return (
     <>

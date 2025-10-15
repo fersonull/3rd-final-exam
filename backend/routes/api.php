@@ -27,4 +27,7 @@ Router::get('/v1/tasks/{id}', 'TaskController@find', ['AuthMiddleware']);
 Router::get('/v1/tasks/total', 'TaskController@total', ['AuthMiddleware']);
 Router::get('/v1/tasks/project/{projectId}', 'TaskController@project', ['AuthMiddleware']);
 
+// analytics
+Router::get("/v1/stats", "AnalyticsController@tasks");
+
 Router::dispatch();
