@@ -34,18 +34,14 @@ export default function Index() {
   )
 
 
-  const { activeProject, loading } = useActiveProject({ projectId: pid });
+  const { activeProject, loading: projectLoading } = useActiveProject({ projectId: pid });
 
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   if (error?.forbidden) {
     return <div>{error?.forbidden}</div>
   }
 
-  if (!activeProject) {
+  if (!activeProject && !projectLoading) {
     return <div>Project not found</div>;
   }
 
@@ -57,7 +53,7 @@ export default function Index() {
       />
 
       <div className="grid grid-cols-1 gap-4">
-        <OverviewCards data={data} />
+        <OverviewCards data={data} loading={statsLoading} />
 
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
           <div className="lg:col-span-2">
