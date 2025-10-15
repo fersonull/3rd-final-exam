@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   ResponsiveContainer,
   Legend,
@@ -11,49 +12,68 @@ import {
   Bar,
 } from "recharts";
 
-function getLast7DaysData() {
+function getLast7DaysData(taskData) {
   const today = new Date();
   const data = [];
+
   for (let i = 6; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
-    const month = d.toLocaleString("default", { month: "short" });
-    const day = d.getDate();
+
+    const dateKey = d.toISOString().split("T")[0];
+
+    const found = taskData.find(item => item.date === dateKey);
+
+    const label = `${d.toLocaleString("default", { month: "short" })} ${d.getDate()}`;
+
     data.push({
-      date: `${month} ${day}`,
-      tasksCreated: Math.floor(Math.random() * 10) + 1,
-      tasksCompleted: Math.floor(Math.random() * 9) + 1,
+      date: label,
+      tasksCreated: found ? found.total_created : 0,
+      tasksCompleted: found ? found.total_finished : 0,
     });
   }
+
   return data;
 }
 
-function getLast1MonthData() {
+function getLast1MonthData(taskData) {
   const today = new Date();
   const data = [];
+
   for (let i = 29; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
-    const month = d.toLocaleString("default", { month: "short" });
-    const day = d.getDate();
+
+    const dateKey = d.toISOString().split("T")[0];
+
+    const found = taskData.find(item => item.date === dateKey);
+
+    const label = `${d.toLocaleString("default", { month: "short" })} ${d.getDate()}`;
+
     data.push({
-      date: `${month} ${day}`,
-      tasksCreated: Math.floor(Math.random() * 10) + 1,
-      tasksCompleted: Math.floor(Math.random() * 9) + 1,
+      date: label,
+      tasksCreated: found ? found.total_created : 0,
+      tasksCompleted: found ? found.total_finished : 0,
     });
   }
+
   return data;
 }
 
-export default function InfoChart({ data }) {
 
+export default function InfoChart({ data, range }) {
+  const [chartData, setChartData] = useState([]);
+
+  useEffect(() => {
+    setChartData(range === "7" ? getLast7DaysData(data) : getLast1MonthData(data));
+  }, [data, range]);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
         width={730}
         height={250}
-        data={data}
+        data={chartData}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
         <defs>
@@ -72,7 +92,7 @@ export default function InfoChart({ data }) {
 
         <Bar
           name="Tasks Created"
-          dataKey="total_created"
+          dataKey="tasksCreated"
           stroke="#fff"
           fillOpacity={1}
           fill="url(#color1)"
@@ -80,7 +100,7 @@ export default function InfoChart({ data }) {
 
         <Bar
           name="Tasks Completed"
-          dataKey="total_finished"
+          dataKey="tasksCompleted"
           stroke="#fff"
           fillOpacity={1}
           fill="url(#color2)"
@@ -94,6 +114,10 @@ export default function InfoChart({ data }) {
 
 function CustomTooltip({ active, payload, label }) {
   if (active && payload && payload.length) {
+
+    const created = payload.find((p) => p.dataKey === "tasksCreated" || p.dataKey === "total_created");
+    const completed = payload.find((p) => p.dataKey === "tasksCompleted" || p.dataKey === "total_finished");
+
     return (
       <div className="p-3 rounded-md shadow bg-background border-accent">
         <p className="font-medium text-sm mb-1">{label}</p>
@@ -103,17 +127,19 @@ function CustomTooltip({ active, payload, label }) {
               <div className="p-1 border-accent me-1 bg-[#7ba6e4]" />
               <p className="flex-1">Tasks created</p>
             </span>
-            <p className="font-bold">{payload[0].value}</p>
+            <p className="font-bold">{created ? created.value : 0}</p>
           </div>
           <div className="flex gap-4">
             <span className="flex-center flex-1">
               <div className="p-1 border-accent me-1 bg-[#a8e6a3]" />
               <p className="flex-1">Tasks completed</p>
             </span>
-            <p className="font-bold">{payload[1].value}</p>
+            <p className="font-bold">{completed ? completed.value : 0}</p>
           </div>
         </div>
       </div>
     );
   }
+
+  return null;
 }
