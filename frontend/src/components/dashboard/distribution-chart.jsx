@@ -37,8 +37,8 @@ export default function DistributionChart({ distribution }) {
   }, [distribution])
 
   const pieData = [
-    { name: "Completed", value: pie?.total },
-    { name: "Ongoing", value: pie?.completed },
+    { name: "Completed", value: pie?.completed },
+    { name: "Ongoing", value: pie?.ongoing },
     { name: "Remaining", value: pie?.total - pie?.completed - pie?.ongoing },
   ];
 

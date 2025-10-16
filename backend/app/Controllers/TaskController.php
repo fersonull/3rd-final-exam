@@ -17,13 +17,24 @@ class TaskController
     public function index()
     {
         $tasks = $this->taskModel->all();
-        Response::json(200, $tasks);
-    }
 
-    public function total()
-    {
-        $total = $this->taskModel->total();
-        Response::json(200, $total);
+        // Add the "overdue" status to each task if its due_date is in the past and status is not completed.
+        $now = strtotime(date("Y-m-d"));
+        foreach ($tasks as &$task) {
+            $isOverdue = false;
+            if (
+                isset($task["due_date"])
+                && isset($task["status"])
+                && $task["status"] !== "completed"
+                && strtotime($task["due_date"]) < $now
+            ) {
+                $isOverdue = true;
+            }
+            $task["overdue"] = $isOverdue;
+        }
+        unset($task);
+
+        Response::json(200, $tasks);
     }
 
     public function store()
@@ -66,16 +77,77 @@ class TaskController
 
     public function update($id)
     {
+        // -- START: update method from Task.php (model) --
         $request = $_POST;
 
-        $task = $this->taskModel->update($id, $request);
+        // Model's update method logic inserted here, adapted for controller:
+        $stmt = $this->taskModel::db()->prepare("
+            UPDATE tasks
+            SET title = :title,
+                description = :description,
+                priority = :priority,
+                status = :status,
+                due_date = :due_date,
+                assignee_id = :assignee_id,
+                project_id = :project_id
+            WHERE id = :id
+        ");
+        $stmt->execute([
+            "title" => $request["title"],
+            "description" => $request["description"],
+            "priority" => $request["priority"],
+            "status" => $request["status"],
+            "due_date" => $request["due_date"],
+            "assignee_id" => $request["assignee_id"],
+            "project_id" => $request["project_id"],
+            "id" => $id,
+        ]);
 
-        return Response::json(200, $task);
+        $task = $this->taskModel->find($id);
+
+        if ($task) {
+            $response = ["success" => true, "message" => "Task updated successfully", "task" => $task];
+        } else {
+            $response = ["success" => false, "message" => "Task update failed", "task" => null];
+        }
+
+        return Response::json(200, $response);
+        // -- END: update method from Task.php (model) --
     }
 
     public function project($projectId)
     {
         $tasks = $this->taskModel->project($projectId);
+
+        // Add the "overdue" status to each task as in index
+        $now = strtotime(date("Y-m-d"));
+        foreach ($tasks as &$task) {
+            $isOverdue = false;
+            if (
+                isset($task["due_date"])
+                && isset($task["status"])
+                && $task["status"] !== "completed"
+                && strtotime($task["due_date"]) < $now
+            ) {
+                $isOverdue = true;
+                $this->taskModel->updateStatus($task["id"], "overdue");
+            }
+            $task["overdue"] = $isOverdue;
+        }
+        unset($task);
+
         Response::json(200, $tasks);
+    }
+    
+    public function isTaskOverdue($taskId)
+    {
+        $taskModel = new Task();
+        $task = $taskModel->find($taskId);
+
+        if (!$task || !isset($task["due_date"])) {
+            return Response::json(404, ["error" => "Task not found or due date missing."]);
+        }
+
+        return Response::json(200, ["overdue" => $task["overdue"]]);
     }
 }

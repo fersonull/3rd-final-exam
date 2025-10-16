@@ -63,4 +63,14 @@ class ProjectController
         $tasks = $this->projectModel->tasks($projectId);
         Response::json(200, $tasks);
     }
+
+    public function members($projectId)
+    {
+        $members = $this->projectModel->members($projectId);
+
+
+        $statusCode = $members["success"] ? 200 : 404;
+
+        Response::json($statusCode, $members["data"]);
+    }
 }

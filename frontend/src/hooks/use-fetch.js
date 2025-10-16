@@ -31,15 +31,17 @@ export function useFetch(url, options = {}, immediate = true) {
 
         const result = await response.json();
 
+
         if (!response.ok && result.errors || result.error) {
           setError(result.errors || result.error);
-          throw new Error(`Error: ${response.status} ${response.statusText}`);
+          // throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
 
         setData(result);
 
         return result;
       } catch (err) {
+        setError(err?.message);
         return null;
       } finally {
         setLoading(false);

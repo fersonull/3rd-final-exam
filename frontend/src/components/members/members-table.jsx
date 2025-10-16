@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { dummyMembers } from "@/lib/members-data-placeholder";
 import {
   Card,
   CardHeader,
@@ -18,13 +17,14 @@ import {
 } from "../ui/table";
 import { UserPlus2, Pencil, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useFetch } from "@/hooks/use-fetch"; // Assuming your usefetch hook is here
 
 const columns = [
-  { key: "name", label: "Name" },
-  { key: "email", label: "Email" },
-  { key: "role", label: "Role" },
-  { key: "status", label: "Status" },
+  { key: "user_name", label: "Name" },
+  { key: "user_email", label: "Email" },
+  { key: "role", label: "Role" }
+  // Status column removed, as the backend does not provide it; add it back if desired
 ];
 
 function getSortedData(data, sortKey, sortOrder) {
@@ -40,6 +40,16 @@ function getSortedData(data, sortKey, sortOrder) {
 }
 
 export default function MembersTable() {
+  const { pid: projectId } = useParams();
+
+  const { data: members, loading, error } = useFetch(
+    projectId ? `/projects/${projectId}/members` : null
+  );
+
+  console.log(members);
+  console.log(error);
+
+
   const [sortKey, setSortKey] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
@@ -52,7 +62,8 @@ export default function MembersTable() {
     }
   };
 
-  const sortedMembers = getSortedData(dummyMembers, sortKey, sortOrder);
+  // Default to [] if members is not loaded yet, backend gives array or null
+  const sortedMembers = getSortedData(members ?? [], sortKey, sortOrder);
 
   return (
     <Card>
@@ -62,7 +73,6 @@ export default function MembersTable() {
           View and manage all members of your team. Add, remove, or update
           member information as needed.
         </CardDescription>
-
         <CardAction>
           <Link to="new-member">
             <Button>
@@ -73,71 +83,72 @@ export default function MembersTable() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {columns.map((col) => (
-                <TableHead
-                  key={col.key}
-                  style={{
-                    cursor: "pointer",
-                    userSelect: "none",
-                  }}
-                  onClick={() => handleSort(col.key)}
-                >
-                  <span className="inline-flex items-center gap-1">
-                    {col.label}
-                    {sortKey === col.key ? (
-                      sortOrder === "asc" ? (
-                        <ChevronUp size={16} />
-                      ) : (
-                        <ChevronDown size={16} />
-                      )
-                    ) : (
-                      <span className="opacity-30">
-                        <ChevronUp size={14} style={{ marginBottom: -4 }} />
-                        <ChevronDown size={14} style={{ marginTop: -4 }} />
-                      </span>
-                    )}
-                  </span>
-                </TableHead>
-              ))}
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sortedMembers.map((member, idx) => (
-              <TableRow key={idx}>
-                <TableCell>{member.name}</TableCell>
-                <TableCell>{member.email}</TableCell>
-                <TableCell>{member.role}</TableCell>
-                <TableCell>
-                  <span
-                    className={
-                      member.status === "Active"
-                        ? "text-green-600 font-medium"
-                        : "text-gray-400"
-                    }
+        {loading && <div>Loading members...</div>}
+        {!loading && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {columns.map((col) => (
+                  <TableHead
+                    key={col.key}
+                    style={{
+                      cursor: "pointer",
+                      userSelect: "none",
+                    }}
+                    onClick={() => handleSort(col.key)}
                   >
-                    {member.status}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <Link to={`members/edit/${member.id || idx}`}>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex items-center gap-1"
-                    >
-                      <Pencil size={16} />
-                      Edit
-                    </Button>
-                  </Link>
-                </TableCell>
+                    <span className="inline-flex items-center gap-1">
+                      {col.label}
+                      {sortKey === col.key ? (
+                        sortOrder === "asc" ? (
+                          <ChevronUp size={16} />
+                        ) : (
+                          <ChevronDown size={16} />
+                        )
+                      ) : (
+                        <span className="opacity-30">
+                          <ChevronUp size={14} style={{ marginBottom: -4 }} />
+                          <ChevronDown size={14} style={{ marginTop: -4 }} />
+                        </span>
+                      )}
+                    </span>
+                  </TableHead>
+                ))}
+                <TableHead>Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {!sortedMembers || error || sortedMembers.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length + 1} className="text-center">
+                    No members found.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                sortedMembers.map((member, idx) => (
+                  <TableRow key={member.id || idx}>
+                    {/* Use backend fields: user_name, user_email, role */}
+                    <TableCell>{member.user_name || "-"}</TableCell>
+                    <TableCell>{member.user_email || "-"}</TableCell>
+                    <TableCell>{member.role || "-"}</TableCell>
+                    <TableCell>
+                      <Link to={`edit/${member.id || idx}`}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex items-center gap-1"
+                        >
+                          <Pencil size={16} />
+                          Edit
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        )}
       </CardContent>
     </Card>
   );

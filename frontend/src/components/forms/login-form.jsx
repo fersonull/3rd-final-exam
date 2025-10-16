@@ -30,6 +30,9 @@ export default function LoginForm() {
 
       const result = await login({ body: formData });
 
+      console.log(result);
+      console.log(error);
+
       if (result?.success && !result.error) {
         toast.success(result.message);
         setUser(result?.user);
@@ -38,6 +41,7 @@ export default function LoginForm() {
 
         return;
       }
+
 
       if (result?.error) {
         toast.warning(result?.error, {

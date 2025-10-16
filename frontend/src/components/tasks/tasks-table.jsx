@@ -43,62 +43,148 @@ import {
 } from "lucide-react";
 import { initialTableData, teamMembers } from "@/lib/tasks-data-placeholder";
 import TaskStatusPill from "./task-status-pill";
-import TaskPriorityPill from "./task-priority-pill";
+// import TaskPriorityPill from "./task-priority-pill"; // No badge, text only
 import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 
-function getSortedData(data, sortKey, sortOrder) {
+// Helper: check if task is overdue (fallback for missing backend flag)
+function isTaskOverdue(task) {
+  // Use backend-provided flag if available
+  if (typeof task.overdue === "boolean") return task.overdue;
+  // Fallback: check due_date & not completed
+  if (task.status === "completed" || !task.due_date) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(task.due_date);
+  if (isNaN(due.getTime())) return false;
+  return due < today;
+}
 
+// Priority text coloring utility
+function getPriorityStyle(priority) {
+  switch ((priority || "").toLowerCase()) {
+    case "high":
+      return { color: "#d32f2f", fontWeight: 600 }; // red, bold
+    case "normal":
+      return { color: "#f9a825", fontWeight: 500 }; // amber/brownish
+    case "low":
+      return { color: "#388e3c", fontWeight: 500 }; // green
+    default:
+      return { color: "#757575" };
+  }
+}
+
+function getPriorityLabel(priority) {
+  if (!priority) return "";
+  switch (priority.toLowerCase()) {
+    case "high":
+      return "High";
+    case "normal":
+      return "Normal";
+    case "low":
+      return "Low";
+    default:
+      return priority.charAt(0).toUpperCase() + priority.slice(1);
+  }
+}
+
+// Fixed: Handle column key mapping for sorting actual data keys
+function getSortValue(row, sortKey) {
+  // For known keys, map to real field
+  switch (sortKey) {
+    case "title":
+      return row.title || "";
+    case "status":
+      return row.status || "";
+    case "priority":
+      // Rank for order: high < normal < low
+      const priorityRank = { high: 1, normal: 2, low: 3 };
+      return priorityRank[(row.priority || "").toLowerCase()] || 99;
+    case "dueDate":
+    case "due_date":
+      // Allow either
+      return row.due_date ? new Date(row.due_date).getTime() : Infinity;
+    case "assignee":
+      return row.assignee_name || "";
+    default:
+      // Fallback to the key directly
+      return row[sortKey];
+  }
+}
+
+function getSortedData(data, sortKey, sortOrder) {
   if (!sortKey) return data;
   return [...data].sort((a, b) => {
-    let aValue = a[sortKey];
-    let bValue = b[sortKey];
+    let aValue = getSortValue(a, sortKey);
+    let bValue = getSortValue(b, sortKey);
 
-    if (sortKey === "dueDate") {
-      aValue = new Date(aValue);
-      bValue = new Date(bValue);
+    // If both are numbers, compare as numbers (dates, priority rank); otherwise as string
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+    } else {
+      // compare as string (case-insensitive)
+      const aStr = (aValue ?? "").toString().toLowerCase();
+      const bStr = (bValue ?? "").toString().toLowerCase();
+      if (aStr < bStr) return sortOrder === "asc" ? -1 : 1;
+      if (aStr > bStr) return sortOrder === "asc" ? 1 : -1;
+      return 0;
     }
-
-    if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
-    if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
-    return 0;
   });
 }
 
+// Compare helper for string-insensitive match
+function iEquals(a, b) {
+  if (a == null || b == null) return false;
+  return String(a).toLowerCase() === String(b).toLowerCase();
+}
+
 export default function TasksTable({ tasks }) {
-
-
   const [sortKey, setSortKey] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
-  const [tableData, setTableData] = useState(tasks);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [assigneeFilter, setAssigneeFilter] = useState("all");
 
-  const handleSort = (key) => {
-    if (sortKey === key) {
-      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+  // Sorting handler
+  function handleSort(nextKey) {
+    if (sortKey === nextKey) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
-      setSortKey(key);
+      setSortKey(nextKey);
       setSortOrder("asc");
     }
-  };
+  }
 
-  const filteredData = tasks?.filter((row) => {
+  // Filtering logic fixed to match against canonical values, and check id as well as name for assignee
+  const filteredData = (tasks || []).filter((row) => {
+    // Search matches title, project, or assignee_name (case-insensitive)
+    const searchText = search.trim().toLowerCase();
     const matchesSearch =
-      search === "" ||
-      row.task.toLowerCase().includes(search.toLowerCase()) ||
-      row.project.toLowerCase().includes(search.toLowerCase()) ||
-      (row.assignee
-        ? row.assignee.toLowerCase().includes(search.toLowerCase())
-        : false);
-    const matchesStatus = statusFilter === "all" || row.status === statusFilter;
+      !searchText ||
+      (row.title && row.title.toLowerCase().includes(searchText)) ||
+      (row.project && row.project.toLowerCase().includes(searchText)) ||
+      (row.assignee_name && row.assignee_name.toLowerCase().includes(searchText));
+
+    // Status filter: statusFilter is the canonical value
+    const matchesStatus =
+      statusFilter === "all" ||
+      iEquals(row.status, statusFilter);
+
+    // Priority filter: priorityFilter is the canonical value
     const matchesPriority =
-      priorityFilter === "all" || row.priority === priorityFilter;
+      priorityFilter === "all" ||
+      iEquals(row.priority, priorityFilter);
+
+    // Assignee filter: (assigneeFilter is team member's value string; match row.assignee_id or row.assignee_name)
     const matchesAssignee =
-      assigneeFilter === "all" || row.assignee === assigneeFilter;
+      assigneeFilter === "all" ||
+      String(row.assignee_id) === assigneeFilter ||
+      (row.assignee_name &&
+        row.assignee_name.toLowerCase() ===
+        teamMembers.find(m => m.value === assigneeFilter)?.label?.toLowerCase());
+
     return matchesSearch && matchesStatus && matchesPriority && matchesAssignee;
   });
 
@@ -242,48 +328,74 @@ export default function TasksTable({ tasks }) {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    sortedData?.map((data, index) => (
-                      <TableRow key={index}>
-                        <TableCell className="py-3 font-medium">
-                          {data.title}
-                        </TableCell>
-                        <TableCell className="py-3">
-                          <TaskStatusPill status={data.status} />
-                        </TableCell>
-                        <TableCell className="py-3">
-                          <TaskPriorityPill priority={data.priority} />
-                        </TableCell>
-                        <TableCell className="py-3">
-                          {formatDate(data.due_date)}
-                        </TableCell>
-                        <TableCell className="py-3 flex-end">
-                          {data.assignee_id === null ? (
-                            <div>
-                              <Select>
-                                <SelectTrigger className="w-[180px]">
-                                  <SelectValue placeholder="Select assignee" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectGroup>
-                                    <SelectLabel>Your team</SelectLabel>
-                                    {teamMembers.map((member) => (
-                                      <SelectItem
-                                        key={member.value}
-                                        value={member.value}
-                                      >
-                                        {member.label}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectGroup>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          ) : (
-                            <span>{data.assignee_name}</span>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))
+                    sortedData?.map((data, index) => {
+                      const overdue = isTaskOverdue(data);
+                      return (
+                        <TableRow
+                          key={index}
+                          style={
+                            overdue
+                              ? { backgroundColor: "rgba(255, 83, 83, 0.07)" }
+                              : {}
+                          }
+                          className={overdue ? "animate-pulse-[.5s] transition-colors" : ""}
+                          title={overdue ? "This task is overdue" : undefined}
+                        >
+                          <TableCell className="py-3 font-medium">
+                            {data.title}
+                            {overdue && (
+                              <span
+                                className="ml-2 px-2 py-0.5 rounded text-xs font-semibold"
+                                style={{
+                                  color: "#d32f2f",
+                                  background: "rgba(255, 83, 83, 0.13)",
+                                  marginLeft: 8,
+                                }}
+                              >
+                                Overdue
+                              </span>
+                            )}
+                          </TableCell>
+                          <TableCell className="py-3">
+                            <TaskStatusPill status={data.status} />
+                          </TableCell>
+                          <TableCell className="py-3">
+                            <span style={getPriorityStyle(data.priority)}>
+                              {getPriorityLabel(data.priority)}
+                            </span>
+                          </TableCell>
+                          <TableCell className="py-3">
+                            {formatDate(data.due_date)}
+                          </TableCell>
+                          <TableCell className="py-3 flex-end">
+                            {data.assignee_id === null ? (
+                              <div>
+                                <Select>
+                                  <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Select assignee" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      <SelectLabel>Your team</SelectLabel>
+                                      {teamMembers.map((member) => (
+                                        <SelectItem
+                                          key={member.value}
+                                          value={member.value}
+                                        >
+                                          {member.label}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            ) : (
+                              <span>{data.assignee_name}</span>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
                   )}
                 </TableBody>
               </Table>

@@ -24,7 +24,6 @@ const DashboardChart = lazy(() =>
 );
 
 export default function Index() {
-  const navigate = useNavigate();
   const { pid } = useParams();
   const [range, setRange] = useState("7");
 

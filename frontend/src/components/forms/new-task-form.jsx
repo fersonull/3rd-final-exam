@@ -3,7 +3,7 @@ import { useAuthContext } from "@/contexts/auth-context";
 import { useFetch } from "@/hooks/use-fetch";
 import { useFormData } from "@/hooks/use-formdata";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const initialForm = {
@@ -28,9 +28,10 @@ const STATUS_OPTIONS = [
     { value: "finished", label: "Finished" }
 ];
 
-export default function NewTaskForm({ projectId, projects = [], members = [], onSubmit }) {
+export default function NewTaskForm({ projectId, projects = [], onSubmit }) {
     const navigate = useNavigate();
     const { token } = useAuthContext();
+    const { pid } = useParams();
     const { values, handleChange, getFormData } = useFormData({
         ...initialForm,
         project_id: projectId || ""
@@ -38,21 +39,32 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
 
     const [submitting, setSubmitting] = useState(false);
 
-    const { refetch: createTask, error } = useFetch("/tasks", { method: "POST", headers: { Authorization: `Bearer ${token}` } }, false);
+    // Fetch for creating the task (mutation)
+    const { refetch: createTask, error } = useFetch("/tasks", { method: "POST" }, false);
+
+    // Fetch project members with useFetch custom hook
+    const {
+        data: members,
+        loading: membersLoading,
+        error: membersError
+    } = useFetch(
+        pid ? `/projects/${pid}/members` : null,
+    );
+
+    console.log(members);
+    console.log(membersError);
+
     useEffect(() => {
         if (projectId) {
             handleChange({ target: { name: "project_id", value: projectId } });
         }
     }, [projectId]);
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
         try {
-
             const form = getFormData();
-
 
             const res = await createTask({ body: form });
 
@@ -81,7 +93,6 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                     value={values.title}
                     onChange={handleChange}
                     maxLength={200}
-
                 />
                 {error?.title && <span className="text-xs text-red-500">{error.title}</span>}
             </div>
@@ -98,7 +109,7 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                 {error?.description && <span className="text-xs text-red-500">{error.description}</span>}
             </div>
 
-            { // If project is not preselected, offer a select
+            {
                 !projectId &&
                 <div>
                     <label className="block font-medium mb-1">
@@ -109,7 +120,6 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                         className="w-full border rounded px-3 py-2"
                         value={values.project_id}
                         onValueChange={(value) => handleChange({ target: { name: "project_id", value } })}
-
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select project" />
@@ -125,25 +135,28 @@ export default function NewTaskForm({ projectId, projects = [], members = [], on
                 </div>
             }
 
+            {/* dito */}
             <div>
                 <label className="block font-medium mb-1">Assign To</label>
                 <Select
-                    name="assignee_id"
+                    name="user_id"
                     className="w-full border rounded px-3 py-2"
-                    value={values.assignee_id}
+                    value={values.user_id}
                     onValueChange={(value) => handleChange({ target: { name: "assignee_id", value } })}
+                    disabled={membersLoading || !members}
                 >
                     <SelectTrigger>
-                        <SelectValue placeholder="Unassigned" />
+                        <SelectValue placeholder={membersLoading ? "Loading..." : "Unassigned"} />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="null">Unassigned</SelectItem>
-                        {members.map((m) => (
-                            <SelectItem key={m.id} value={m.id}>{m.name || m.email}</SelectItem>
+                        {members?.map(({ user_id, user_name, user_email }) => (
+                            <SelectItem key={user_id} value={user_id}>{user_name || user_email}</SelectItem>
                         ))}
                     </SelectContent>
                 </Select>
-                {error?.assignee_id && <span className="text-xs text-red-500">{error.assignee_id}</span>}
+                {membersError && <span className="text-xs text-red-500">Could not fetch project members.</span>}
+                {error?.user_name && <span className="text-xs text-red-500">{error.user_name}</span>}
             </div>
 
             <div className="flex flex-wrap gap-4">

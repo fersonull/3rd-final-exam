@@ -78,4 +78,25 @@ class Project extends Model
         $rows = $stmt->fetchAll();
         return $rows ?: null;
     }
+
+    public function members(string $projectId): ?array
+    {
+        $stmt = self::db()->prepare(
+            "SELECT pm.*, u.name as user_name, u.email as user_email
+             FROM project_members pm
+             LEFT JOIN users u ON pm.user_id = u.id
+             WHERE pm.project_id = :project_id"
+        );
+        $stmt->execute(["project_id" => $projectId]);
+        $rows = $stmt->fetchAll(); 
+        return $rows ? [
+            "success" => true,
+            "data" => $rows,
+            "message" => "Members fetched successfully"
+        ] : [
+            "success" => false,
+            "data" => null,
+            "message" => "Failed to fetch members"
+        ];
+    }
 }

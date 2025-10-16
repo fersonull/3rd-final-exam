@@ -37,7 +37,22 @@ class Task extends Model
             "project_id" => $data["project_id"],
         ]);
 
+        // After insertion, check if task is overdue and update status if necessary
         $task = $this->find($data["id"]);
+        $isOverdue = false;
+
+        if (
+            isset($task["due_date"]) && 
+            isset($task["status"]) &&
+            $task["status"] !== "completed" &&
+            strtotime($task["due_date"]) < strtotime(date("Y-m-d"))
+        ) {
+            $isOverdue = true;
+            // Update status to "overdue" if not already "overdue"
+            if ($task["status"] !== "overdue") {
+                $this->updateStatus($data["id"], "overdue");
+            }
+        }
 
         return ["success" => true, "message" => "Task created successfully", "task" => $task] ?: null;  
     }
@@ -64,5 +79,54 @@ class Task extends Model
         $stmt->execute(["project_id" => $projectId]);
         $rows = $stmt->fetchAll();
         return $rows ?: null;
+    }
+
+    // Add method to update task
+    public function update(string $id, array $data): ?array
+    {
+        // Only update fields present in $data, but common ones for safety
+        $fields = [
+            'title',
+            'description',
+            'priority',
+            'status',
+            'due_date',
+            'assignee_id',
+            'project_id'
+        ];
+
+        $set = [];
+        $params = [];
+        foreach ($fields as $field) {
+            if (array_key_exists($field, $data)) {
+                $set[] = "$field = :$field";
+                $params[$field] = $data[$field];
+            }
+        }
+
+        if (empty($set)) {
+            return ["success" => false, "message" => "No fields provided to update"];
+        }
+
+        $setSql = implode(', ', $set);
+        $params['id'] = $id;
+
+        $sql = "UPDATE $this->table SET $setSql WHERE id = :id";
+        $stmt = self::db()->prepare($sql);
+        $success = $stmt->execute($params);
+
+        if ($success) {
+            $task = $this->find($id);
+            return ["success" => true, "message" => "Task updated successfully", "task" => $task];
+        } else {
+            return ["success" => false, "message" => "Failed to update task"];
+        }
+    }
+
+    public function updateStatus(string $id, string $status): ?array
+    {
+        $stmt = self::db()->prepare("UPDATE $this->table SET status = :status WHERE id = :id");
+        $stmt->execute(["status" => $status, "id" => $id]);
+        return ["success" => true, "message" => "Task status updated successfully"];
     }
 }
