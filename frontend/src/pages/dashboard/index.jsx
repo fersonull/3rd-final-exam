@@ -28,17 +28,30 @@ export default function Index() {
   const { pid } = useParams();
   const [range, setRange] = useState("7");
 
-  const { data: stats, loading: statsLoading, error } = useFetch(`/stats/${pid}`);
+  const {
+    data: stats,
+    loading: statsLoading,
+    error,
+  } = useFetch(`/stats/${pid}`);
 
-  const { data: chart, loading: chartLoading, error: chartError } = useFetch(`/stats/${pid}/chart/${range}`);
+  const {
+    data: chart,
+    loading: chartLoading,
+    error: chartError,
+  } = useFetch(`/stats/${pid}/chart/${range}`);
 
-  const { data: distribution, loading: disLoading, error: disError } = useFetch(`/stats/${pid}/chart`);
+  const {
+    data: distribution,
+    loading: disLoading,
+    error: disError,
+  } = useFetch(`/stats/${pid}/chart`);
 
-  const { activeProject, loading: projectLoading } = useActiveProject({ projectId: pid });
-
+  const { activeProject, loading: projectLoading } = useActiveProject({
+    projectId: pid,
+  });
 
   if (error?.forbidden) {
-    return <div>{error?.forbidden}</div>
+    return <div>{error?.forbidden}</div>;
   }
 
   if (!activeProject && !projectLoading) {
@@ -57,17 +70,24 @@ export default function Index() {
 
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
           <div className="lg:col-span-2">
-            {chartLoading ? <ChartSkeleton /> :
+            {chartLoading ? (
+              <ChartSkeleton />
+            ) : (
               <Suspense fallback={<ChartSkeleton />}>
-                <DashboardChart data={chart?.data} setRange={setRange} range={range} />
+                <DashboardChart
+                  data={chart?.data}
+                  setRange={setRange}
+                  range={range}
+                />
               </Suspense>
-            }
-
-
+            )}
           </div>
 
-          {/* Pie Chart Card */}
-          {disLoading ? <DistributionSkeleton /> : <DistributionChart distribution={distribution} />}
+          {disLoading ? (
+            <DistributionSkeleton />
+          ) : (
+            <DistributionChart distribution={distribution} />
+          )}
         </div>
 
         <Card>

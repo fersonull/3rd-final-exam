@@ -14,13 +14,19 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "../ui/empty";
+import { IconChartBar } from "@tabler/icons-react";
 
 // Pie chart data and color palette
 const totalTasks = 200;
 const completedTasks = 122;
 const ongoingTasks = 12;
-
-
 
 // Color palette from InfoChart
 const PIE_COLORS = [
@@ -32,15 +38,26 @@ const PIE_COLORS = [
 export default function DistributionChart({ distribution }) {
   const [pie, setPie] = useState(distribution?.data);
 
+  console.log(pie);
+  console.log(distribution);
+
   useEffect(() => {
-    setPie(distribution?.data)
-  }, [distribution])
+    setPie(distribution?.data);
+  }, [distribution]);
 
   const pieData = [
-    { name: "Completed", value: pie?.completed },
-    { name: "Ongoing", value: pie?.ongoing },
-    { name: "Remaining", value: pie?.total - pie?.completed - pie?.ongoing },
+    { name: "Completed", value: pie?.completed ?? 0 },
+    { name: "Ongoing", value: pie?.ongoing ?? 0 },
+    {
+      name: "Remaining",
+      value: (pie?.total ?? 0) - (pie?.completed ?? 0) - (pie?.ongoing ?? 0),
+    },
   ];
+
+  // Check if pieData values are all 0 or if there's no data
+  const isPieDataEmpty = pieData.every(
+    (item) => !item.value || item.value <= 0
+  );
 
   return (
     <Card>
@@ -51,39 +68,53 @@ export default function DistributionChart({ distribution }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex items-center justify-center w-full h-64">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart className="text-xs">
-            <Pie
-              data={pieData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={60}
-              innerRadius={35}
-              paddingAngle={2}
-              label={({ name, percent }) =>
-                `${name} (${Math.round(percent * 100)}%)`
-              }
-            >
-              {pieData.map((entry, idx) => (
-                <Cell
-                  key={`cell-${idx}`}
-                  fill={PIE_COLORS[idx % PIE_COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomPieTooltip />} />
-            <Legend
-              formatter={(value) => {
-                if (value === "Completed") return "Completed";
-                if (value === "Ongoing") return "Ongoing";
-                if (value === "Remaining") return "Remaining";
-                return value;
-              }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        {isPieDataEmpty || !distribution?.data ? (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <IconChartBar />
+              </EmptyMedia>
+              <EmptyTitle>No data found</EmptyTitle>
+              <EmptyDescription>
+                No data found for the selected project
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart className="text-xs">
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={60}
+                innerRadius={35}
+                paddingAngle={2}
+                label={({ name, percent }) =>
+                  `${name} (${Math.round(percent * 100)}%)`
+                }
+              >
+                {pieData.map((entry, idx) => (
+                  <Cell
+                    key={`cell-${idx}`}
+                    fill={PIE_COLORS[idx % PIE_COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomPieTooltip />} />
+              <Legend
+                formatter={(value) => {
+                  if (value === "Completed") return "Completed";
+                  if (value === "Ongoing") return "Ongoing";
+                  if (value === "Remaining") return "Remaining";
+                  return value;
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        )}
       </CardContent>
     </Card>
   );

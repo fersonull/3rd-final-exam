@@ -28,11 +28,9 @@ export function useFetch(url, options = {}, immediate = true) {
           },
         });
 
-
         const result = await response.json();
 
-
-        if (!response.ok && result.errors || result.error) {
+        if ((!response.ok && result.errors) || result.error) {
           setError(result.errors || result.error);
           // throw new Error(`Error: ${response.status} ${response.statusText}`);
         }

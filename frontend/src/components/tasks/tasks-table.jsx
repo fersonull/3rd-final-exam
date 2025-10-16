@@ -47,6 +47,14 @@ import TaskStatusPill from "./task-status-pill";
 import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "../ui/empty";
+import { IconListCheck } from "@tabler/icons-react";
 
 // Helper: check if task is overdue (fallback for missing backend flag)
 function isTaskOverdue(task) {
@@ -158,35 +166,39 @@ export default function TasksTable({ tasks }) {
   }
 
   // Filtering logic fixed to match against canonical values, and check id as well as name for assignee
-  const filteredData = (tasks || []).filter((row) => {
-    // Search matches title, project, or assignee_name (case-insensitive)
-    const searchText = search.trim().toLowerCase();
-    const matchesSearch =
-      !searchText ||
-      (row.title && row.title.toLowerCase().includes(searchText)) ||
-      (row.project && row.project.toLowerCase().includes(searchText)) ||
-      (row.assignee_name && row.assignee_name.toLowerCase().includes(searchText));
+  const filteredData =
+    tasks?.filter((row) => {
+      // Search matches title, project, or assignee_name (case-insensitive)
+      const searchText = search.trim().toLowerCase();
+      const matchesSearch =
+        !searchText ||
+        (row.title && row.title.toLowerCase().includes(searchText)) ||
+        (row.project && row.project.toLowerCase().includes(searchText)) ||
+        (row.assignee_name &&
+          row.assignee_name.toLowerCase().includes(searchText));
 
-    // Status filter: statusFilter is the canonical value
-    const matchesStatus =
-      statusFilter === "all" ||
-      iEquals(row.status, statusFilter);
+      // Status filter: statusFilter is the canonical value
+      const matchesStatus =
+        statusFilter === "all" || iEquals(row.status, statusFilter);
 
-    // Priority filter: priorityFilter is the canonical value
-    const matchesPriority =
-      priorityFilter === "all" ||
-      iEquals(row.priority, priorityFilter);
+      // Priority filter: priorityFilter is the canonical value
+      const matchesPriority =
+        priorityFilter === "all" || iEquals(row.priority, priorityFilter);
 
-    // Assignee filter: (assigneeFilter is team member's value string; match row.assignee_id or row.assignee_name)
-    const matchesAssignee =
-      assigneeFilter === "all" ||
-      String(row.assignee_id) === assigneeFilter ||
-      (row.assignee_name &&
-        row.assignee_name.toLowerCase() ===
-        teamMembers.find(m => m.value === assigneeFilter)?.label?.toLowerCase());
+      // Assignee filter: (assigneeFilter is team member's value string; match row.assignee_id or row.assignee_name)
+      const matchesAssignee =
+        assigneeFilter === "all" ||
+        String(row.assignee_id) === assigneeFilter ||
+        (row.assignee_name &&
+          row.assignee_name.toLowerCase() ===
+            teamMembers
+              .find((m) => m.value === assigneeFilter)
+              ?.label?.toLowerCase());
 
-    return matchesSearch && matchesStatus && matchesPriority && matchesAssignee;
-  });
+      return (
+        matchesSearch && matchesStatus && matchesPriority && matchesAssignee
+      );
+    }) || [];
 
   const sortedData = getSortedData(filteredData, sortKey, sortOrder);
 
@@ -316,7 +328,7 @@ export default function TasksTable({ tasks }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {sortedData?.length === 0 ? (
+                  {sortedData?.length === 0 || !tasks ? (
                     <TableRow>
                       <TableCell
                         colSpan={columns.length}
@@ -329,32 +341,25 @@ export default function TasksTable({ tasks }) {
                     </TableRow>
                   ) : (
                     sortedData?.map((data, index) => {
-                      const overdue = isTaskOverdue(data);
                       return (
                         <TableRow
                           key={index}
                           style={
-                            overdue
+                            data?.overdue
                               ? { backgroundColor: "rgba(255, 83, 83, 0.07)" }
                               : {}
                           }
-                          className={overdue ? "animate-pulse-[.5s] transition-colors" : ""}
-                          title={overdue ? "This task is overdue" : undefined}
+                          className={
+                            data?.overdue
+                              ? "animate-pulse-[.5s] transition-colors"
+                              : ""
+                          }
+                          title={
+                            data?.overdue ? "This task is overdue" : undefined
+                          }
                         >
                           <TableCell className="py-3 font-medium">
                             {data.title}
-                            {overdue && (
-                              <span
-                                className="ml-2 px-2 py-0.5 rounded text-xs font-semibold"
-                                style={{
-                                  color: "#d32f2f",
-                                  background: "rgba(255, 83, 83, 0.13)",
-                                  marginLeft: 8,
-                                }}
-                              >
-                                Overdue
-                              </span>
-                            )}
                           </TableCell>
                           <TableCell className="py-3">
                             <TaskStatusPill status={data.status} />

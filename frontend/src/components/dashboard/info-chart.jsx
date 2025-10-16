@@ -11,6 +11,14 @@ import {
   CartesianGrid,
   Bar,
 } from "recharts";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "../ui/empty";
+import { IconChartBar } from "@tabler/icons-react";
 
 function getLast7DaysData(taskData) {
   const today = new Date();
@@ -22,9 +30,11 @@ function getLast7DaysData(taskData) {
 
     const dateKey = d.toISOString().split("T")[0];
 
-    const found = taskData.find(item => item.date === dateKey);
+    const found = taskData?.find((item) => item.date === dateKey);
 
-    const label = `${d.toLocaleString("default", { month: "short" })} ${d.getDate()}`;
+    const label = `${d.toLocaleString("default", {
+      month: "short",
+    })} ${d.getDate()}`;
 
     data.push({
       date: label,
@@ -46,9 +56,11 @@ function getLast1MonthData(taskData) {
 
     const dateKey = d.toISOString().split("T")[0];
 
-    const found = taskData.find(item => item.date === dateKey);
+    const found = taskData?.find((item) => item.date === dateKey);
 
-    const label = `${d.toLocaleString("default", { month: "short" })} ${d.getDate()}`;
+    const label = `${d.toLocaleString("default", {
+      month: "short",
+    })} ${d.getDate()}`;
 
     data.push({
       date: label,
@@ -60,13 +72,30 @@ function getLast1MonthData(taskData) {
   return data;
 }
 
-
 export default function InfoChart({ data, range }) {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    setChartData(range === "7" ? getLast7DaysData(data) : getLast1MonthData(data));
+    setChartData(
+      range === "7" ? getLast7DaysData(data) : getLast1MonthData(data)
+    );
   }, [data, range]);
+
+  if (chartData.length === 0 || !data) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <IconChartBar />
+          </EmptyMedia>
+          <EmptyTitle>No data found</EmptyTitle>
+          <EmptyDescription>
+            No data found for the selected range
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+    );
+  }
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -114,9 +143,12 @@ export default function InfoChart({ data, range }) {
 
 function CustomTooltip({ active, payload, label }) {
   if (active && payload && payload.length) {
-
-    const created = payload.find((p) => p.dataKey === "tasksCreated" || p.dataKey === "total_created");
-    const completed = payload.find((p) => p.dataKey === "tasksCompleted" || p.dataKey === "total_finished");
+    const created = payload.find(
+      (p) => p.dataKey === "tasksCreated" || p.dataKey === "total_created"
+    );
+    const completed = payload.find(
+      (p) => p.dataKey === "tasksCompleted" || p.dataKey === "total_finished"
+    );
 
     return (
       <div className="p-3 rounded-md shadow bg-background border-accent">
