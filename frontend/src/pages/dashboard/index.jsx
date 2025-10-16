@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import OverviewCards from "@/components/dashboard/overview-cards";
 import { List } from "lucide-react";
 import ChartSkeleton from "@/components/dashboard/chart-skeleton";
+import DistributionSkeleton from "@/components/dashboard/distribution-skeleton";
 import DashboardTable from "@/components/dashboard/dashboard-table";
 import DistributionChart from "@/components/dashboard/distribution-chart";
 import {
@@ -66,7 +67,7 @@ export default function Index() {
           </div>
 
           {/* Pie Chart Card */}
-          <DistributionChart distribution={distribution} />
+          {disLoading ? <DistributionSkeleton /> : <DistributionChart distribution={distribution} />}
         </div>
 
         <Card>
