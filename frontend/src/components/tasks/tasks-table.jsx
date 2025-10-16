@@ -155,6 +155,8 @@ export default function TasksTable({ tasks }) {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [assigneeFilter, setAssigneeFilter] = useState("all");
 
+  console.log(tasks);
+
   // Sorting handler
   function handleSort(nextKey) {
     if (sortKey === nextKey) {

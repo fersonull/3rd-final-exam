@@ -38,9 +38,6 @@ const PIE_COLORS = [
 export default function DistributionChart({ distribution }) {
   const [pie, setPie] = useState(distribution?.data);
 
-  console.log(pie);
-  console.log(distribution);
-
   useEffect(() => {
     setPie(distribution?.data);
   }, [distribution]);

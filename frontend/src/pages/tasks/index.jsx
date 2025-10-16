@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 export default function Tasks() {
   const { pid } = useParams();
 
-  const { data: tasks, loading, error } = useFetch(`/tasks/project/${pid}`);
+  const { data: tasks, loading, error } = useFetch(`/tasks/project/${pid}/0`);
 
   // console.log(tasks);
 

@@ -28,21 +28,20 @@ export default function SidebarUserAvatar() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-
     const res = await logout();
 
     if (res?.success) {
       setToken(null);
 
-      toast.success(res?.message)
-    }
+      toast.success(res?.message);
 
-    navigate("/auth");
+      navigate("/auth");
+
+      return;
+    }
   };
 
   const handleProfile = () => {
-    
-
     // navigate("/profile");
   };
 
@@ -60,7 +59,7 @@ export default function SidebarUserAvatar() {
             {user?.email}
           </span>
         </div>
-        <DropdownMenu >
+        <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="icon" title="Settings">
               <Settings />
@@ -73,7 +72,11 @@ export default function SidebarUserAvatar() {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
-              {loggingOut ? <LoaderCircle size={16} className="mr-2 animate-spin" /> : <LogOut size={16} className="mr-2" /> }
+              {loggingOut ? (
+                <LoaderCircle size={16} className="mr-2 animate-spin" />
+              ) : (
+                <LogOut size={16} className="mr-2" />
+              )}
               Logout
             </DropdownMenuItem>
           </DropdownMenuContent>

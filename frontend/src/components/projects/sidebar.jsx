@@ -41,11 +41,6 @@ const projectItems = [
 
 const appItems = [
   {
-    title: "Inbox",
-    url: "inbox",
-    icon: Inbox,
-  },
-  {
     title: "Calendar",
     url: "calendar",
     icon: Calendar,

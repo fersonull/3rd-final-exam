@@ -27,6 +27,7 @@ const DashboardChart = lazy(() =>
 export default function Index() {
   const { pid } = useParams();
   const [range, setRange] = useState("7");
+  const [taskLimit] = useState(5);
 
   const {
     data: stats,
@@ -45,6 +46,12 @@ export default function Index() {
     loading: disLoading,
     error: disError,
   } = useFetch(`/stats/${pid}/chart`);
+
+  const {
+    data: tasks,
+    loading: tasksLoading,
+    error: tasksError,
+  } = useFetch(`/tasks/project/${pid}/${taskLimit}`);
 
   const { activeProject, loading: projectLoading } = useActiveProject({
     projectId: pid,
@@ -94,7 +101,8 @@ export default function Index() {
           <CardHeader>
             <CardTitle>Recent Task Activity</CardTitle>
             <CardDescription>
-              See the latest updates and changes to your team's tasks
+              See the latest {taskLimit} tasks and recent updates to your team's
+              work
             </CardDescription>
 
             <CardAction>
@@ -107,7 +115,7 @@ export default function Index() {
             </CardAction>
           </CardHeader>
           <CardContent>
-            <DashboardTable />
+            <DashboardTable tasks={tasks} loading={tasksLoading} />
           </CardContent>
         </Card>
       </div>

@@ -9,6 +9,7 @@ import ProjectsLayout from "./layouts/projects-layout";
 import NewTask from "./pages/tasks/new-task";
 import NewMember from "./pages/members/new-member";
 import Calendar from "./pages/calendar";
+import Profile from "./pages/profile";
 
 const Dashboard = lazy(() => import("@/pages/dashboard/index"));
 const Tasks = lazy(() => import("@/pages/tasks/index"));
@@ -113,6 +114,20 @@ export const routes = [
           {
             path: "members/new-member",
             element: <NewMember />,
+          },
+          {
+            path: "profile",
+            element: <Profile />,
+          },
+        ],
+      },
+      {
+        path: "profile",
+        element: <DashboardLayout />,
+        children: [
+          {
+            index: true,
+            element: <Profile />,
           },
         ],
       },

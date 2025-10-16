@@ -65,21 +65,33 @@ class Task extends Model
         return $row ?: null;
     }
 
-    public function project(string $projectId): ?array
+    public function project(string $projectId, $limit = null): ?array
     {
-        $stmt = self::db()->prepare("SELECT 
+        $sql = "
+            SELECT 
                 t.*,
                 u.id AS assignee_id, 
                 u.name AS assignee_name, 
                 u.email AS assignee_email
-            FROM $this->table t
+            FROM {$this->table} t
             LEFT JOIN users u ON t.assignee_id = u.id
             WHERE t.project_id = :project_id
-        ");
-        $stmt->execute(["project_id" => $projectId]);
+            ORDER BY t.created_at DESC
+        ";
+
+        if ($limit) {
+            $sql .= " LIMIT " . intval($limit); // safer than binding LIMIT
+        }
+
+        $stmt = self::db()->prepare($sql);
+        $stmt->execute([
+            "project_id" => $projectId
+        ]);
+
         $rows = $stmt->fetchAll();
         return $rows ?: null;
     }
+
 
     // Add method to update task
     public function update(string $id, array $data): ?array

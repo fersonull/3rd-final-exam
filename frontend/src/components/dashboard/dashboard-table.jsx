@@ -20,11 +20,10 @@ import {
 import TaskStatusPill from "../tasks/task-status-pill";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { columns } from "@/lib/dashboard-table-definitions";
-import { initialTableData } from "@/lib/tasks-data-placeholder";
 import { formatDate } from "@/lib/utils";
 
 function getSortedData(data, sortKey, sortOrder) {
-  if (!sortKey) return data;
+  if (!sortKey || !data) return data || [];
   return [...data].sort((a, b) => {
     let aValue = a[sortKey];
     let bValue = b[sortKey];
@@ -40,10 +39,9 @@ function getSortedData(data, sortKey, sortOrder) {
   });
 }
 
-export default function DashboardTable() {
+export default function DashboardTable({ tasks, loading }) {
   const [sortKey, setSortKey] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
-  const [tableData, setTableData] = useState(initialTableData);
 
   const handleSort = (key) => {
     if (sortKey === key) {
@@ -54,7 +52,17 @@ export default function DashboardTable() {
     }
   };
 
-  const sortedData = getSortedData(tableData, sortKey, sortOrder);
+  const sortedData = getSortedData(tasks, sortKey, sortOrder);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <div className="text-muted-foreground">Loading tasks...</div>
+      </div>
+    );
+  }
+
+  console.log(tasks);
 
   return (
     <div className="overflow-x-auto w-full">
@@ -100,20 +108,19 @@ export default function DashboardTable() {
               </TableCell>
             </TableRow>
           ) : (
-            sortedData.map((data, index) => (
-              <TableRow key={index}>
-                <TableCell className="py-3 font-medium">{data.task}</TableCell>
-                <TableCell className="py-3">{data.project}</TableCell>
+            sortedData.map((task, index) => (
+              <TableRow key={task.id || index}>
+                <TableCell className="py-3 font-medium">{task.title}</TableCell>
                 <TableCell className="py-3">
-                  <TaskStatusPill status={data.status} />
+                  <TaskStatusPill status={task.status} />
                 </TableCell>
-                <TableCell className="py-3">{data.priority}</TableCell>
+                <TableCell className="py-3">{task.priority}</TableCell>
                 <TableCell className="py-3">
-                  {formatDate(data.dueDate)}
+                  {task.due_date ? formatDate(task.due_date) : "No due date"}
                 </TableCell>
                 <TableCell className="py-3 flex-end">
-                  {data.assignee ? (
-                    data.assignee
+                  {task.assignee_name ? (
+                    task.assignee_name || task.assignee_name
                   ) : (
                     <p className="text-muted-foreground">No assignee</p>
                   )}
