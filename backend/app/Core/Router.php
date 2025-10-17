@@ -43,7 +43,6 @@ class Router
 
         $path   = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-        // Check if the method exists in routes
         if (!isset(self::$routes[$method])) {
             Response::json(405, ["error" => "Method not allowed"]);
             return;
@@ -54,7 +53,6 @@ class Router
                 array_shift($matches);
                 $callback = $route['callback'];
 
-                // run middleware
                 foreach ($route['middleware'] as $mw) {
                     require_once "./app/Middlewares/$mw.php";
                     $mwInstance = new $mw();
@@ -64,7 +62,6 @@ class Router
                     }
                 }
 
-                // run controller or closure
                 if (is_callable($callback)) {
                     $result = call_user_func_array($callback, $matches);
                 } elseif (is_string($callback) && strpos($callback, '@')) {

@@ -39,7 +39,6 @@ export const routes = [
     ],
   },
   {
-    // auth only
     element: <ProtectedRoutes />,
     children: [
       {

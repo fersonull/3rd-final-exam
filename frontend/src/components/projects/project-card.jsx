@@ -28,7 +28,6 @@ export default function ProjectCard({ project }) {
     created_at, // Add createdAt for the date
   } = project;
 
-  // Fallback for demo if data not provided
   const members =
     typeof total_members === "number"
       ? total_members
@@ -38,7 +37,6 @@ export default function ProjectCard({ project }) {
       ? total_tasks
       : Math.floor(Math.random() * 51) + 10;
 
-  // Format the date nicely
   function formatDate(dateStr) {
     if (!dateStr) return "Unknown date";
     try {

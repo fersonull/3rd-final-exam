@@ -37,7 +37,6 @@ class Task extends Model
             "project_id" => $data["project_id"],
         ]);
 
-        // After insertion, check if task is overdue and update status if necessary
         $task = $this->find($data["id"]);
         $isOverdue = false;
 
@@ -48,7 +47,6 @@ class Task extends Model
             strtotime($task["due_date"]) < strtotime(date("Y-m-d"))
         ) {
             $isOverdue = true;
-            // Update status to "overdue" if not already "overdue"
             if ($task["status"] !== "overdue") {
                 $this->updateStatus($data["id"], "overdue");
             }
@@ -93,14 +91,11 @@ class Task extends Model
     }
 
 
-    // Add method to update task with database transaction
     public function update(string $id, array $data): ?array
     {
         try {
-            // Start database transaction
             self::db()->beginTransaction();
 
-            // Check if task exists
             $existingTask = $this->find($id);
             if (!$existingTask) {
                 self::db()->rollBack();
@@ -110,7 +105,6 @@ class Task extends Model
                 ];
             }
 
-            // Only update fields present in $data, but common ones for safety
             $fields = [
                 'title',
                 'description',
@@ -153,10 +147,8 @@ class Task extends Model
                 ];
             }
 
-            // Get updated task
             $updatedTask = $this->find($id);
             
-            // Commit transaction
             self::db()->commit();
             
             return [
@@ -166,7 +158,6 @@ class Task extends Model
             ];
 
         } catch (Exception $e) {
-            // Rollback transaction on any exception
             self::db()->rollBack();
             return [
                 "success" => false, 

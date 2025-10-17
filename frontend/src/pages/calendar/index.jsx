@@ -30,7 +30,6 @@ export default function CalendarPage() {
   const { pid } = useParams();
   const [month, setMonth] = useState(() => new Date());
 
-  // Calculate date range for the current month view
   const startDate = format(
     startOfWeek(startOfMonth(month), { weekStartsOn: 0 }),
     "yyyy-MM-dd"
@@ -40,7 +39,6 @@ export default function CalendarPage() {
     "yyyy-MM-dd"
   );
 
-  // Fetch tasks for the current month
   const {
     data: tasksData,
     loading: tasksLoading,
@@ -56,7 +54,6 @@ export default function CalendarPage() {
 
   const monthLabel = format(month, "MMMM yyyy");
 
-  // The calendar will always show month view
   function goToPrev() {
     setMonth((m) => add(m, { months: -1 }));
   }

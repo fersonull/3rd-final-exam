@@ -10,14 +10,12 @@ export function AddMemberModal({ isOpen, onClose, onInvite, projectId }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isInviting, setIsInviting] = useState(false);
 
-  // Search users with debouncing
   const { data: searchResults, loading: searchLoading } = useFetch(
     searchQuery.length >= 2
       ? `/users/search?q=${encodeURIComponent(searchQuery)}`
       : null
   );
 
-  // Reset state when modal opens/closes
   useEffect(() => {
     if (isOpen) {
       setSearchQuery("");
@@ -43,7 +41,6 @@ export function AddMemberModal({ isOpen, onClose, onInvite, projectId }) {
       onClose();
     } catch (error) {
       console.error("Failed to invite user:", error);
-      // You could add a toast notification here
       alert(`Failed to invite user: ${error.message}`);
     } finally {
       setIsInviting(false);

@@ -18,7 +18,6 @@ class TaskController
     {
         $tasks = $this->taskModel->all();
 
-        // Add the "overdue" status to each task if its due_date is in the past and status is not completed.
         $now = strtotime(date("Y-m-d"));
         foreach ($tasks as &$task) {
             $isOverdue = false;
@@ -77,16 +76,13 @@ class TaskController
 
     public function update()
     {
-        // Handle both PUT and POST requests
         $request = $_POST;
         
-        // For PUT requests, also check if data is in request body (JSON)
         if ($_SERVER['REQUEST_METHOD'] === 'PUT' && empty($request)) {
             $input = file_get_contents('php://input');
             $request = json_decode($input, true);
         }
 
-        // Validate required fields
         if (empty($request["id"])) {
             return Response::json(400, [
                 "success" => false,
@@ -96,10 +92,8 @@ class TaskController
 
         $taskId = $request["id"];
 
-        // Get validation rules for provided fields
         $validationRules = $this->getUpdateValidationRules($request);
         
-        // Validate the request data
         $validator = Validate::make($request, $validationRules);
         
         if ($validator->fails()) {
@@ -109,7 +103,6 @@ class TaskController
             ]);
         }
 
-        // Use model's update method with transaction handling
         $result = $this->taskModel->update($taskId, $request);
         
         if ($result['success']) {
@@ -120,9 +113,6 @@ class TaskController
         }
     }
 
-    /**
-     * Get validation rules for task update based on provided fields
-     */
     private function getUpdateValidationRules(array $request): array
     {
         $rules = [];
@@ -136,7 +126,6 @@ class TaskController
             'project_id' => 'required|max:32'
         ];
 
-        // Only validate fields that are present in the request
         foreach ($fieldRules as $field => $rule) {
             if (array_key_exists($field, $request)) {
                 $rules[$field] = $rule;
@@ -188,7 +177,6 @@ class TaskController
 
     public function calendar($projectId, $startDate, $endDate)
     {
-        // Validate date format
         if (!$this->isValidDate($startDate) || !$this->isValidDate($endDate)) {
             return Response::json(400, [
                 "success" => false,
@@ -198,7 +186,6 @@ class TaskController
 
         $tasks = $this->taskModel->getTasksByDateRange($projectId, $startDate, $endDate);
 
-        // Add overdue status to each task
         $now = strtotime(date("Y-m-d"));
         foreach ($tasks as &$task) {
             $isOverdue = false;

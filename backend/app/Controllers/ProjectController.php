@@ -39,7 +39,6 @@ class ProjectController
     {
         $request = $_POST;
 
-        // Validate required fields
         $validator = Validate::make($request, [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',

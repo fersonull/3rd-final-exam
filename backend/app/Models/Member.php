@@ -30,10 +30,8 @@ class Member extends Model
     public function invite(array $data): ?array
     {
         try {
-            // Start database transaction
             self::db()->beginTransaction();
 
-            // Check if user is already a member of this project
             $existingMember = $this->findByUserAndProject($data['user_id'], $data['project_id']);
             if ($existingMember) {
                 self::db()->rollBack();
@@ -43,7 +41,6 @@ class Member extends Model
                 ];
             }
 
-            // Create the member record
             $memberId = AuthService::generateID();
             $stmt = self::db()->prepare("
                 INSERT INTO $this->table (id, user_id, project_id, role, joined_at) 
@@ -65,10 +62,8 @@ class Member extends Model
                 ];
             }
 
-            // Get the created member with user details
             $member = $this->findWithUserDetails($memberId);
             
-            // Commit transaction
             self::db()->commit();
             
             return [
@@ -78,7 +73,6 @@ class Member extends Model
             ];
 
         } catch (Exception $e) {
-            // Rollback transaction on any exception
             self::db()->rollBack();
             return [
                 "success" => false,

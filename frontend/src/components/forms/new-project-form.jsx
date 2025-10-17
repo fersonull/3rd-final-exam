@@ -36,7 +36,6 @@ export default function NewProjectForm() {
   const { values, handleChange, getFormData } = useFormData(initialForm);
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch for creating the project (mutation)
   const {
     data,
     refetch: createProject,
@@ -58,7 +57,6 @@ export default function NewProjectForm() {
       }
     } catch (e) {
       console.error("Error creating project:", e);
-      // Only show toast for unexpected errors, not validation errors
       toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setSubmitting(false);

@@ -7,7 +7,6 @@ export default function Tasks() {
 
   const { data: tasks, loading, error } = useFetch(`/tasks/project/${pid}/0`);
 
-  // console.log(tasks);
 
   if (error?.forbidden) {
     return <div>{error?.forbidden}</div>;

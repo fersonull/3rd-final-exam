@@ -23,12 +23,10 @@ import {
 } from "../ui/empty";
 import { IconChartBar } from "@tabler/icons-react";
 
-// Pie chart data and color palette
 const totalTasks = 200;
 const completedTasks = 122;
 const ongoingTasks = 12;
 
-// Color palette from InfoChart
 const PIE_COLORS = [
   "#a8e6a3", // Completed (matches tasksCompleted in InfoChart)
   "#7ba6e4", // Ongoing (matches tasksCreated in InfoChart)
@@ -51,7 +49,6 @@ export default function DistributionChart({ distribution }) {
     },
   ];
 
-  // Check if pieData values are all 0 or if there's no data
   const isPieDataEmpty = pieData.every(
     (item) => !item.value || item.value <= 0
   );

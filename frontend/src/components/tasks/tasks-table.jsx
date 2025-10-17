@@ -50,11 +50,8 @@ import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 
-// Helper: check if task is overdue (fallback for missing backend flag)
 function isTaskOverdue(task) {
-  // Use backend-provided flag if available
   if (typeof task.overdue === "boolean") return task.overdue;
-  // Fallback: check due_date & not completed
   if (task.status === "completed" || !task.due_date) return false;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -63,7 +60,6 @@ function isTaskOverdue(task) {
   return due < today;
 }
 
-// Priority text coloring utility
 function getPriorityStyle(priority) {
   switch ((priority || "").toLowerCase()) {
     case "high":
@@ -91,26 +87,21 @@ function getPriorityLabel(priority) {
   }
 }
 
-// Fixed: Handle column key mapping for sorting actual data keys
 function getSortValue(row, sortKey) {
-  // For known keys, map to real field
   switch (sortKey) {
     case "title":
       return row.title || "";
     case "status":
       return row.status || "";
     case "priority":
-      // Rank for order: high < normal < low
       const priorityRank = { high: 1, normal: 2, low: 3 };
       return priorityRank[(row.priority || "").toLowerCase()] || 99;
     case "dueDate":
     case "due_date":
-      // Allow either
       return row.due_date ? new Date(row.due_date).getTime() : Infinity;
     case "assignee":
       return row.assignee_name || "";
     default:
-      // Fallback to the key directly
       return row[sortKey];
   }
 }
@@ -121,11 +112,9 @@ function getSortedData(data, sortKey, sortOrder) {
     let aValue = getSortValue(a, sortKey);
     let bValue = getSortValue(b, sortKey);
 
-    // If both are numbers, compare as numbers (dates, priority rank); otherwise as string
     if (typeof aValue === "number" && typeof bValue === "number") {
       return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
     } else {
-      // compare as string (case-insensitive)
       const aStr = (aValue ?? "").toString().toLowerCase();
       const bStr = (bValue ?? "").toString().toLowerCase();
       if (aStr < bStr) return sortOrder === "asc" ? -1 : 1;
@@ -135,7 +124,6 @@ function getSortedData(data, sortKey, sortOrder) {
   });
 }
 
-// Compare helper for string-insensitive match
 function iEquals(a, b) {
   if (a == null || b == null) return false;
   return String(a).toLowerCase() === String(b).toLowerCase();
@@ -151,21 +139,18 @@ export default function TasksTable({ tasks }) {
   const [assigneeFilter, setAssigneeFilter] = useState("all");
   const [assigningTask, setAssigningTask] = useState(null);
 
-  // Fetch project members for assignee selection
   const {
     data: membersData,
     loading: membersLoading,
     error: membersError,
   } = useFetch(pid ? `/projects/${pid}/members` : null);
 
-  // Fetch for updating task assignee
   const { refetch: updateTaskAssignee } = useFetch(
     "/tasks",
     { method: "PUT" },
     false
   );
 
-  // Handle assignee selection
   const handleAssigneeChange = async (taskId, assigneeId) => {
     console.log("Assigning task:", taskId, "to assignee:", assigneeId);
 
@@ -191,7 +176,6 @@ export default function TasksTable({ tasks }) {
       if (res?.success) {
         toast.success("Task assignee updated successfully!");
       } else if (res?.errors) {
-        // Handle validation errors
         Object.values(res.errors).forEach((errorMsg) => {
           toast.error(errorMsg);
         });
@@ -206,10 +190,8 @@ export default function TasksTable({ tasks }) {
     }
   };
 
-  // Get project members for assignee selection
   const projectMembers = membersData || [];
 
-  // Sorting handler
   function handleSort(nextKey) {
     if (sortKey === nextKey) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -219,10 +201,8 @@ export default function TasksTable({ tasks }) {
     }
   }
 
-  // Filtering logic fixed to match against canonical values, and check id as well as name for assignee
   const filteredData =
     tasks?.filter((row) => {
-      // Search matches title, project, or assignee_name (case-insensitive)
       const searchText = search.trim().toLowerCase();
       const matchesSearch =
         !searchText ||
@@ -231,15 +211,12 @@ export default function TasksTable({ tasks }) {
         (row.assignee_name &&
           row.assignee_name.toLowerCase().includes(searchText));
 
-      // Status filter: statusFilter is the canonical value
       const matchesStatus =
         statusFilter === "all" || iEquals(row.status, statusFilter);
 
-      // Priority filter: priorityFilter is the canonical value
       const matchesPriority =
         priorityFilter === "all" || iEquals(row.priority, priorityFilter);
 
-      // Assignee filter: (assigneeFilter is team member's value string; match row.assignee_id or row.assignee_name)
       const matchesAssignee =
         assigneeFilter === "all" ||
         String(row.assignee_id) === assigneeFilter ||
@@ -395,7 +372,6 @@ export default function TasksTable({ tasks }) {
                     </TableRow>
                   ) : (
                     sortedData?.map((data, index) => {
-                      // console.log("Task data:", data);
                       return (
                         <TableRow
                           key={index}

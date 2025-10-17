@@ -42,7 +42,6 @@ export default function NewMemberForm() {
     const errs = {};
     if (!form.name.trim()) errs.name = "Name is required";
     if (!form.email.trim()) errs.email = "Email is required";
-    // Simple email regex for demo purposes
     else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(form.email))
       errs.email = "Invalid email";
     if (!form.role) errs.role = "Role is required";
@@ -55,9 +54,7 @@ export default function NewMemberForm() {
     const errs = validate();
     setErrors(errs);
     if (Object.keys(errs).length === 0) {
-      // This is where you would normally POST data to the backend.
       setSubmitted(true);
-      // Simulate clear or redirect as needed.
     }
   };
 

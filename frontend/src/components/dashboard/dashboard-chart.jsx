@@ -15,7 +15,6 @@ import {
   SelectItem,
 } from "../ui/select";
 
-// Expecting setRange and range to be passed from parent
 export default function DashboardChart({ data, range = "7", setRange }) {
   return (
     <Card className="lg:h-full h-104">

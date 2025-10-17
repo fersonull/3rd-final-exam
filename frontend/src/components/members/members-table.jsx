@@ -27,7 +27,6 @@ const columns = [
   { key: "user_name", label: "Name" },
   { key: "user_email", label: "Email" },
   { key: "role", label: "Role" },
-  // Status column removed, as the backend does not provide it; add it back if desired
 ];
 
 function getSortedData(data, sortKey, sortOrder) {
@@ -77,7 +76,6 @@ export default function MembersTable() {
     }
   };
 
-  // Default to [] if members is not loaded yet, backend gives array or null
   const sortedMembers = getSortedData(members ?? [], sortKey, sortOrder);
 
   const handleInviteUser = async (user, projectId) => {

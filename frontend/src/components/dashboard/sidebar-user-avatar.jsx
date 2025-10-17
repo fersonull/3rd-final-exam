@@ -42,7 +42,6 @@ export default function SidebarUserAvatar() {
   };
 
   const handleProfile = () => {
-    // navigate("/profile");
   };
 
   return (

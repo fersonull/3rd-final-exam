@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/card";
 
 export default function CalendarGrid({ monthDate, tasks }) {
-  // start and end for grid
   const start = startOfWeek(startOfMonth(monthDate), { weekStartsOn: 0 });
   const end = endOfWeek(endOfMonth(monthDate), { weekStartsOn: 0 });
 

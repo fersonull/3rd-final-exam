@@ -50,9 +50,6 @@ export default function AppSidebar() {
     navigate(`/p/${value}/overview`);
   }, [setActiveProject]);
 
-  // useEffect(() => {
-  //   console.log(activeProject)
-  // }, [activeProject, projectLoading])
 
   return (
     <Sidebar>

@@ -50,14 +50,12 @@ export default function NewTaskForm({ projectId, projects = [], onSubmit }) {
 
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch for creating the task (mutation)
   const { refetch: createTask, error } = useFetch(
     "/tasks",
     { method: "POST" },
     false
   );
 
-  // Fetch project members with useFetch custom hook
   const {
     data: members,
     loading: membersLoading,

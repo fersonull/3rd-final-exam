@@ -6,25 +6,19 @@ export default function DashboardBreadcrumb() {
   const location = useLocation();
   const { pid } = useParams();
 
-  // Fetch the active project using pid
   const active = useActiveProject({ projectId: pid });
 
-  // Split the path, e.g. /p/123/tasks -> ["p", "123", "tasks"]
   const paths = location.pathname.split("/").filter(Boolean);
 
-  // Only handle dashboard breadcrumb for /p/:projectid/...
-  // Paths: ["p", ":projectid", ...rest]
   const breadcrumbItems = [];
 
   if (paths[0] === "p" && paths[1]) {
-    // Project page root breadcrumb
     breadcrumbItems.push({
       label: active.activeProject?.name || "Project",
       to: `/p/${paths[1]}/overview`,
     });
 
 
-    // Add additional breadcrumbs for each sub path
     for (let i = 2; i < paths.length; i++) {
       const pathSegment = paths[i];
       const label = pathSegment

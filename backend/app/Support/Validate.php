@@ -71,9 +71,6 @@ class Validate
         return $this->errors;
     }
 
-    /**
-     * Check if a value is a valid date
-     */
     private function isValidDate($date): bool
     {
         if (empty($date)) {

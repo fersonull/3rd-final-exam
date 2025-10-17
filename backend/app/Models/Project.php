@@ -53,7 +53,6 @@ class Project extends Model
 
     public function create(array $data): ?array
     {
-        // Validate required fields
         if (empty($data["name"])) {
             return [
                 "success" => false, 
@@ -68,7 +67,6 @@ class Project extends Model
             ];
         }
 
-        // Set default status if not provided
         if (empty($data["status"])) {
             $data["status"] = "active";
         }

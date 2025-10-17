@@ -33,7 +33,6 @@ export function useFetch(url, options = {}, immediate = true) {
 
         if ((!response.ok && result.errors) || result.error) {
           setError(result.errors || result.error);
-          // throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
 
         setData(result);

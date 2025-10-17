@@ -20,7 +20,6 @@ export default function useActiveProject({ projectId }) {
                 setLoading(true);
                 const project = await getProjects();
 
-                // console.log(project);
 
                 if ((!project || project?.error) && !get()) {
                     console.error("Error fetching project:", project?.error);

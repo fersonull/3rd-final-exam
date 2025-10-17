@@ -34,7 +34,7 @@ export default function AuthHero() {
         </div>
 
         {/* Benefits List */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-4 mb-8 flex-center flex-col">
           {benefits.map((benefit, index) => (
             <div key={index} className="flex items-center gap-3 text-left">
               <div className="text-primary-foreground/90 flex-shrink-0">
