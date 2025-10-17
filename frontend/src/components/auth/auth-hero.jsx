@@ -21,7 +21,7 @@ export default function AuthHero() {
   ];
 
   return (
-    <div className="flex flex-col justify-center items-center h-full px-8 py-12 text-center">
+    <div className="flex flex-col justify-center items-center h-full px-8 py-12 text-center bg-gradient-to-br from-primary to-primary/90">
       <div className="max-w-md">
         {/* Logo/Brand */}
         <div className="mb-8">

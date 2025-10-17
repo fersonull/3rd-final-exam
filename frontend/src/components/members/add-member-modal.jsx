@@ -62,7 +62,7 @@ export function AddMemberModal({ isOpen, onClose, onInvite, projectId }) {
       <div className="space-y-4">
         {/* Search Input */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
             type="text"
             placeholder="Search by name or email..."
@@ -71,35 +71,39 @@ export function AddMemberModal({ isOpen, onClose, onInvite, projectId }) {
             className="pl-10"
           />
           {searchLoading && (
-            <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 animate-spin" />
+            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
           )}
         </div>
 
         {/* Search Results */}
         {searchQuery.length >= 2 && (
-          <div className="max-h-60 overflow-y-auto border rounded-lg">
+          <div className="max-h-60 overflow-y-auto border rounded-md bg-background">
             {users.length === 0 && !searchLoading ? (
-              <div className="p-4 text-center text-gray-500">
+              <div className="p-4 text-center text-muted-foreground">
                 No users found matching "{searchQuery}"
               </div>
             ) : (
               users.map((user) => (
                 <div
                   key={user.id}
-                  className={`p-3 border-b last:border-b-0 cursor-pointer hover:bg-gray-50 ${
+                  className={[
+                    "p-3 border-b last:border-b-0 cursor-pointer",
+                    "hover:bg-accent hover:text-accent-foreground",
                     selectedUser?.id === user.id
-                      ? "bg-blue-50 border-blue-200"
-                      : ""
-                  }`}
+                      ? "bg-accent text-accent-foreground"
+                      : "bg-background",
+                  ].join(" ")}
                   onClick={() => handleUserSelect(user)}
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="font-medium">{user.name}</div>
-                      <div className="text-sm text-gray-500">{user.email}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {user.email}
+                      </div>
                     </div>
                     {selectedUser?.id === user.id && (
-                      <div className="text-blue-600">
+                      <div className="text-primary">
                         <UserPlus className="h-4 w-4" />
                       </div>
                     )}
@@ -112,21 +116,17 @@ export function AddMemberModal({ isOpen, onClose, onInvite, projectId }) {
 
         {/* Selected User */}
         {selectedUser && (
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="p-4 bg-accent border border-accent rounded-md">
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-medium text-blue-900">
+                <div className="font-medium text-foreground">
                   {selectedUser.name}
                 </div>
-                <div className="text-sm text-blue-600">
+                <div className="text-sm text-muted-foreground">
                   {selectedUser.email}
                 </div>
               </div>
-              <Button
-                onClick={handleInvite}
-                disabled={isInviting}
-                className="bg-blue-600 hover:bg-blue-700"
-              >
+              <Button onClick={handleInvite} disabled={isInviting}>
                 {isInviting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -145,8 +145,8 @@ export function AddMemberModal({ isOpen, onClose, onInvite, projectId }) {
 
         {/* Instructions */}
         {searchQuery.length < 2 && (
-          <div className="text-center text-gray-500 py-8">
-            <UserPlus className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+          <div className="text-center text-muted-foreground py-8">
+            <UserPlus className="h-12 w-12 mx-auto mb-4 text-muted" />
             <p>Start typing to search for users by name or email</p>
           </div>
         )}

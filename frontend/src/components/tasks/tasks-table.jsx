@@ -431,8 +431,8 @@ export default function TasksTable({ tasks }) {
                             {data.assignee_id === null ? (
                               <div>
                                 {membersError ? (
-                                  <div className="text-red-500 text-xs">
-                                    Error loading members
+                                  <div className=" text-xs">
+                                    No members available
                                   </div>
                                 ) : (
                                   <Select

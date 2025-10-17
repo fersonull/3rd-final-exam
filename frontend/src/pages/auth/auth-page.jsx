@@ -8,41 +8,45 @@ export default function AuthPage() {
   const [searchParams] = useSearchParams();
 
   return (
-    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 min-h-screen">
+    <div className="flex-1 min-h-screen grid grid-cols-1 lg:grid-cols-2">
       {/* Left Side - Auth Forms */}
-      <div className="flex flex-col items-center justify-between h-full px-8 py-6 bg-background order-2 md:order-1">
-        <div className="text-center">
-          <a className="logo text-xl font-bold">Projet</a>
-          <span className="text-xs text-muted-foreground tracking-widest mt-1 block">
-            work. flow. evolve.
-          </span>
+      <div className="flex flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="mx-auto w-full max-w-sm lg:w-96">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              Projet
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              work. flow. evolve.
+            </p>
+          </div>
+
+          <Tabs
+            defaultValue={searchParams.get("tab") || "login"}
+            className="w-full"
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="login">Login</TabsTrigger>
+              <TabsTrigger value="register">Register</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="login" className="mt-6">
+              <LoginForm />
+            </TabsContent>
+
+            <TabsContent value="register" className="mt-6">
+              <SignupForm />
+            </TabsContent>
+          </Tabs>
+
+          <footer className="mt-8 text-center text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Projet. All rights reserved.
+          </footer>
         </div>
-
-        <Tabs
-          defaultValue={searchParams.get("tab") || "login"}
-          className="w-full max-w-md"
-        >
-          <TabsList className="w-full grid grid-cols-2 gap-1 mb-6">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="register">Register</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="login">
-            <LoginForm />
-          </TabsContent>
-
-          <TabsContent value="register">
-            <SignupForm />
-          </TabsContent>
-        </Tabs>
-
-        <footer className="text-xs text-muted-foreground text-center mt-8">
-          © {new Date().getFullYear()} Projet. All rights reserved.
-        </footer>
       </div>
 
-      {/* Right Side - Hero Section (Hidden on mobile only) */}
-      <div className="hidden md:block bg-gradient-to-br from-primary to-primary/90 order-1 md:order-2">
+      {/* Right Side - Hero Section */}
+      <div className="hidden lg:block relative">
         <AuthHero />
       </div>
     </div>
