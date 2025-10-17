@@ -31,4 +31,22 @@ class UserController
             $data ? ['data' => $data] : ['error' => "User with ID $id not found"]
         );
     }
+
+    public function search()
+    {
+        $query = $_GET['q'] ?? '';
+        
+        if (empty($query)) {
+            return Response::json(400, [
+                'error' => 'Search query is required'
+            ]);
+        }
+
+        $users = $this->userModel->search($query);
+
+        return Response::json(200, [
+            'success' => true,
+            'data' => $users ?: []
+        ]);
+    }
 }

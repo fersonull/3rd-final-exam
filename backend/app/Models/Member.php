@@ -26,4 +26,99 @@ class Member extends Model
         $rows = $stmt->fetchAll();
         return $rows ?: null;
     }
+
+    public function invite(array $data): ?array
+    {
+        try {
+            // Start database transaction
+            self::db()->beginTransaction();
+
+            // Check if user is already a member of this project
+            $existingMember = $this->findByUserAndProject($data['user_id'], $data['project_id']);
+            if ($existingMember) {
+                self::db()->rollBack();
+                return [
+                    "success" => false,
+                    "error" => "User is already a member of this project"
+                ];
+            }
+
+            // Create the member record
+            $memberId = AuthService::generateID();
+            $stmt = self::db()->prepare("
+                INSERT INTO $this->table (id, user_id, project_id, role, joined_at) 
+                VALUES (:id, :user_id, :project_id, :role, NOW())
+            ");
+            
+            $success = $stmt->execute([
+                "id" => $memberId,
+                "user_id" => $data["user_id"],
+                "project_id" => $data["project_id"],
+                "role" => $data["role"] ?? "member"
+            ]);
+
+            if (!$success) {
+                self::db()->rollBack();
+                return [
+                    "success" => false,
+                    "error" => "Failed to add member to project"
+                ];
+            }
+
+            // Get the created member with user details
+            $member = $this->findWithUserDetails($memberId);
+            
+            // Commit transaction
+            self::db()->commit();
+            
+            return [
+                "success" => true,
+                "message" => "Member added successfully",
+                "member" => $member
+            ];
+
+        } catch (Exception $e) {
+            // Rollback transaction on any exception
+            self::db()->rollBack();
+            return [
+                "success" => false,
+                "error" => "Database error: " . $e->getMessage()
+            ];
+        }
+    }
+
+    public function findByUserAndProject(string $userId, string $projectId): ?array
+    {
+        $stmt = self::db()->prepare("
+            SELECT * FROM $this->table 
+            WHERE user_id = :user_id AND project_id = :project_id
+        ");
+        $stmt->execute([
+            "user_id" => $userId,
+            "project_id" => $projectId
+        ]);
+        
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
+
+    public function findWithUserDetails(string $memberId): ?array
+    {
+        $stmt = self::db()->prepare("
+            SELECT 
+                pm.id,
+                pm.role,
+                pm.joined_at,
+                u.id as user_id,
+                u.name as user_name,
+                u.email as user_email
+            FROM $this->table pm
+            JOIN users u ON pm.user_id = u.id
+            WHERE pm.id = :member_id
+        ");
+        $stmt->execute(["member_id" => $memberId]);
+        
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
 }

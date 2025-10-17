@@ -5,6 +5,7 @@ require_once "./app/Support/Response.php";
 require_once "./app/Controllers/TestController.php";
 require_once "./app/Controllers/AuthController.php";
 require_once "./app/Controllers/UserController.php";
+require_once "./app/Controllers/MemberController.php";
 require_once "./app/Middlewares/AuthMiddleware.php";
 
 // auth related routes
@@ -12,6 +13,12 @@ Router::post('/v1/login', 'AuthController@login');
 Router::post('/v1/signup', 'AuthController@signup');
 Router::get('/v1/session', 'AuthController@session');
 Router::post('/v1/logout', 'AuthController@logout', ['AuthMiddleware']);
+
+// user related routes
+Router::get('/v1/users/search', 'UserController@search', ['AuthMiddleware']);
+
+// member related routes
+Router::post('/v1/members', 'MemberController@store', ['AuthMiddleware']);
 
 // project related routes
 Router::get('/v1/projects', 'ProjectController@index', ['AuthMiddleware']);

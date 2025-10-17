@@ -53,4 +53,19 @@ class User extends Model
         $row = $stmt->fetch();
         return $row ?: null;
     }
+
+    public function search(string $query): ?array
+    {
+        $searchTerm = "%{$query}%";
+        $stmt = self::db()->prepare("
+            SELECT id, name, email 
+            FROM $this->table 
+            WHERE name LIKE :search OR email LIKE :search
+            LIMIT 10
+        ");
+        $stmt->execute(['search' => $searchTerm]);
+
+        $rows = $stmt->fetchAll();
+        return $rows ?: null;
+    }
 }

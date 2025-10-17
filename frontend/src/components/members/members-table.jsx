@@ -18,12 +18,15 @@ import {
 import { UserPlus2, Pencil, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link, useParams } from "react-router-dom";
-import { useFetch } from "@/hooks/use-fetch"; // Assuming your usefetch hook is here
+import { useFetch } from "@/hooks/use-fetch";
+import { AddMemberModal } from "./add-member-modal";
+import { useFormData } from "@/hooks/use-formdata";
+import { toast } from "sonner";
 
 const columns = [
   { key: "user_name", label: "Name" },
   { key: "user_email", label: "Email" },
-  { key: "role", label: "Role" }
+  { key: "role", label: "Role" },
   // Status column removed, as the backend does not provide it; add it back if desired
 ];
 
@@ -41,14 +44,26 @@ function getSortedData(data, sortKey, sortOrder) {
 
 export default function MembersTable() {
   const { pid: projectId } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: members, loading, error } = useFetch(
-    projectId ? `/projects/${projectId}/members` : null
+  const {
+    data: members,
+    loading,
+    error,
+    refetch,
+  } = useFetch(projectId ? `/projects/${projectId}/members` : null);
+
+  const {
+    loading: addMemberLoading,
+    error: addMemberError,
+    refetch: addMember,
+  } = useFetch(
+    projectId ? `/members` : null,
+    {
+      method: "POST",
+    },
+    false
   );
-
-  console.log(members);
-  console.log(error);
-
 
   const [sortKey, setSortKey] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -65,6 +80,24 @@ export default function MembersTable() {
   // Default to [] if members is not loaded yet, backend gives array or null
   const sortedMembers = getSortedData(members ?? [], sortKey, sortOrder);
 
+  const handleInviteUser = async (user, projectId) => {
+    const formData = new FormData();
+    formData.append("user_id", user.id);
+    formData.append("project_id", projectId);
+    formData.append("role", "member");
+
+    const result = await addMember({
+      body: formData,
+    });
+
+    if (result?.success) {
+      toast.success(result.message);
+      refetch();
+    } else {
+      toast.error(result.error);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -74,12 +107,10 @@ export default function MembersTable() {
           member information as needed.
         </CardDescription>
         <CardAction>
-          <Link to="new-member">
-            <Button>
-              <UserPlus2 />
-              Add member
-            </Button>
-          </Link>
+          <Button onClick={() => setIsModalOpen(true)}>
+            <UserPlus2 />
+            Add member
+          </Button>
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -120,7 +151,10 @@ export default function MembersTable() {
             <TableBody>
               {!sortedMembers || error || sortedMembers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length + 1} className="text-center">
+                  <TableCell
+                    colSpan={columns.length + 1}
+                    className="text-center"
+                  >
                     No members found.
                   </TableCell>
                 </TableRow>
@@ -150,6 +184,14 @@ export default function MembersTable() {
           </Table>
         )}
       </CardContent>
+
+      {/* Add Member Modal */}
+      <AddMemberModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onInvite={handleInviteUser}
+        projectId={projectId}
+      />
     </Card>
   );
 }

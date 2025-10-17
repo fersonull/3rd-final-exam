@@ -15,14 +15,28 @@ class MemberController
 
     public function store()
     {
+        $request = $_POST;
+        
         $validator = Validate::make($request, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'role' => 'required|string|in:admin,member',
+            'user_id' => 'required|string|max:32',
+            'project_id' => 'required|string|max:32',
+            'role' => 'string|in:admin,member',
         ]);
 
         if ($validator->fails()) {
-            return Response::json(400, ['errors' => $validator->errors()]);
+            return Response::json(400, [
+                'success' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        $result = $this->memberModel->invite($request);
+        
+        if ($result['success']) {
+            return Response::json(201, $result);
+        } else {
+            $statusCode = isset($result['error']) && strpos($result['error'], 'already a member') !== false ? 409 : 500;
+            return Response::json($statusCode, $result);
         }
     }
 
