@@ -62,8 +62,6 @@ export default function DashboardTable({ tasks, loading }) {
     );
   }
 
-  console.log(tasks);
-
   return (
     <div className="overflow-x-auto w-full">
       <Table className="min-w-[700px] w-full">

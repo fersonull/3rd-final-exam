@@ -19,6 +19,7 @@ import Banner from "@/components/ui/banner";
 import { Button } from "@/components/ui/button";
 import useActiveProject from "@/hooks/use-active-project";
 import { useFetch } from "@/hooks/use-fetch";
+import DashboardTableSkeleton from "@/components/dashboard/dashboard-table-skeleton";
 
 const DashboardChart = lazy(() =>
   import("@/components/dashboard/dashboard-chart")
@@ -97,27 +98,31 @@ export default function Index() {
           )}
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Task Activity</CardTitle>
-            <CardDescription>
-              See the latest {taskLimit} tasks and recent updates to your team's
-              work
-            </CardDescription>
+        {tasksLoading ? (
+          <DashboardTableSkeleton />
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Task Activity</CardTitle>
+              <CardDescription>
+                See the latest {taskLimit} tasks and recent updates to your
+                team's work
+              </CardDescription>
 
-            <CardAction>
-              <Link to="tasks">
-                <Button variant="outline">
-                  <List />
-                  Browse all
-                </Button>
-              </Link>
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <DashboardTable tasks={tasks} loading={tasksLoading} />
-          </CardContent>
-        </Card>
+              <CardAction>
+                <Link to="tasks">
+                  <Button variant="outline">
+                    <List />
+                    Browse all
+                  </Button>
+                </Link>
+              </CardAction>
+            </CardHeader>
+            <CardContent>
+              <DashboardTable tasks={tasks} loading={tasksLoading} />
+            </CardContent>
+          </Card>
+        )}
       </div>
     </>
   );
