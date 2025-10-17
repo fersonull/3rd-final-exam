@@ -8,6 +8,7 @@ import DashboardLayout from "./layouts/dashboard-layout";
 import ProjectsLayout from "./layouts/projects-layout";
 import NewTask from "./pages/tasks/new-task";
 import NewMember from "./pages/members/new-member";
+import NewProject from "./pages/projects/new-project";
 import Calendar from "./pages/calendar";
 import Profile from "./pages/profile";
 
@@ -52,6 +53,10 @@ export const routes = [
                 <ProjectDashboard />
               </Suspense>
             ),
+          },
+          {
+            path: "new-project",
+            element: <NewProject />,
           },
         ],
       },

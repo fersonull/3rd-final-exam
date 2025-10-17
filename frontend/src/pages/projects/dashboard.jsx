@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ProjectCard from "@/components/projects/project-card";
 import { projects } from "@/lib/projetcs-data-placeholder";
 import Banner from "@/components/ui/banner";
@@ -71,17 +72,14 @@ function sortAndFilter(projectList, search, sort) {
 }
 
 export default function Dashboard() {
-  const { remove } = useLocalStorage("activeProject")
-
+  const navigate = useNavigate();
+  const { remove } = useLocalStorage("activeProject");
 
   useEffect(() => {
     remove();
   }, []);
 
-  const { data: projects, loading } = useFetch(
-    "/projects/users",
-    true
-  );
+  const { data: projects, loading } = useFetch("/projects/users", true);
 
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(sortOptions[0].value);
@@ -95,7 +93,7 @@ export default function Dashboard() {
   }, [search, sort, projects?.data]);
 
   if (loading) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   return (
@@ -134,7 +132,7 @@ export default function Dashboard() {
             </SelectContent>
           </Select>
         </div>
-        <Button>
+        <Button onClick={() => navigate("/p/new-project")}>
           <FolderPlus />
           New Project
         </Button>
@@ -143,9 +141,7 @@ export default function Dashboard() {
       <div className="space-y-12">
         <section>
           <div className="flex items-center mb-4 gap-2">
-            <span className="font-medium">
-              Your Projects
-            </span>
+            <span className="font-medium">Your Projects</span>
             <span className="bg-green-100 text-green-700 ml-2 px-2 rounded-full text-xs h-6 flex items-center">
               {filteredAndSortedProjects?.length} active
             </span>
@@ -159,7 +155,7 @@ export default function Dashboard() {
           ) : (
             <EmptyProject>
               <div className="flex gap-2">
-                <Button>
+                <Button onClick={() => navigate("/p/new-project")}>
                   Create Project
                 </Button>
               </div>
@@ -169,9 +165,7 @@ export default function Dashboard() {
 
         <section>
           <div className="flex items-center mb-4 gap-2">
-            <span className="font-medium">
-              Invited Projects
-            </span>
+            <span className="font-medium">Invited Projects</span>
             <span className="ml-1 bg-blue-100 text-blue-600 px-2 rounded-full text-xs h-6 flex items-center">
               {filteredAndSortedInvitedProjects.length} shared
             </span>
@@ -186,7 +180,11 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <EmptyProject icon={<UsersRound />} title={"No Invited Projects"} desc={"You are not a member of any shared projects yet."} />
+            <EmptyProject
+              icon={<UsersRound />}
+              title={"No Invited Projects"}
+              desc={"You are not a member of any shared projects yet."}
+            />
           )}
 
           <Button className="mt-5" size="sm" variant="outline">

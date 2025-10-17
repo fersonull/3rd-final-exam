@@ -79,8 +79,10 @@ export default function NewTaskForm({ projectId, projects = [], onSubmit }) {
       const res = await createTask({ body: form });
 
       if (res?.success) {
-        toast.success(res.message);
+        toast.success(res.message || "Task created successfully!");
         navigate(`/p/${projectId}/tasks/${res.task.id}`);
+      } else if (res?.error) {
+        toast.error(res.error);
       }
     } catch (e) {
       console.error("Error creating task:", e);
@@ -98,7 +100,7 @@ export default function NewTaskForm({ projectId, projects = [], onSubmit }) {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="title" className="text-sm font-medium">
-                Task Title <span className="text-destructive">*</span>
+                Task Title
               </Label>
               <Input
                 id="title"
@@ -140,9 +142,7 @@ export default function NewTaskForm({ projectId, projects = [], onSubmit }) {
               <Separator />
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium">
-                    Project <span className="text-destructive">*</span>
-                  </Label>
+                  <Label className="text-sm font-medium">Project</Label>
                   <Select
                     value={values.project_id}
                     onValueChange={(value) =>

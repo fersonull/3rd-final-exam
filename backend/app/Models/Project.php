@@ -53,22 +53,54 @@ class Project extends Model
 
     public function create(array $data): ?array
     {
+        // Validate required fields
+        if (empty($data["name"])) {
+            return [
+                "success" => false, 
+                "error" => "Project name is required"
+            ];
+        }
+
+        if (empty($data["owner_id"])) {
+            return [
+                "success" => false, 
+                "error" => "Owner ID is required"
+            ];
+        }
+
+        // Set default status if not provided
+        if (empty($data["status"])) {
+            $data["status"] = "active";
+        }
+
         $stmt = self::db()->prepare("INSERT INTO $this->table (id, name, description, owner_id, status) VALUES (:id, :name, :description, :owner_id, :status)");
-        $stmt->execute([
-            "id" => $data["id"],
-            "name" => $data["name"],
-            "description" => $data["description"],
-            "owner_id" => $data["owner_id"],
-            "status" => $data["status"],
-        ]);
+        
+        try {
+            $stmt->execute([
+                "id" => $data["id"],
+                "name" => $data["name"],
+                "description" => $data["description"] ?? "",
+                "owner_id" => $data["owner_id"],
+                "status" => $data["status"],
+            ]);
 
-        $projectID = $data["id"];
-        $project = $this->find($projectID);
+            $projectID = $data["id"];
+            $project = $this->find($projectID);
 
-        return $project ? [
-            "success" => true, 
-            "data" => $project
-        ] : ["success" => false, "data" => null];
+            return $project ? [
+                "success" => true, 
+                "data" => $project,
+                "message" => "Project created successfully"
+            ] : [
+                "success" => false, 
+                "error" => "Failed to retrieve created project"
+            ];
+        } catch (Exception $e) {
+            return [
+                "success" => false, 
+                "error" => "Failed to create project: " . $e->getMessage()
+            ];
+        }
     }
 
     public function tasks(string $projectId): ?array

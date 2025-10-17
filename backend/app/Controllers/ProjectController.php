@@ -39,12 +39,28 @@ class ProjectController
     {
         $request = $_POST;
 
+        // Validate required fields
+        $validator = Validate::make($request, [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            Response::json(400, [
+                'errors' => $validator->errors()
+            ]);
+            return;
+        }
+
         $user = Session::get("auth")["user"];
 
         $request["id"] = AuthService::generateID();
         $request["owner_id"] = $user["id"];
 
-        $project = $this->projectModel->create($request);
+        $result = $this->projectModel->create($request);
+
+        Response::json(201, $result);
+        return;
     }
 
     public function getUsersProjects()
