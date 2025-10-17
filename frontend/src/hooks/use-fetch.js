@@ -8,6 +8,7 @@ export function useFetch(url, options = {}, immediate = true) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { token } = useAuthContext();
+  
   const fetchData = useCallback(
     async (overrideOptions = {}) => {
       setLoading(true);

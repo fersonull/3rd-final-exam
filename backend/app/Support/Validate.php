@@ -45,6 +45,18 @@ class Validate
                         $this->errors[$field] = ucfirst($field) . " must only be $max characters";
                     }
                 }
+
+                if (str_starts_with($rule, 'in:')) {
+                    $allowedValues = explode(',', substr($rule, 3));
+                    if ($value && !in_array($value, $allowedValues)) {
+                        $allowedList = implode(', ', $allowedValues);
+                        $this->errors[$field] = ucfirst($field) . " must be one of: $allowedList";
+                    }
+                }
+
+                if ($rule === 'date' && $value && !$this->isValidDate($value)) {
+                    $this->errors[$field] = ucfirst($field) . " must be a valid date";
+                }
             }
         }
     }
@@ -57,5 +69,18 @@ class Validate
     public function errors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * Check if a value is a valid date
+     */
+    private function isValidDate($date): bool
+    {
+        if (empty($date)) {
+            return false;
+        }
+        
+        $d = DateTime::createFromFormat('Y-m-d', $date);
+        return $d && $d->format('Y-m-d') === $date;
     }
 }

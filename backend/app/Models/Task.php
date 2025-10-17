@@ -93,45 +93,85 @@ class Task extends Model
     }
 
 
-    // Add method to update task
+    // Add method to update task with database transaction
     public function update(string $id, array $data): ?array
     {
-        // Only update fields present in $data, but common ones for safety
-        $fields = [
-            'title',
-            'description',
-            'priority',
-            'status',
-            'due_date',
-            'assignee_id',
-            'project_id'
-        ];
+        try {
+            // Start database transaction
+            self::db()->beginTransaction();
 
-        $set = [];
-        $params = [];
-        foreach ($fields as $field) {
-            if (array_key_exists($field, $data)) {
-                $set[] = "$field = :$field";
-                $params[$field] = $data[$field];
+            // Check if task exists
+            $existingTask = $this->find($id);
+            if (!$existingTask) {
+                self::db()->rollBack();
+                return [
+                    "success" => false, 
+                    "error" => "Task not found"
+                ];
             }
-        }
 
-        if (empty($set)) {
-            return ["success" => false, "message" => "No fields provided to update"];
-        }
+            // Only update fields present in $data, but common ones for safety
+            $fields = [
+                'title',
+                'description',
+                'priority',
+                'status',
+                'due_date',
+                'assignee_id',
+                'project_id'
+            ];
 
-        $setSql = implode(', ', $set);
-        $params['id'] = $id;
+            $set = [];
+            $params = [];
+            foreach ($fields as $field) {
+                if (array_key_exists($field, $data)) {
+                    $set[] = "$field = :$field";
+                    $params[$field] = $data[$field];
+                }
+            }
 
-        $sql = "UPDATE $this->table SET $setSql WHERE id = :id";
-        $stmt = self::db()->prepare($sql);
-        $success = $stmt->execute($params);
+            if (empty($set)) {
+                self::db()->rollBack();
+                return [
+                    "success" => false, 
+                    "error" => "No fields provided to update"
+                ];
+            }
 
-        if ($success) {
-            $task = $this->find($id);
-            return ["success" => true, "message" => "Task updated successfully", "task" => $task];
-        } else {
-            return ["success" => false, "message" => "Failed to update task"];
+            $setSql = implode(', ', $set);
+            $params['id'] = $id;
+
+            $sql = "UPDATE $this->table SET $setSql WHERE id = :id";
+            $stmt = self::db()->prepare($sql);
+            $success = $stmt->execute($params);
+
+            if (!$success) {
+                self::db()->rollBack();
+                return [
+                    "success" => false, 
+                    "error" => "Failed to update task"
+                ];
+            }
+
+            // Get updated task
+            $updatedTask = $this->find($id);
+            
+            // Commit transaction
+            self::db()->commit();
+            
+            return [
+                "success" => true, 
+                "message" => "Task updated successfully", 
+                "task" => $updatedTask
+            ];
+
+        } catch (Exception $e) {
+            // Rollback transaction on any exception
+            self::db()->rollBack();
+            return [
+                "success" => false, 
+                "error" => "Database error: " . $e->getMessage()
+            ];
         }
     }
 

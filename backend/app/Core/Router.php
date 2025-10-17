@@ -4,7 +4,7 @@ require_once "./app/Support/Response.php";
 
 class Router
 {
-    private static $routes = ['GET' => [], 'POST' => []];
+    private static $routes = ['GET' => [], 'POST' => [], 'PUT' => [], 'DELETE' => []];
 
     public static function get($path, $callback, $middleware = [])
     {
@@ -14,6 +14,16 @@ class Router
     public static function post($path, $callback, $middleware = [])
     {
         self::addRoute('POST', $path, $callback, $middleware);
+    }
+
+    public static function put($path, $callback, $middleware = [])
+    {
+        self::addRoute('PUT', $path, $callback, $middleware);
+    }
+
+    public static function delete($path, $callback, $middleware = [])
+    {
+        self::addRoute('DELETE', $path, $callback, $middleware);
     }
 
     private static function addRoute($method, $path, $callback, $middleware)
@@ -32,6 +42,12 @@ class Router
         $method = $_SERVER['REQUEST_METHOD'];
 
         $path   = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+        // Check if the method exists in routes
+        if (!isset(self::$routes[$method])) {
+            Response::json(405, ["error" => "Method not allowed"]);
+            return;
+        }
 
         foreach (self::$routes[$method] as $route) {
             if (preg_match($route['regex'], $path, $matches)) {

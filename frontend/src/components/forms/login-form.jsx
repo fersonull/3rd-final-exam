@@ -38,23 +38,19 @@ export default function LoginForm() {
         setUser(result?.user);
         setToken(result?.token);
 
-
         return;
       }
-
 
       if (result?.error) {
         toast.warning(result?.error, {
           closeButton: true,
         });
       }
-
     } catch (err) {
       console.error("Login failed:", err);
       toast.error("An unexpected error occurred. Please try again.");
     }
   };
-
 
   return (
     <>

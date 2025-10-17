@@ -75,44 +75,75 @@ class TaskController
         return Response::json(200, $task);
     }
 
-    public function update($id)
+    public function update()
     {
-        // -- START: update method from Task.php (model) --
+        // Handle both PUT and POST requests
         $request = $_POST;
-
-        // Model's update method logic inserted here, adapted for controller:
-        $stmt = $this->taskModel::db()->prepare("
-            UPDATE tasks
-            SET title = :title,
-                description = :description,
-                priority = :priority,
-                status = :status,
-                due_date = :due_date,
-                assignee_id = :assignee_id,
-                project_id = :project_id
-            WHERE id = :id
-        ");
-        $stmt->execute([
-            "title" => $request["title"],
-            "description" => $request["description"],
-            "priority" => $request["priority"],
-            "status" => $request["status"],
-            "due_date" => $request["due_date"],
-            "assignee_id" => $request["assignee_id"],
-            "project_id" => $request["project_id"],
-            "id" => $id,
-        ]);
-
-        $task = $this->taskModel->find($id);
-
-        if ($task) {
-            $response = ["success" => true, "message" => "Task updated successfully", "task" => $task];
-        } else {
-            $response = ["success" => false, "message" => "Task update failed", "task" => null];
+        
+        // For PUT requests, also check if data is in request body (JSON)
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT' && empty($request)) {
+            $input = file_get_contents('php://input');
+            $request = json_decode($input, true);
         }
 
-        return Response::json(200, $response);
-        // -- END: update method from Task.php (model) --
+        // Validate required fields
+        if (empty($request["id"])) {
+            return Response::json(400, [
+                "success" => false,
+                "error" => "Task ID is required"
+            ]);
+        }
+
+        $taskId = $request["id"];
+
+        // Get validation rules for provided fields
+        $validationRules = $this->getUpdateValidationRules($request);
+        
+        // Validate the request data
+        $validator = Validate::make($request, $validationRules);
+        
+        if ($validator->fails()) {
+            return Response::json(400, [
+                "success" => false,
+                "errors" => $validator->errors()
+            ]);
+        }
+
+        // Use model's update method with transaction handling
+        $result = $this->taskModel->update($taskId, $request);
+        
+        if ($result['success']) {
+            return Response::json(200, $result);
+        } else {
+            $statusCode = isset($result['error']) && strpos($result['error'], 'not found') !== false ? 404 : 500;
+            return Response::json($statusCode, $result);
+        }
+    }
+
+    /**
+     * Get validation rules for task update based on provided fields
+     */
+    private function getUpdateValidationRules(array $request): array
+    {
+        $rules = [];
+        $fieldRules = [
+            'title' => 'required|max:255',
+            'description' => 'max:1000',
+            'priority' => 'required|in:low,normal,high',
+            'status' => 'required|in:pending,ongoing,completed,overdue',
+            'due_date' => 'required|date',
+            'assignee_id' => 'max:32',
+            'project_id' => 'required|max:32'
+        ];
+
+        // Only validate fields that are present in the request
+        foreach ($fieldRules as $field => $rule) {
+            if (array_key_exists($field, $request)) {
+                $rules[$field] = $rule;
+            }
+        }
+
+        return $rules;
     }
 
     public function project($projectId, $limit = null)

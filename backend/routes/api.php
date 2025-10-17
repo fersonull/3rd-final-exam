@@ -23,6 +23,7 @@ Router::post('/v1/projects', 'ProjectController@store', ['AuthMiddleware']);
 
 // task related routes
 Router::post('/v1/tasks', 'TaskController@store', ['AuthMiddleware']);
+Router::put('/v1/tasks', 'TaskController@update', ['AuthMiddleware']);
 Router::get('/v1/tasks', 'TaskController@index', ['AuthMiddleware', 'ProjectOwnerRights']);
 Router::get('/v1/tasks/{id}', 'TaskController@find', ['AuthMiddleware', 'ProjectOwnerRights']);
 Router::get('/v1/tasks/total', 'TaskController@total', ['AuthMiddleware', 'ProjectOwnerRights']);

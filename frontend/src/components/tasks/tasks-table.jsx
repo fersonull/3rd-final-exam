@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useFetch } from "@/hooks/use-fetch";
+import { toast } from "sonner";
 import {
   InputGroup,
   InputGroupInput,
@@ -43,18 +46,9 @@ import {
 } from "lucide-react";
 import { initialTableData, teamMembers } from "@/lib/tasks-data-placeholder";
 import TaskStatusPill from "./task-status-pill";
-// import TaskPriorityPill from "./task-priority-pill"; // No badge, text only
 import { formatDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
-import {
-  Empty,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-  EmptyDescription,
-} from "../ui/empty";
-import { IconListCheck } from "@tabler/icons-react";
 
 // Helper: check if task is overdue (fallback for missing backend flag)
 function isTaskOverdue(task) {
@@ -148,14 +142,72 @@ function iEquals(a, b) {
 }
 
 export default function TasksTable({ tasks }) {
+  const { pid } = useParams();
   const [sortKey, setSortKey] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [assigneeFilter, setAssigneeFilter] = useState("all");
+  const [assigningTask, setAssigningTask] = useState(null);
 
-  console.log(tasks);
+  // Fetch project members for assignee selection
+  const {
+    data: membersData,
+    loading: membersLoading,
+    error: membersError,
+  } = useFetch(pid ? `/projects/${pid}/members` : null);
+
+  // Fetch for updating task assignee
+  const { refetch: updateTaskAssignee } = useFetch(
+    "/tasks",
+    { method: "PUT" },
+    false
+  );
+
+  // Handle assignee selection
+  const handleAssigneeChange = async (taskId, assigneeId) => {
+    console.log("Assigning task:", taskId, "to assignee:", assigneeId);
+
+    if (!taskId || !assigneeId) {
+      console.log("Missing taskId or assigneeId:", { taskId, assigneeId });
+      return;
+    }
+
+    setAssigningTask(taskId);
+    try {
+      const res = await updateTaskAssignee({
+        body: JSON.stringify({
+          id: taskId,
+          assignee_id: assigneeId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("Update response:", res);
+
+      if (res?.success) {
+        toast.success("Task assignee updated successfully!");
+      } else if (res?.errors) {
+        // Handle validation errors
+        Object.values(res.errors).forEach((errorMsg) => {
+          toast.error(errorMsg);
+        });
+      } else {
+        toast.error(res?.error || "Failed to update assignee");
+      }
+    } catch (error) {
+      console.error("Error updating assignee:", error);
+      toast.error("An unexpected error occurred");
+    } finally {
+      setAssigningTask(null);
+    }
+  };
+
+  // Get project members for assignee selection
+  const projectMembers = membersData || [];
 
   // Sorting handler
   function handleSort(nextKey) {
@@ -343,6 +395,7 @@ export default function TasksTable({ tasks }) {
                     </TableRow>
                   ) : (
                     sortedData?.map((data, index) => {
+                      // console.log("Task data:", data);
                       return (
                         <TableRow
                           key={index}
@@ -377,24 +430,62 @@ export default function TasksTable({ tasks }) {
                           <TableCell className="py-3 flex-end">
                             {data.assignee_id === null ? (
                               <div>
-                                <Select>
-                                  <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Select assignee" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectGroup>
-                                      <SelectLabel>Your team</SelectLabel>
-                                      {teamMembers.map((member) => (
-                                        <SelectItem
-                                          key={member.value}
-                                          value={member.value}
-                                        >
-                                          {member.label}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectGroup>
-                                  </SelectContent>
-                                </Select>
+                                {membersError ? (
+                                  <div className="text-red-500 text-xs">
+                                    Error loading members
+                                  </div>
+                                ) : (
+                                  <Select
+                                    onValueChange={(assigneeId) => {
+                                      console.log(
+                                        "Select changed for task:",
+                                        data.id,
+                                        "assignee:",
+                                        assigneeId
+                                      );
+                                      handleAssigneeChange(data.id, assigneeId);
+                                    }}
+                                    disabled={
+                                      assigningTask === data.id ||
+                                      membersLoading ||
+                                      projectMembers.length === 0
+                                    }
+                                  >
+                                    <SelectTrigger className="w-[180px]">
+                                      <SelectValue
+                                        placeholder={
+                                          membersLoading
+                                            ? "Loading members..."
+                                            : projectMembers.length === 0
+                                            ? "No members available"
+                                            : "Select assignee"
+                                        }
+                                      />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {projectMembers.length === 0 ? (
+                                        <div className="p-2 text-sm text-muted-foreground text-center">
+                                          No members available
+                                        </div>
+                                      ) : (
+                                        <SelectGroup>
+                                          <SelectLabel>
+                                            Project Members
+                                          </SelectLabel>
+                                          {projectMembers.map((member) => (
+                                            <SelectItem
+                                              key={member.user_id}
+                                              value={member.user_id}
+                                            >
+                                              {member.user_name ||
+                                                member.user_email}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      )}
+                                    </SelectContent>
+                                  </Select>
+                                )}
                               </div>
                             ) : (
                               <span>{data.assignee_name}</span>
