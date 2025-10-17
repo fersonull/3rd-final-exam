@@ -141,4 +141,29 @@ class Task extends Model
         $stmt->execute(["status" => $status, "id" => $id]);
         return ["success" => true, "message" => "Task status updated successfully"];
     }
+
+    public function getTasksByDateRange(string $projectId, string $startDate, string $endDate): ?array
+    {
+        $stmt = self::db()->prepare("
+            SELECT 
+                t.*,
+                u.id AS assignee_id, 
+                u.name AS assignee_name, 
+                u.email AS assignee_email
+            FROM {$this->table} t
+            LEFT JOIN users u ON t.assignee_id = u.id
+            WHERE t.project_id = :project_id 
+            AND t.due_date BETWEEN :start_date AND :end_date
+            ORDER BY t.due_date ASC, t.created_at DESC
+        ");
+        
+        $stmt->execute([
+            "project_id" => $projectId,
+            "start_date" => $startDate,
+            "end_date" => $endDate
+        ]);
+
+        $rows = $stmt->fetchAll();
+        return $rows ?: [];
+    }
 }

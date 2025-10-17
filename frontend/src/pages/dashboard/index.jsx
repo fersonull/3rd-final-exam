@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import OverviewCards from "@/components/dashboard/overview-cards";
@@ -57,6 +57,12 @@ export default function Index() {
   const { activeProject, loading: projectLoading } = useActiveProject({
     projectId: pid,
   });
+
+  const normalizedTasks = useMemo(() => {
+    if (Array.isArray(tasks)) return tasks;
+    if (tasks && Array.isArray(tasks.data)) return tasks.data;
+    return [];
+  }, [tasks]);
 
   if (error?.forbidden) {
     return <div>{error?.forbidden}</div>;
@@ -119,7 +125,12 @@ export default function Index() {
               </CardAction>
             </CardHeader>
             <CardContent>
-              <DashboardTable tasks={tasks} loading={tasksLoading} />
+              {/* Use key to force remount when project changes, to ensure DashboardTable clears out. */}
+              <DashboardTable
+                key={pid}
+                tasks={normalizedTasks}
+                loading={tasksLoading}
+              />
             </CardContent>
           </Card>
         )}

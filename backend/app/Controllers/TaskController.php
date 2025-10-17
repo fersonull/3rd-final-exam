@@ -154,4 +154,45 @@ class TaskController
 
         return Response::json(200, ["overdue" => $task["overdue"]]);
     }
+
+    public function calendar($projectId, $startDate, $endDate)
+    {
+        // Validate date format
+        if (!$this->isValidDate($startDate) || !$this->isValidDate($endDate)) {
+            return Response::json(400, [
+                "success" => false,
+                "error" => "Invalid date format. Use YYYY-MM-DD format."
+            ]);
+        }
+
+        $tasks = $this->taskModel->getTasksByDateRange($projectId, $startDate, $endDate);
+
+        // Add overdue status to each task
+        $now = strtotime(date("Y-m-d"));
+        foreach ($tasks as &$task) {
+            $isOverdue = false;
+            if (
+                isset($task["due_date"]) &&
+                isset($task["status"]) &&
+                $task["status"] !== "completed" &&
+                strtotime($task["due_date"]) < $now
+            ) {
+                $isOverdue = true;
+            }
+            $task["overdue"] = $isOverdue;
+        }
+        unset($task);
+
+        return Response::json(200, [
+            "success" => true,
+            "data" => $tasks,
+            "message" => "Calendar tasks retrieved successfully"
+        ]);
+    }
+
+    private function isValidDate($date)
+    {
+        $d = DateTime::createFromFormat('Y-m-d', $date);
+        return $d && $d->format('Y-m-d') === $date;
+    }
 }

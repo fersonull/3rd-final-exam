@@ -27,6 +27,7 @@ Router::get('/v1/tasks', 'TaskController@index', ['AuthMiddleware', 'ProjectOwne
 Router::get('/v1/tasks/{id}', 'TaskController@find', ['AuthMiddleware', 'ProjectOwnerRights']);
 Router::get('/v1/tasks/total', 'TaskController@total', ['AuthMiddleware', 'ProjectOwnerRights']);
 Router::get('/v1/tasks/project/{projectId}/{limit}', 'TaskController@project');
+Router::get('/v1/tasks/calendar/{projectId}/{startDate}/{endDate}', 'TaskController@calendar', ['AuthMiddleware', 'ProjectOwnerRights']);
 
 // analytics
 Router::get("/v1/stats/{pid}", "AnalyticsController@tasks", ['AuthMiddleware','ProjectOwnerRights']);
