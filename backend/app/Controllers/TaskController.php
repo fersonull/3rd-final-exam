@@ -44,7 +44,7 @@ class TaskController
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'priority' => 'required|string|in:low,normal,high',
-            'status' => 'required|string|in:pending,in_progress,completed',
+            'status' => 'required|string|in:pending,ongoing,finished',
             'due_date' => 'required|date',
             'assignee_id' => 'max:32',
             'project_id' => 'required|string|max:32'

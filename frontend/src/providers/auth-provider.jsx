@@ -5,7 +5,7 @@ import { useFetch } from "@/hooks/use-fetch";
 export default function AuthProvider({ children }) {
   const { refetch } = useFetch("/session");
 
-  const [user, setUser] = useState(() => {
+const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser && storedUser !== "undefined"
       ? JSON.parse(storedUser)

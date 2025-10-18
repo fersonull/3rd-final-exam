@@ -45,4 +45,22 @@ class MemberController
         $members = $this->memberModel->all($projectId);
         Response::json(200, $members);
     }
+
+    public function delete($memberId)
+    {
+        try {
+            $result = $this->memberModel->delete($memberId);
+            
+            if ($result['success']) {
+                return Response::json(200, $result);
+            } else {
+                return Response::json(500, $result);
+            }
+        } catch (Exception $e) {
+            return Response::json(500, [
+                'success' => false,
+                'error' => 'Failed to delete member: ' . $e->getMessage()
+            ]);
+        }
+    }
 }

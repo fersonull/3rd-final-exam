@@ -22,24 +22,24 @@ import { useFetch } from "@/hooks/use-fetch";
 import useLocalStorage from "@/hooks/use-localstorage";
 
 const invitedProjects = [
-  {
-    id: "invd1",
-    name: "Invited Marketing Platform",
-    description: "A marketing analytics dashboard shared by another team.",
-    owner_name: "Elena Lindstrom",
-    status: "active",
-    createdAt: "2024-05-15T10:00:00Z",
-    invited: true,
-  },
-  {
-    id: "invd2",
-    name: "Shared Real Estate Portal",
-    description: "Collaboration on property listing portal.",
-    owner_name: "Greg Tanaka",
-    status: "on-hold",
-    createdAt: "2024-01-30T08:00:00Z",
-    invited: true,
-  },
+  // {
+  //   id: "invd1",
+  //   name: "Invited Marketing Platform",
+  //   description: "A marketing analytics dashboard shared by another team.",
+  //   owner_name: "Elena Lindstrom",
+  //   status: "active",
+  //   createdAt: "2024-05-15T10:00:00Z",
+  //   invited: true,
+  // },
+  // {
+  //   id: "invd2",
+  //   name: "Shared Real Estate Portal",
+  //   description: "Collaboration on property listing portal.",
+  //   owner_name: "Greg Tanaka",
+  //   status: "on-hold",
+  //   createdAt: "2024-01-30T08:00:00Z",
+  //   invited: true,
+  // },
 ];
 
 const sortOptions = [

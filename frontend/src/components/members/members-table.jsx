@@ -15,9 +15,9 @@ import {
   TableBody,
   TableCell,
 } from "../ui/table";
-import { UserPlus2, Pencil, ChevronUp, ChevronDown } from "lucide-react";
+import { UserPlus2, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useFetch } from "@/hooks/use-fetch";
 import { AddMemberModal } from "./add-member-modal";
 import { useFormData } from "@/hooks/use-formdata";
@@ -164,16 +164,14 @@ export default function MembersTable() {
                     <TableCell>{member.user_email || "-"}</TableCell>
                     <TableCell>{member.role || "-"}</TableCell>
                     <TableCell>
-                      <Link to={`edit/${member.id || idx}`}>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex items-center gap-1"
-                        >
-                          <Pencil size={16} />
-                          Edit
-                        </Button>
-                      </Link>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        className="flex items-center gap-1"
+                      >
+                        <Trash2 size={16} />
+                        Delete
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))

@@ -16,6 +16,7 @@ Router::post('/v1/logout', 'AuthController@logout', ['AuthMiddleware']);
 Router::get('/v1/users/search', 'UserController@search', ['AuthMiddleware']);
 
 Router::post('/v1/members', 'MemberController@store', ['AuthMiddleware']);
+Router::post('/v1/members/{id}', 'MemberController@delete', ['AuthMiddleware']);
 
 Router::get('/v1/projects', 'ProjectController@index', ['AuthMiddleware']);
 Router::get('/v1/projects/users', 'ProjectController@getUsersProjects', ['AuthMiddleware','ProjectOwnerRights']);

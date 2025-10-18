@@ -115,4 +115,54 @@ class Member extends Model
         $row = $stmt->fetch();
         return $row ?: null;
     }
+
+    public function delete(string $memberId): ?array
+    {
+        try {
+            self::db()->beginTransaction();
+
+            $existingMember = $this->find($memberId);
+            if (!$existingMember) {
+                self::db()->rollBack();
+                return [
+                    "success" => false,
+                    "error" => "Member not found"
+                ];
+            }
+
+            $stmt = self::db()->prepare("DELETE FROM $this->table WHERE id = :id");
+            $success = $stmt->execute(["id" => $memberId]);
+
+            if (!$success) {
+                self::db()->rollBack();
+                return [
+                    "success" => false,
+                    "error" => "Failed to delete member"
+                ];
+            }
+
+            self::db()->commit();
+            
+            return [
+                "success" => true,
+                "message" => "Member deleted successfully"
+            ];
+
+        } catch (Exception $e) {
+            self::db()->rollBack();
+            return [
+                "success" => false,
+                "error" => "Database error: " . $e->getMessage()
+            ];
+        }
+    }
+
+    public function find(string $id): ?array
+    {
+        $stmt = self::db()->prepare("SELECT * FROM $this->table WHERE id = :id");
+        $stmt->execute(["id" => $id]);
+        
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
 }

@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 
 const statusVariantMap = {
-  completed: "default",
+  finished: "success",
   ongoing: "secondary",
   pending: "outline",
   overdue: "destructive",

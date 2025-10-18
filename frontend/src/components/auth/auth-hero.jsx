@@ -75,7 +75,7 @@ export default function AuthHero() {
           <div className="flex justify-center items-center gap-4 opacity-60">
             <div className="w-16 h-8 bg-primary-foreground/20 rounded flex items-center justify-center">
               <span className="text-xs font-semibold text-primary-foreground">
-                TechCorp
+                JobFinder
               </span>
             </div>
             <div className="w-16 h-8 bg-primary-foreground/20 rounded flex items-center justify-center">

@@ -39,30 +39,12 @@ const projectItems = [
   },
 ];
 
-const appItems = [
-  {
-    title: "Calendar",
-    url: "calendar",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "/search",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-];
-
 export default function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
         <Link to="/" className="flex-center">
-          logo-logo
+          <p className="font-bold">Projet</p>
         </Link>
       </SidebarHeader>
 
@@ -72,23 +54,6 @@ export default function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {projectItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {appItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link to={item.url}>
